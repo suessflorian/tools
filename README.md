@@ -5,10 +5,6 @@
 - [lazygit](https://github.com/jesseduffield/lazygit)
 
 ## Notes
-Geared towards a mixture of JS/TS and Go only.
+Currently geared towards a mixture of Python and Go development.
 - Brew (install relevant packages via `brew bundle`)
-- NPM hence Node
-    - typescript
-    - typescript-lagnuage-server
-- Golang
-    - `GO111MODULE=on go get golang.org/x/tools/gopls@latest`
+- `go get golang.org/x/tools/gopls@latest`
