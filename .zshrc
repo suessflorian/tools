@@ -14,11 +14,12 @@ fi
 export PATH=/Users/florians/.local/bin:$HOME/bin:/usr/local/bin:$PATH
 export ZSH="/Users/florians/.oh-my-zsh"
 
-plugins=(zsh-z)
+plugins=(zsh-z zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR=nvim
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 
 alias ls='ls -1AGp'
 alias clear='clear && printf "\e[3J"'
