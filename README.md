@@ -17,7 +17,7 @@ My current overall big ticket to-do list is;
 Feel free to join the journey and watch it grow!
 
 ## v0.3.1
-Lots of minor tweaks have come out to this release. My appearance preferences are beginning to finally mature. I've tweaked how I search content and files via [fzf-vim](https://github.com/junegunn/fzf.vim) heavily utulising `ripgrep` specific commands under the hood. I've decided to completely abondon the intiative of making `flow lsp` work well with `ale`. Italics for comments. Ripped out all vim focused `git`  clients in favour of `tig` and made `vim-move` simply **work** by appending my own version of the plugin to the end of my `init.vim` file. 
+Lots of minor tweaks have come out to this release. My appearance preferences are beginning to finally mature. I've tweaked how I search content and files via [fzf-vim](https://github.com/junegunn/fzf.vim) heavily utulising `ripgrep` specific commands under the hood. I've decided to completely abandon the intiative of making `flow lsp` work well with `ale`. Italics for comments. Ripped out all vim focused `git`  clients in favour of `tig` and made `vim-move` simply **work** by appending my own version of the plugin to the end of my `init.vim` file. 
 
 ## v0.2.0
 As I started playing around with more and more CLI based tools to subsitute productivity tasks that I used to do on a full blown IDE. I noticed that the performance on iTerm2 and Terminal simply wasn't good enough. More frequently than not, lag spikes occured on upward and downward scrolling, `vim-fugitive` more often than got bulked down on large commits... these lag spikes made me explore [Alacittry](https://github.com/jwilm/alacritty). It is insanely fast.
