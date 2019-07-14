@@ -12,7 +12,7 @@ window:
   decorations: buttonless
 
 scrolling:
-  history: 100000
+  history: 10000
   multiplier: 3
   faux_multiplier: 3
   auto_scroll: true
