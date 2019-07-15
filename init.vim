@@ -20,7 +20,6 @@ call plug#begin('~/.config/nvim/plugged')
   Plug '/usr/local/opt/fzf'
   Plug 'https://github.com/junegunn/fzf.vim.git'
   Plug 'https://github.com/vim-airline/vim-airline.git'
-  Plug 'https://github.com/vim-airline/vim-airline-themes.git'
   Plug 'https://github.com/prettier/vim-prettier.git', { 'do': 'yarn install' }
   Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
@@ -50,6 +49,8 @@ nnoremap gb :<C-u>call gitblame#echo()<CR>
 
 " basic preferences
 set noerrorbells
+set noshowmode
+set noshowcmd
 set novisualbell
 set nobackup
 set cmdheight=1
@@ -147,17 +148,17 @@ endif
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_section_z = "%3p %%"
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 
 " vim airline top preferences 
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#tab_nr_type = 0
@@ -165,13 +166,11 @@ let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#show_tab_count = 0
 
 " buffer navigation preferences
-nnoremap <C-x> :bufdo bd<CR>
 nnoremap <S-j> :bprevious<CR>
 nnoremap <S-k> :bnext<CR>
 nnoremap <leader>x :bd<CR>
 
 " NERDTree preferences
-let g:NERDTreeSortOrder=['\/$', '*', '\.swp$', '\.bak$', '\~$', '[[timestamp]]']
 let g:NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
 let NERDTreeMapJumpLastChild=''
@@ -199,8 +198,6 @@ highlight VertSplit cterm=none
 highlight LineNr ctermfg=16 ctermbg=none 
 highlight Visual cterm=italic ctermfg=black ctermbg=3
 highlight Search cterm=italic,underline ctermfg=3 ctermbg=none
-
-let g:airline_theme='badcat'
 
 " syntax preferences 
 let g:javascript_plugin_flow=1
@@ -245,3 +242,41 @@ inoremap ∆ <Esc>:m .+1<CR>==gi
 inoremap ˚<Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
+
+let AirlineTheme='dark'
+let g:airline#themes#dark#palette = {}
+
+let s:airline_a_normal   = [ '#ffffff' , '#ffffff' , 7 , 'NONE', 'NONE' ]
+let s:airline_b_normal   = [ '#ffffff' , '#ffffff' , 7 , 'NONE', 'NONE' ]
+let s:airline_c_normal   = [ '#ffffff' , '#ffffff' , 239 , 'NONE', 'NONE' ]
+let g:airline#themes#dark#palette.normal = airline#themes#generate_color_map(s:airline_a_normal, s:airline_b_normal, s:airline_c_normal)
+let g:airline#themes#dark#palette.normal_modified = {'airline_c': [ '#ffffff', '#ffffff', 'NONE', 'NONE', 'NONE']}
+
+let s:airline_a_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE'  ]
+let s:airline_b_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE'  ]
+let s:airline_c_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE' ]
+let g:airline#themes#dark#palette.insert = airline#themes#generate_color_map(s:airline_a_insert, s:airline_b_insert, s:airline_c_insert)
+let g:airline#themes#dark#palette.insert_modified = {'airline_c': ['#ffffff', '#ffffff', 7, 'NONE', 'NONE'],}
+let g:airline#themes#dark#palette.insert_paste = {'airline_a': [ s:airline_a_insert[0], s:airline_a_insert[1], s:airline_a_insert[2], s:airline_a_insert[3], 'NONE'],}
+
+let g:airline#themes#dark#palette.replace = copy(g:airline#themes#dark#palette.insert)
+let g:airline#themes#dark#palette.replace.airline_a = [ s:airline_b_insert[0], s:airline_a_insert[1], s:airline_b_insert[2] , s:airline_b_insert[3], 'NONE']
+let g:airline#themes#dark#palette.replace_modified = g:airline#themes#dark#palette.insert_modified
+
+let s:airline_a_visual = [ '#ffffff' , '#ffffff' , 3 , 'NONE' ]
+let s:airline_b_visual = [ '#ffffff' , '#ffffff' , 3 , 'NONE' ]
+let s:airline_c_visual = [ '#ffffff' , '#ffffff' , 3  , 'NONE' ]
+let g:airline#themes#dark#palette.visual = airline#themes#generate_color_map(s:airline_a_visual, s:airline_b_visual, s:airline_c_visual)
+let g:airline#themes#dark#palette.visual_modified = {'airline_c': ['#ffffff', '#ffffff', 255 , 'NONE', 'NONE'],}
+
+let s:airline_a_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
+let s:airline_b_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
+let s:airline_c_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
+let g:airline#themes#dark#palette.inactive = airline#themes#generate_color_map(s:airline_a_inactive, s:airline_b_inactive, s:airline_c_inactive)
+let g:airline#themes#dark#palette.inactive_modified = {'airline_c': [ '#ffffff', 'NONE', 'NONE', 'NONE', 'NONE'],}
+
+let s:airline_a_commandline = ['#ffffff', '#ffffff', 239, 'NONE']
+let s:airline_b_commandline = ['#ffffff', '#ffffff', 7, 'NONE']
+let s:airline_c_commandline = ['#ffffff', '#ffffff', 7, 'NONE']
+let g:airline#themes#dark#palette.commandline = airline#themes#generate_color_map(s:airline_a_commandline, s:airline_b_commandline, s:airline_c_commandline)
+
