@@ -1,14 +1,6 @@
-
-#    ███████╗███████╗██╗  ██╗██████╗  ██████╗
-#    ╚══███╔╝██╔════╝██║  ██║██╔══██╗██╔════╝
-#      ███╔╝ ███████╗███████║██████╔╝██║     
-#     ███╔╝  ╚════██║██╔══██║██╔══██╗██║     
-# ██╗███████╗███████║██║  ██║██║  ██║╚██████╗
-# ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝
-
 plugins=(zsh-z zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
-                                                                                                                                                                                                     
+
 PROMPT=' %{$fg[white]%}%30<...<%~%<<%{$reset_color%}: '
 RPROMPT='$(git_prompt_info)'
 
@@ -25,7 +17,7 @@ if [ -z "$TMUX" ]
 then
     tmux attach -t main || tmux new -s main
 fi
-                                                                                        
+
 export PATH=/Users/florians/.local/bin:$HOME/bin:/usr/local/bin:$PATH
 
 export EDITOR=nvim

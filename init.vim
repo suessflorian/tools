@@ -1,34 +1,43 @@
-
-"    ██╗   ██╗██╗███╗   ███╗██████╗  ██████╗
-"    ██║   ██║██║████╗ ████║██╔══██╗██╔════╝
-"    ██║   ██║██║██╔████╔██║██████╔╝██║
-"    ╚██╗ ██╔╝██║██║╚██╔╝██║██╔══██╗██║
-"  ██╗╚████╔╝ ██║██║ ╚═╝ ██║██║  ██║╚██████╗
-"  ╚═╝ ╚═══╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝
-
 let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
 
+  " syntax support
   Plug 'https://github.com/pangloss/vim-javascript.git'
   Plug 'https://github.com/mxw/vim-jsx.git'
   Plug 'https://github.com/elzr/vim-json.git'
   Plug 'https://github.com/moll/vim-node.git'
-  Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
-  Plug 'https://github.com/zivyangll/git-blame.vim.git'
-  Plug 'https://github.com/fatih/vim-go.git'
-  Plug '/usr/local/opt/fzf'
-  Plug 'https://github.com/junegunn/fzf.vim.git'
+
+  " layout/appearance support
+  Plug 'https://github.com/NLKNguyen/papercolor-theme.git'
   Plug 'https://github.com/vim-airline/vim-airline.git'
-  Plug 'https://github.com/prettier/vim-prettier.git', { 'do': 'yarn install' }
-  Plug 'https://github.com/jiangmiao/auto-pairs.git'
-  Plug 'https://github.com/tpope/vim-surround.git'
-  Plug 'https://github.com/w0rp/ale.git'
-  Plug 'https://github.com/scrooloose/nerdtree.git'
-  Plug 'https://github.com/iamcco/markdown-preview.nvim.git', { 'do': { -> mkdp#util#install() } }
+  Plug 'https://github.com/suessflorian/vim-cleaner-airline-theme.git'
+
+  " language support
+  Plug 'https://github.com/fatih/vim-go.git'
   Plug 'https://github.com/neovimhaskell/haskell-vim.git'
 
+  " functionality support
+  Plug 'https://github.com/scrooloose/nerdtree.git'
+  Plug 'https://github.com/junegunn/fzf.vim.git'
+  Plug '/usr/local/opt/fzf'
+  Plug 'https://github.com/jiangmiao/auto-pairs.git'
+  Plug 'https://github.com/tpope/vim-surround.git'
+  Plug 'https://github.com/prettier/vim-prettier.git', { 'do': 'yarn install' }
+  Plug 'https://github.com/iamcco/markdown-preview.nvim.git', { 'do': { -> mkdp#util#install() } }
+
+  " tmux integration
+  Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
+
 call plug#end()
+
+" paper colouring
+set background=light
+let g:PaperColor_Theme_Options = {'theme': {'default': {'transparent_background': 1}}}
+colorscheme PaperColor
+
+" airline theme, getting rid of all the colours
+let g:airline_theme = 'cleaner'
 
 " reaching preferences
 nnoremap <C-p> :Files<CR>
@@ -39,45 +48,26 @@ nnoremap <C-f> :Rg<space>
 nnoremap <leader>f :Rg <c-r><c-w><CR>
 vnoremap <leader>f y:Rg <c-r>"<CR>
 
-nnoremap / :BLines<CR>
-nnoremap <leader>: :Commands<CR>
-
 command! -bang -nargs=* Fi call fzf#vim#files('.', {'options':'--query '.shellescape(<q-args>)})
-command! -bang -nargs=* Rg call fzf#vim#grep('rg --line-number --hidden --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 3..'}, <bang>0)
-
-nnoremap gb :<C-u>call gitblame#echo()<CR>
-
-" basic preferences
-set noerrorbells
-set noshowmode
-set noshowcmd
-set novisualbell
-set nobackup
-set cmdheight=1
-nnoremap q: :q
-
-let g:ale_completion_enabled = 1
+command! -bang -nargs=* Rg call fzf#vim#grep('rg --line-number --hidden --no-heading --color=always --smart-case '.shellescape(<q-args>),1, fzf#vim#with_preview({'options': '--delimiter : --nth 3..'}), <bang>0)
 
 " navigate visual lines rather than physical on wrapped buffers
 nnoremap j gj
 nnoremap k gk
 
-set encoding=utf8
-set history=1000
-set clipboard+=unnamedplus
-set splitright
-set splitbelow
+" bring up vim documentation quicker
 cabbrev h vert h
-set mouse=a
+
+noremap <leader>gb :!git blame -- %<cr>
 
 " haskell preferences
-let g:haskell_enable_quantification = 1   
-let g:haskell_enable_recursivedo = 1      
-let g:haskell_enable_arrowsyntax = 1      
-let g:haskell_enable_pattern_synonyms = 1 
-let g:haskell_enable_typeroles = 1        
-let g:haskell_enable_static_pointers = 1  
-let g:haskell_backpack = 1                
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+let g:haskell_backpack = 1
 
 " go preferences
 let g:go_highlight_array_whitespace_error = 1
@@ -103,67 +93,22 @@ let g:go_info_mode = 'gopls'
 " vim go shortcuts
 nnoremap <leader>gd :GoDocBrowser<CR>
 
-" ALE preferences
-let g:airline#extensions#ale#enabled = 1
-
-let g:ale_enabled=0
-nnoremap <leader>al :ALEEnable<CR>
-let g:ale_sign_error = '⤫'
-let g:ale_sign_warning = '⚠'
-highlight SignColumn ctermfg=black ctermbg=NONE
-highlight Error ctermfg=1 ctermbg=NONE
-highlight Todo ctermfg=3 ctermbg=NONE
-
-let g:ale_set_loclist = 0	
-let g:ale_set_highlights = 0	
-let g:ale_disable_lsp = 1
-
-let g:ale_linters = 	
-     \{	
-     \ 'javascript.jsx': ['eslint', 'flow', 'flow-language-server'],	
-     \ 'javascript': ['eslint', 'flow', 'flow-language-server'],	
-     \ 'go': [],
-     \ 'php': ['php', 'langserver'],	
-     \}	
-
-inoremap <c-space> <c-x><c-o>
-highlight Pmenu ctermbg=238 gui=bold
-
-let g:ale_php_langserver_executable = expand('~/.config/composer/vendor/bin/php-language-server.php')	
-
-autocmd FileType php nnoremap <buffer> gd :ALEGoToDefinition<CR>
-autocmd FileType javascript nnoremap <buffer> gd :ALEGoToDefinition<CR>
-autocmd FileType javascript.jsx nnoremap <buffer> gd :ALEGoToDefinition<CR>
-
-" vim-airline base preferences
+" ripping out extraneous information
+let g:airline_symbols = {}
 let g:airline_section_x=''
 let g:airline_section_y=''
-let g:airline_skip_empty_sections = 1
-let g:airline#extensions#whitespace#enabled = 0
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
+let g:airline_skip_empty_sections = 1
 let g:airline_section_z = "%3p %%"
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-
-" vim airline top preferences 
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#tab_nr_type = 0
-let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_tab_count = 0
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
 
 " buffer navigation preferences
 nnoremap <S-j> :bprevious<CR>
@@ -175,13 +120,7 @@ let g:NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
 let NERDTreeMapJumpLastChild=''
 let NERDTreeMapJumpFirstChild=''
-nnoremap <C-b> :NERDTree<CR>
 nnoremap <leader>bo :NERDTreeFind<CR>
-
-" prettier preferences
-let g:prettier#autoformat = 0
-let g:prettier#exec_cmd_async = 1
-let g:prettier#quickfix_enabled = 0
 
 " appearances
 set number
@@ -191,16 +130,19 @@ set hlsearch
 set ignorecase
 set scrolloff=0
 set wildmenu
-set t_ZH=\e[3m
-set t_ZR=\e[23m
-highlight Comment cterm=italic
-highlight VertSplit cterm=none
-highlight LineNr ctermfg=16 ctermbg=none 
-highlight Visual cterm=italic ctermfg=black ctermbg=3
-highlight Search cterm=italic,underline ctermfg=3 ctermbg=none
-
-" syntax preferences 
-let g:javascript_plugin_flow=1
+set noerrorbells
+set noshowmode
+set noshowcmd
+set novisualbell
+set nobackup
+set cmdheight=1
+set noswapfile
+set encoding=utf8
+set history=1000
+set clipboard+=unnamedplus
+set splitright
+set splitbelow
+set mouse=a
 
 " tabbing preferences
 set expandtab
@@ -209,6 +151,16 @@ set shiftwidth=2
 set tabstop=2
 set autoindent
 set smartindent
+
+" italic comments
+set t_ZH=\e[3m
+set t_ZR=\e[23m
+highlight Comment cterm=italic
+
+highlight VertSplit cterm=none
+highlight LineNr ctermfg=black ctermbg=none
+highlight Visual cterm=italic ctermfg=white ctermbg=lightyellow
+highlight Search cterm=italic,underline ctermfg=white ctermbg=lightyellow
 
 " split sizing bindings
 nnoremap _ :vertical resize -5<CR>
@@ -243,40 +195,5 @@ inoremap ˚<Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
-let AirlineTheme='dark'
-let g:airline#themes#dark#palette = {}
-
-let s:airline_a_normal   = [ '#ffffff' , '#ffffff' , 7 , 'NONE', 'NONE' ]
-let s:airline_b_normal   = [ '#ffffff' , '#ffffff' , 7 , 'NONE', 'NONE' ]
-let s:airline_c_normal   = [ '#ffffff' , '#ffffff' , 239 , 'NONE', 'NONE' ]
-let g:airline#themes#dark#palette.normal = airline#themes#generate_color_map(s:airline_a_normal, s:airline_b_normal, s:airline_c_normal)
-let g:airline#themes#dark#palette.normal_modified = {'airline_c': [ '#ffffff', '#ffffff', 'NONE', 'NONE', 'NONE']}
-
-let s:airline_a_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE'  ]
-let s:airline_b_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE'  ]
-let s:airline_c_insert = [ '#ffffff' , '#ffffff' , 7 , 'NONE' ]
-let g:airline#themes#dark#palette.insert = airline#themes#generate_color_map(s:airline_a_insert, s:airline_b_insert, s:airline_c_insert)
-let g:airline#themes#dark#palette.insert_modified = {'airline_c': ['#ffffff', '#ffffff', 7, 'NONE', 'NONE'],}
-let g:airline#themes#dark#palette.insert_paste = {'airline_a': [ s:airline_a_insert[0], s:airline_a_insert[1], s:airline_a_insert[2], s:airline_a_insert[3], 'NONE'],}
-
-let g:airline#themes#dark#palette.replace = copy(g:airline#themes#dark#palette.insert)
-let g:airline#themes#dark#palette.replace.airline_a = [ s:airline_b_insert[0], s:airline_a_insert[1], s:airline_b_insert[2] , s:airline_b_insert[3], 'NONE']
-let g:airline#themes#dark#palette.replace_modified = g:airline#themes#dark#palette.insert_modified
-
-let s:airline_a_visual = [ '#ffffff' , '#ffffff' , 3 , 'NONE' ]
-let s:airline_b_visual = [ '#ffffff' , '#ffffff' , 3 , 'NONE' ]
-let s:airline_c_visual = [ '#ffffff' , '#ffffff' , 3  , 'NONE' ]
-let g:airline#themes#dark#palette.visual = airline#themes#generate_color_map(s:airline_a_visual, s:airline_b_visual, s:airline_c_visual)
-let g:airline#themes#dark#palette.visual_modified = {'airline_c': ['#ffffff', '#ffffff', 255 , 'NONE', 'NONE'],}
-
-let s:airline_a_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
-let s:airline_b_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
-let s:airline_c_inactive = ['#ffffff', '#ffffff', 239, 'NONE', 'NONE' ]
-let g:airline#themes#dark#palette.inactive = airline#themes#generate_color_map(s:airline_a_inactive, s:airline_b_inactive, s:airline_c_inactive)
-let g:airline#themes#dark#palette.inactive_modified = {'airline_c': [ '#ffffff', 'NONE', 'NONE', 'NONE', 'NONE'],}
-
-let s:airline_a_commandline = ['#ffffff', '#ffffff', 239, 'NONE']
-let s:airline_b_commandline = ['#ffffff', '#ffffff', 7, 'NONE']
-let s:airline_c_commandline = ['#ffffff', '#ffffff', 7, 'NONE']
-let g:airline#themes#dark#palette.commandline = airline#themes#generate_color_map(s:airline_a_commandline, s:airline_b_commandline, s:airline_c_commandline)
-
+" remove all trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
