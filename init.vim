@@ -23,13 +23,17 @@ call plug#begin('~/.config/nvim/plugged')
   Plug '/usr/local/opt/fzf'
   Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
-  Plug 'https://github.com/prettier/vim-prettier.git', { 'do': 'yarn install' }
-  Plug 'https://github.com/iamcco/markdown-preview.nvim.git', { 'do': { -> mkdp#util#install() } }
 
   " tmux integration
   Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
+  " cool to have
+  Plug 'https://github.com/iamcco/markdown-preview.nvim.git', { 'do': { -> mkdp#util#install() } }
+  Plug 'https://github.com/segeljakt/vim-silicon.git'
+
 call plug#end()
+
+let g:silicon = {'background': '#ffffff'}
 
 " paper colouring
 set background=light
@@ -40,6 +44,7 @@ colorscheme PaperColor
 let g:airline_theme = 'cleaner'
 
 " reaching preferences
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 nnoremap <C-p> :Files<CR>
 nnoremap <Leader>p :Fi <c-r><c-w><CR>
 vnoremap <leader>p y:Fi <c-r>"<CR>
@@ -55,8 +60,8 @@ let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'fg+':     ['fg', 'CursorLine',  'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', ],
   \ 'hl+':     ['fg', 'Statement'],
   \ 'info':    ['fg', 'PreProc'],
   \ 'border':  ['fg', 'Ignore'],
@@ -131,14 +136,15 @@ nnoremap <S-k> :bnext<CR>
 nnoremap <leader>x :bd<CR>
 
 " NERDTree preferences
-let g:NERDTreeHijackNetrw = 1
+let NERDTreeWinSizeMax=31
+let NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
 let NERDTreeMapJumpLastChild=''
 let NERDTreeMapJumpFirstChild=''
 nnoremap <leader>bo :NERDTreeFind<CR>
 
 " appearances
-set number
+set relativenumber number
 set foldcolumn=0
 set nowrap
 set hlsearch
@@ -168,8 +174,8 @@ set autoindent
 set smartindent
 
 " italic comments
-set t_ZH=\e[3m
-set t_ZR=\e[23m
+set t_ZH=^[[3m
+set t_ZR=^[[23m
 highlight Comment cterm=italic
 
 highlight VertSplit cterm=none

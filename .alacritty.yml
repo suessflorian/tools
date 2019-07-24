@@ -29,7 +29,7 @@ font:
   italic:
     family: Ubuntu Mono
     style: Italic
-  size: 15.0
+  size: 14.5
   offset:
     x: 0
     y: 0
@@ -89,7 +89,7 @@ mouse:
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
-  save_to_clipboard: true
+  save_to_clipboard: false
 
 dynamic_title: false
 
@@ -97,7 +97,7 @@ live_config_reload: true
 
 shell:
   program: login
-  args: ["-fp", "florians"]
+  args: ["-fp", "floriansuess"]
 
 alt_send_esc: true
 
@@ -211,7 +211,6 @@ key_bindings:
   #- { key: H,      mods: Command, action: Hide             }
   #- { key: Q,      mods: Command, action: Quit             }
   #- { key: W,      mods: Command, action: Quit             }
-  - { key: N,        mods: Command, command: { program: "open", args: ["-n", "/Applications/Alacritty.app"] } }
   - { key: Paste,                   action: Paste                            }
   - { key: Copy,                    action: Copy                             }
   - { key: L,        mods: Control, action: ClearLogNotice                   }
