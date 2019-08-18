@@ -23,17 +23,15 @@ call plug#begin('~/.config/nvim/plugged')
   Plug '/usr/local/opt/fzf'
   Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
+  Plug 'https://github.com/junegunn/goyo.vim.git'
 
   " tmux integration
   Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
-  " cool to have
-  Plug 'https://github.com/iamcco/markdown-preview.nvim.git', { 'do': { -> mkdp#util#install() } }
-  Plug 'https://github.com/segeljakt/vim-silicon.git'
-
 call plug#end()
 
-let g:silicon = {'background': '#ffffff'}
+" distraction free mode
+nnoremap <leader>gy :Goyo 60%x90%<CR>
 
 " paper colouring
 set background=light
@@ -163,7 +161,6 @@ set history=1000
 set clipboard+=unnamedplus
 set splitright
 set splitbelow
-set mouse=a
 
 " tabbing preferences
 set expandtab
