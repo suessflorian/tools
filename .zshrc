@@ -21,7 +21,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}*"
 PROMPT='  %{$fg[white]%}%30<...<%~%<<%{$reset_color%}: '
 RPROMPT='$(git_prompt_info)'
 
-# Preferred editor
+# preferred editor
 export EDITOR='nvim'
 
 if [ -z "$TMUX" ]
@@ -30,7 +30,7 @@ then
     tmux attach -t main || tmux new -s main
 fi
 
-# Alias's and functions
+# alias's and functions
 n() { nvim "${1:-.}"; }
 source ~/.awsAliases
 alias aws.all="_awsListAll"
@@ -52,7 +52,7 @@ export GOPATH="$HOME/Documents"
 export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$PATH:$GOPATH/bin"
 
-# Emacs style terminal io bindings
+# emacs style terminal io bindings
 bindkey -e
 
 #   ctrl + u          : clear line
@@ -72,3 +72,7 @@ bindkey '^b' backward-word
 # ctrl+space brings up git status window
 bindkey -s '^ ' 'lazygit^M'
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"
