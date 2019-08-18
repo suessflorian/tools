@@ -70,5 +70,5 @@ bindkey '^f' forward-word
 bindkey '^b' backward-word
 
 # ctrl+space brings up git status window
-bindkey -s '^ ' 'tig^M'
+bindkey -s '^ ' 'lazygit^M'
 
