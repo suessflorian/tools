@@ -33,6 +33,9 @@ call plug#end()
 " distraction free mode
 nnoremap <leader>gy :Goyo 60%x90%<CR>
 
+" spell checking
+nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
+
 " paper colouring
 set background=light
 let g:PaperColor_Theme_Options = {'theme': {'default': {'transparent_background': 1}}}
@@ -76,7 +79,7 @@ nnoremap k gk
 " bring up vim documentation quicker
 cabbrev h vert h
 
-noremap <leader>gb :!git blame -- %<cr>
+noremap <leader>gb :execute "!git blame -L " . eval(line(".")-5) . ",+10 %"<cr>
 
 " haskell preferences
 let g:haskell_enable_quantification = 1
@@ -107,6 +110,7 @@ let g:go_doc_keywordprg_enabled = 0
 let g:go_fmt_command = "goimports"
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
+let g:go_def_mapping_enabled = 0
 
 " vim go shortcuts
 nnoremap <leader>gd :GoDocBrowser<CR>
@@ -161,6 +165,7 @@ set history=1000
 set clipboard+=unnamedplus
 set splitright
 set splitbelow
+set hidden
 
 " tabbing preferences
 set expandtab
