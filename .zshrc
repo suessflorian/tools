@@ -13,13 +13,12 @@ plugins=(git z zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[white]%}(%{$fg_no_bold[white]%}%B"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%b%{$fg_bold[white]%})%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg_bold[white]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg_bold[white]%}%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}*"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_no_bold[red]%}*"
 
-PROMPT='  %{$fg[white]%}%30<...<%~%<<%{$reset_color%}: '
-RPROMPT='$(git_prompt_info)'
+PROMPT='  %{$fg[white]%}%30<...<%~%<<%{$reset_color%}$(git_prompt_info): '
 
 # preferred editor
 export EDITOR='nvim'
@@ -48,7 +47,7 @@ function aws.ecr.login () {
     $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 191213556404)
 }
 
-export GOPATH="$HOME/Documents"
+export GOPATH="$HOME/Documents/gopath"
 export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$PATH:$GOPATH/bin"
 
@@ -72,7 +71,8 @@ bindkey '^b' backward-word
 # ctrl+space brings up git status window
 bindkey -s '^ ' 'lazygit^M'
 
-
+export PATH="$PATH:/Users/floriansuess/Library/Python/3.7/bin"
+export PATH="$PATH:/Users/floriansuess/Library/Python/2.7/bin"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
 [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"

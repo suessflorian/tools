@@ -3,10 +3,7 @@ let mapleader = " "
 call plug#begin('~/.config/nvim/plugged')
 
   " syntax support
-  Plug 'https://github.com/pangloss/vim-javascript.git'
-  Plug 'https://github.com/mxw/vim-jsx.git'
-  Plug 'https://github.com/elzr/vim-json.git'
-  Plug 'https://github.com/moll/vim-node.git'
+  Plug 'https://github.com/sheerun/vim-polyglot.git'
 
   " layout/appearance support
   Plug 'https://github.com/NLKNguyen/papercolor-theme.git'
@@ -15,7 +12,7 @@ call plug#begin('~/.config/nvim/plugged')
 
   " language support
   Plug 'https://github.com/fatih/vim-go.git'
-  Plug 'https://github.com/neovimhaskell/haskell-vim.git'
+  Plug 'https://github.com/davidhalter/jedi-vim.git'
 
   " functionality support
   Plug 'https://github.com/scrooloose/nerdtree.git'
@@ -23,15 +20,11 @@ call plug#begin('~/.config/nvim/plugged')
   Plug '/usr/local/opt/fzf'
   Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
-  Plug 'https://github.com/junegunn/goyo.vim.git'
 
   " tmux integration
   Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
 call plug#end()
-
-" distraction free mode
-nnoremap <leader>gy :Goyo 60%x90%<CR>
 
 " spell checking
 nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
@@ -81,15 +74,6 @@ cabbrev h vert h
 
 noremap <leader>gb :execute "!git blame -L " . eval(line(".")-5) . ",+10 %"<cr>
 
-" haskell preferences
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_recursivedo = 1
-let g:haskell_enable_arrowsyntax = 1
-let g:haskell_enable_pattern_synonyms = 1
-let g:haskell_enable_typeroles = 1
-let g:haskell_enable_static_pointers = 1
-let g:haskell_backpack = 1
-
 " go preferences
 let g:go_highlight_array_whitespace_error = 1
 let g:go_highlight_chan_whitespace_error = 1
@@ -110,10 +94,15 @@ let g:go_doc_keywordprg_enabled = 0
 let g:go_fmt_command = "goimports"
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
-let g:go_def_mapping_enabled = 0
+let g:go_def_mapping_enabled = 1
 
 " vim go shortcuts
 nnoremap <leader>gd :GoDocBrowser<CR>
+
+" python preferences
+let g:jedi#auto_initialization = 0
+autocmd FileType python nnoremap <leader>rn :call jedi#rename()<cr>
+autocmd FileType python nnoremap <silent>gd :call jedi#goto()<cr>
 
 " ripping out extraneous information
 let g:airline_symbols = {}
@@ -138,7 +127,6 @@ nnoremap <S-k> :bnext<CR>
 nnoremap <leader>x :bd<CR>
 
 " NERDTree preferences
-let NERDTreeWinSizeMax=31
 let NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
 let NERDTreeMapJumpLastChild=''
@@ -176,8 +164,6 @@ set autoindent
 set smartindent
 
 " italic comments
-set t_ZH=^[[3m
-set t_ZR=^[[23m
 highlight Comment cterm=italic
 
 highlight VertSplit cterm=none
@@ -209,14 +195,6 @@ function! AutoHighlightToggle()
     return 1
   endif
 endfunction
-
-" <A-j/k> movements
-nnoremap ∆ :m .+1<CR>==
-nnoremap ˚ :m .-2<CR>==
-inoremap ∆ <Esc>:m .+1<CR>==gi
-inoremap ˚<Esc>:m .-2<CR>==gi
-vnoremap ∆ :m '>+1<CR>gv=gv
-vnoremap ˚ :m '<-2<CR>gv=gv
 
 " remove all trailing whitespace on save
 autocmd BufWritePre * %s/\s\+$//e
