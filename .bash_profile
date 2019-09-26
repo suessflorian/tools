@@ -8,6 +8,7 @@ export EDITOR="$VISUAL"
 
 [ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 
 eval "$(jump shell)"
 eval "$(jump shell --bind=z)"
