@@ -2,26 +2,26 @@ let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
 
-  " syntax support
+  " syntax colors
   Plug 'https://github.com/sheerun/vim-polyglot.git'
 
-  " layout/appearance support
+  " language support
+  Plug 'https://github.com/fatih/vim-go.git' " Golang
+  Plug 'https://github.com/davidhalter/jedi-vim.git' " Python
+
+  " cosmetic
   Plug 'https://github.com/NLKNguyen/papercolor-theme.git'
-  Plug 'https://github.com/vim-airline/vim-airline.git'
   Plug 'https://github.com/suessflorian/vim-cleaner-airline-theme.git'
 
-  " language support
-  Plug 'https://github.com/fatih/vim-go.git'
-  Plug 'https://github.com/davidhalter/jedi-vim.git'
-
   " functionality support
-  Plug 'https://github.com/scrooloose/nerdtree.git'
-  Plug 'https://github.com/junegunn/fzf.vim.git'
+  Plug 'https://github.com/vim-airline/vim-airline.git'
   Plug '/usr/local/opt/fzf'
+  Plug 'https://github.com/junegunn/fzf.vim.git'
+  Plug 'https://github.com/scrooloose/nerdtree.git'
   Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
 
-  " tmux integration
+  " tmux navigation integration support
   Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
 call plug#end()
@@ -29,13 +29,14 @@ call plug#end()
 " spell checking
 nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
 
-" paper colouring
-set background=light
 let g:PaperColor_Theme_Options = {'theme': {'default': {'transparent_background': 1}}}
-colorscheme PaperColor
-
-" airline theme, getting rid of all the colours
 let g:airline_theme = 'cleaner'
+set background=light
+colorscheme PaperColor
+highlight VertSplit cterm=none
+highlight LineNr ctermfg=black ctermbg=none
+highlight Visual ctermfg=white ctermbg=3
+highlight Search ctermfg=white ctermbg=3
 
 " reaching preferences
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
@@ -69,7 +70,7 @@ let g:fzf_colors =
 nnoremap j gj
 nnoremap k gk
 
-" bring up vim documentation quicker
+" faster documentation
 cabbrev h vert h
 
 noremap <leader>gb :execute "!git blame -L " . eval(line(".")-5) . ",+10 %"<cr>
@@ -121,7 +122,7 @@ let g:airline#extensions#tabline#show_tab_count = 0
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-" buffer navigation preferences
+" buffer navigation
 nnoremap <S-j> :bprevious<CR>
 nnoremap <S-k> :bnext<CR>
 nnoremap <leader>x :bd<CR>
@@ -129,12 +130,15 @@ nnoremap <leader>x :bd<CR>
 " NERDTree preferences
 let NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
-let NERDTreeMapJumpLastChild=''
-let NERDTreeMapJumpFirstChild=''
 nnoremap <leader>bo :NERDTreeFind<CR>
 
+" mitigate buffer navigation interference
+let NERDTreeMapJumpLastChild=''
+let NERDTreeMapJumpFirstChild=''
+
+
 " appearances
-set relativenumber number
+set number
 set foldcolumn=0
 set nowrap
 set hlsearch
@@ -163,20 +167,12 @@ set tabstop=2
 set autoindent
 set smartindent
 
-" italic comments
-highlight Comment cterm=italic
-
-highlight VertSplit cterm=none
-highlight LineNr ctermfg=black ctermbg=none
-highlight Visual cterm=italic ctermfg=white ctermbg=lightyellow
-highlight Search cterm=italic,underline ctermfg=white ctermbg=lightyellow
-
 " split sizing bindings
 nnoremap _ :vertical resize -5<CR>
 nnoremap + :vertical resize +5<CR>
 
-" highlight all instances of word under cursor, when idle.
-nnoremap <leader>hi :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+" highlight all instances of word under cursor
+nnoremap <leader>h :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 function! AutoHighlightToggle()
   let @/ = ''
   if exists('#auto_highlight')
