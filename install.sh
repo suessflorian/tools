@@ -1,3 +1,5 @@
+ln -s -f ~/.dotfiles/.gitconfig             ~/.gitconfig
+
 ln -s -f ~/.dotfiles/.bash_profile          ~/.bash_profile
 ln -s -f ~/.dotfiles/.git-prompt.sh         ~/.git-prompt.sh
 ln -s -f ~/.dotfiles/.git-completion.bash   ~/.git-completion.bash
