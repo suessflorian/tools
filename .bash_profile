@@ -6,6 +6,8 @@ fi
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
+# movio specific
+[ -f ~/.movio/movio.bash ] && source ~/.movio/movio.bash
 [ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 [ -f ~/.git-completion.bash ] && source ~/.git-completion.bash

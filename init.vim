@@ -68,7 +68,7 @@ nnoremap k gk
 " faster documentation
 cabbrev h vert h
 
-noremap <leader>gb :execute "!git blame -L " . eval(line(".")-5) . ",+10 %"<cr>
+noremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
 
 " go preferences
 let g:go_highlight_array_whitespace_error = 1
