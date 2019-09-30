@@ -31,12 +31,7 @@ nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
 
 let g:PaperColor_Theme_Options = {'theme': {'default': {'transparent_background': 1}}}
 let g:airline_theme = 'cleaner'
-set background=light
 colorscheme PaperColor
-highlight VertSplit cterm=none
-highlight LineNr ctermfg=black ctermbg=none
-highlight Visual ctermfg=white ctermbg=3
-highlight Search ctermfg=white ctermbg=3
 
 " reaching preferences
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
@@ -132,40 +127,26 @@ let NERDTreeHijackNetrw = 1
 let NERDTreeShowHidden=1
 nnoremap <leader>bo :NERDTreeFind<CR>
 
-" mitigate buffer navigation interference
-let NERDTreeMapJumpLastChild=''
-let NERDTreeMapJumpFirstChild=''
-
-
-" appearances
-set number
+" sensibles
+set number relativenumber
 set foldcolumn=0
-set nowrap
-set hlsearch
 set ignorecase
-set scrolloff=0
-set wildmenu
 set noerrorbells
 set noshowmode
 set noshowcmd
 set novisualbell
 set nobackup
-set cmdheight=1
 set noswapfile
-set encoding=utf8
-set history=1000
-set clipboard+=unnamedplus
+set cmdheight=1
 set splitright
 set splitbelow
 set hidden
-
-" tabbing preferences
+set clipboard+=unnamedplus
 set expandtab
-set smarttab
 set shiftwidth=2
 set tabstop=2
-set autoindent
 set smartindent
+set background=light
 
 " split sizing bindings
 nnoremap _ :vertical resize -5<CR>
@@ -194,3 +175,7 @@ endfunction
 
 " remove all trailing whitespace on save
 autocmd BufWritePre * %s/\s\+$//e
+
+highlight VertSplit cterm=none
+highlight Visual ctermfg=white ctermbg=3
+highlight Search ctermfg=white ctermbg=3
