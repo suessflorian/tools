@@ -26,6 +26,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
+nnoremap <Leader>n :set relativenumber!<cr>
+
 " spell checking
 nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
 
@@ -128,7 +130,6 @@ let NERDTreeShowHidden=1
 nnoremap <leader>bo :NERDTreeFind<CR>
 
 " sensibles
-set number relativenumber
 set foldcolumn=0
 set ignorecase
 set noerrorbells
