@@ -26,8 +26,6 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
-nnoremap <Leader>n :set relativenumber!<cr>
-
 " spell checking
 nnoremap <leader>s :setlocal spell! spelllang=en_nz<CR>
 
@@ -71,6 +69,8 @@ nnoremap k gk
 cabbrev h vert h
 
 noremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
+nnoremap <leader>n :set relativenumber!<cr>
+set number
 
 " go preferences
 let g:go_highlight_array_whitespace_error = 1
