@@ -1,10 +1,10 @@
 ln -s -f ~/.dotfiles/.gitconfig             ~/.gitconfig
 
-ln -s -f ~/.dotfiles/.bash_profile          ~/.bash_profile
-ln -s -f ~/.dotfiles/.bash_profile          ~/.bashrc
+ln -s -f ~/.dotfiles/.zprofile              ~/.zprofile
+ln -s -f ~/.dotfiles/.zprofile              ~/.zshrc
 ln -s -f ~/.dotfiles/.git-prompt.sh         ~/.git-prompt.sh
-ln -s -f ~/.dotfiles/.git-completion.bash   ~/.git-completion.bash
-ln -s -f ~/.dotfiles/.fzf.bash              ~/.fzf.bash
+ln -s -f ~/.dotfiles/.zsh                   ~/.zsh
+ln -s -f ~/.dotfiles/.fzf.zsh               ~/.fzf.zsh
 
 ln -s -f ~/.dotfiles/.tmux.conf             ~/.tmux.conf
 ln -s -f ~/.dotfiles/alacritty.yml          ~/.config/alacritty/alacritty.yml
