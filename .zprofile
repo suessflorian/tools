@@ -34,7 +34,7 @@ PROMPT="%{$fg[yellow]%}%m:%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$
 zstyle ':vcs_info:git:*' formats '(%b)'
 
 [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-[ -f ~/.movio/movio.bash ] && source ~/.movio/movio.zsh
+[ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#b3b3b3"
