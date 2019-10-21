@@ -3,24 +3,12 @@ then
     tmux attach -t main || tmux new -s main
 fi
 
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-
-# movio specific
-[ -f ~/.movio/movio.bash ] && source ~/.movio/movio.bash
-[ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f ~/.git-completion.zsh ] && source ~/.git-completion.zsh
+autoload -U colors && colors
+autoload -Uz vcs_info
+autoload -Uz compinit && compinit
 
 eval "$(jump shell)"
-eval "$(jump shell --bind=z)"
 
-setopt PROMPT_SUBST
-PS1='%m %15<...<%~%<< $(__git_ps1 "(%s)") \$ '
-
-bindkey '^ ' _git-status
-
-# use n as main editor trigger argument decides focus state
 function n {
   if [[ -n "$1" ]]; then
     nvim $1
@@ -29,15 +17,27 @@ function n {
   fi
 }
 
-function _git-status { lazygit }
+function _git-status {
+    lazygit
+    zle reset-prompt
+}
 zle -N _git-status
+bindkey '^ ' _git-status
+bindkey -e
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # nvm bash_completion
+export EDITOR="nvim"
 
-# load git completion
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-fpath=(~/.zsh $fpath)
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+PROMPT="%{$fg[yellow]%}%m:%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
+zstyle ':vcs_info:git:*' formats '(%b)'
 
-autoload -Uz compinit && compinit
+[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -f ~/.movio/movio.bash ] && source ~/.movio/movio.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#b3b3b3"
+
+export PATH="/Users/floriansuess/Library/Python/3.7/bin:$PATH"
+
