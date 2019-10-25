@@ -69,8 +69,7 @@ nnoremap k gk
 cabbrev h vert h
 
 noremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
-nnoremap <leader>n :set relativenumber!<cr>
-set number
+nnoremap <leader>n :set foldcolumn=0 number relativenumber!<cr>
 
 " go preferences
 let g:go_highlight_array_whitespace_error = 1
@@ -130,7 +129,7 @@ let NERDTreeShowHidden=1
 nnoremap <leader>bo :NERDTreeFind<CR>
 
 " sensibles
-set foldcolumn=0
+set foldcolumn=4
 set ignorecase
 set noerrorbells
 set noshowmode

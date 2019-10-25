@@ -1,7 +1,4 @@
-if [ -z "$TMUX" ]
-then
-    tmux attach -t main || tmux new -s main
-fi
+if [ "$TMUX" = "" ]; then tmux attach -t main || tmux new -s main; fi
 
 autoload -U colors && colors
 autoload -Uz vcs_info
@@ -24,6 +21,9 @@ function _git-status {
 zle -N _git-status
 bindkey '^ ' _git-status
 bindkey -e
+
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
 
 export EDITOR="nvim"
 
