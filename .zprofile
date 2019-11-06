@@ -18,6 +18,7 @@ function _git-status {
     lazygit
     zle reset-prompt
 }
+
 zle -N _git-status
 bindkey '^ ' _git-status
 bindkey -e
@@ -37,6 +38,7 @@ zstyle ':vcs_info:git:*' formats '(%b)'
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+zstyle ':completion:*' menu select
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#b3b3b3"
 
 export PATH="/Users/floriansuess/Library/Python/3.7/bin:$PATH"
