@@ -1,8 +1,6 @@
 ln -s -f ~/.dotfiles/.gitconfig             ~/.gitconfig
 
-ln -s -f ~/.dotfiles/.zprofile              ~/.zprofile
 ln -s -f ~/.dotfiles/.zprofile              ~/.zshrc
-ln -s -f ~/.dotfiles/.git-prompt.sh         ~/.git-prompt.sh
 ln -s -f ~/.dotfiles/.zsh                   ~/.zsh
 ln -s -f ~/.dotfiles/.fzf.zsh               ~/.fzf.zsh
 
