@@ -18,7 +18,6 @@ call plug#begin('~/.config/nvim/plugged')
   Plug '/usr/local/opt/fzf'
   Plug 'https://github.com/junegunn/fzf.vim.git'
   Plug 'https://github.com/scrooloose/nerdtree.git'
-  Plug 'https://github.com/jiangmiao/auto-pairs.git'
   Plug 'https://github.com/tpope/vim-surround.git'
 
   " tmux navigation integration support
@@ -44,7 +43,7 @@ nnoremap <leader>f :Rg <c-r><c-w><CR>
 vnoremap <leader>f y:Rg <c-r>"<CR>
 
 command! -bang -nargs=* Fi call fzf#vim#files('.', {'options':'--query '.shellescape(<q-args>)})
-command! -bang -nargs=* Rg call fzf#vim#grep('rg --line-number --hidden --no-heading --color=always --smart-case '.shellescape(<q-args>),1, fzf#vim#with_preview({'options': '--delimiter : --nth 3..'}), <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep('rg --line-number --hidden --no-heading --color=always --smart-case --glob="!.git/*" '.shellescape(<q-args>),1, fzf#vim#with_preview({'options': '--delimiter : --nth 3..'}), <bang>0)
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
