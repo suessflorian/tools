@@ -67,7 +67,7 @@ nnoremap k gk
 " faster documentation
 cabbrev h vert h
 
-noremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
+nnoremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
 nnoremap <leader>n :set foldcolumn=0 number relativenumber!<cr>
 
 " go preferences
