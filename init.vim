@@ -53,6 +53,24 @@ autocmd BufWritePre * %s/\s\+$//e
 
 colorscheme monochrome
 highlight VertSplit cterm=none
-highlight Visual ctermfg=black ctermbg=lightgrey
-highlight Search ctermfg=black ctermbg=lightgrey
 highlight FoldColumn ctermbg=none
+
+" Python
+call lsp#add_filetype_config({
+      \ 'filetype': 'python',
+      \ 'name': 'pyls',
+      \ 'cmd': 'pyls'
+      \ })
+
+" Golang
+call lsp#add_filetype_config({
+      \ 'filetype': 'go',
+      \ 'name': 'gopls',
+      \ 'cmd': 'gopls'
+      \ })
+
+autocmd Filetype python,go setl omnifunc=lsp#omnifunc
+nnoremap <silent> ;gd :call lsp#text_document_definition()<CR>
+nnoremap <silent> ;dc :call lsp#text_document_declaration()<CR>
+nnoremap <silent> ;h :call lsp#text_document_hover()<CR>
+
