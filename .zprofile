@@ -14,6 +14,11 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILE=~/.zsh_history
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
+export FZF_DEFAULT_OPTS='--no-height'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+export FZF_CTRL_T_OPTS='--preview "head -70 {}"'
+
 export PYENV_VERSION=3.8.0
 
 zle -N _git-status

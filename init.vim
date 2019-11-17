@@ -12,7 +12,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob "!.git/*" '
+let $FZF_DEFAULT_OPTS = '--preview "head -100 {}"'
 nnoremap <C-p> :Files<CR>
 nnoremap <Leader>p :Fi <c-r><c-w><CR>
 vnoremap <leader>p y:Fi <c-r>"<CR>
