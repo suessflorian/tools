@@ -10,6 +10,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/tpope/vim-surround'
     Plug 'https://github.com/fxn/vim-monochrome'
 
+    Plug 'https://github.com/fatih/vim-go.git'
+
 call plug#end()
 
 let $FZF_DEFAULT_OPTS = '--preview "head -100 {}"'
@@ -62,15 +64,23 @@ call lsp#add_filetype_config({
       \ 'cmd': 'pyls'
       \ })
 
-" Golang
-call lsp#add_filetype_config({
-      \ 'filetype': 'go',
-      \ 'name': 'gopls',
-      \ 'cmd': 'gopls'
-      \ })
+autocmd Filetype python setl omnifunc=lsp#omnifunc
+nnoremap <silent>gd :call lsp#text_document_definition()<CR>
+nnoremap <silent>dh :call lsp#text_document_hover()<CR>
 
-autocmd Filetype python,go setl omnifunc=lsp#omnifunc
-nnoremap <silent> ;gd :call lsp#text_document_definition()<CR>
-nnoremap <silent> ;dc :call lsp#text_document_declaration()<CR>
-nnoremap <silent> ;h :call lsp#text_document_hover()<CR>
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_highlight_variable_assignments = 1
 
+let g:go_fmt_command = 'goimports'
+let g:go_def_mode = 'gopls'
+let g:go_info_mode = 'gopls'
+
+autocmd FileType go nnoremap <buffer> <silent>gd :GoDef<CR>
+autocmd FileType go nnoremap <buffer> <leader>gd :GoDocBrowser<CR>
