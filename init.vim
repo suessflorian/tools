@@ -4,10 +4,12 @@ call plug#begin('~/.config/nvim/plugged')
 
     Plug '/usr/local/opt/fzf'
     Plug 'https://github.com/junegunn/fzf.vim'
+
     Plug 'https://github.com/christoomey/vim-tmux-navigator'
     Plug 'https://github.com/scrooloose/nerdtree'
     Plug 'https://github.com/tpope/vim-surround'
     Plug 'https://github.com/fxn/vim-monochrome'
+    Plug 'https://github.com/neovim/nvim-lsp'
 
 call plug#end()
 
@@ -49,20 +51,9 @@ colorscheme monochrome
 highlight VertSplit cterm=none
 highlight FoldColumn ctermbg=none
 
-" Python
-call lsp#add_filetype_config({
-      \ 'filetype': 'python',
-      \ 'name': 'pyls',
-      \ 'cmd': 'pyls'
-      \ })
+call nvim_lsp#setup("gopls", {})
+call nvim_lsp#setup("pyls", {})
 
-" Golang
-call lsp#add_filetype_config({
-      \ 'filetype': 'go',
-      \ 'name': 'gopls',
-      \ 'cmd': 'gopls'
-      \ })
-
-autocmd Filetype python, go setl omnifunc=lsp#omnifunc
-nnoremap <silent>;gd :call lsp#text_document_definition()<CR>
-nnoremap <silent>;dh :call lsp#text_document_hover()<CR>
+autocmd Filetype python,go setl omnifunc=v:lua.vim.lsp.omnifunc
+nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> ;h  <cmd>lua vim.lsp.buf.hover()<CR>
