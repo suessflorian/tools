@@ -1,23 +1,25 @@
 if [ "$TMUX" = "" ]; then tmux attach -t main || tmux new -s main; fi
 
-autoload -U colors && colors
+autoload -Uz colors && colors
 autoload -Uz vcs_info
 autoload -Uz compinit && compinit
 
 eval "$(jump shell)"
+eval "$(pyenv init -)"
 
-function n {
-  if [[ -n "$1" ]]; then
-    nvim $1
-  else
-    nvim .
-  fi
-}
+function n { if [[ -n "$1" ]]; then nvim $1; else nvim .; fi }
+function _git-status { lazygit; zle reset-prompt }
 
-function _git-status {
-    lazygit
-    zle reset-prompt
-}
+export HISTSIZE=10000
+export SAVEHIST=10000
+export HISTFILE=~/.zsh_history
+
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
+export FZF_DEFAULT_OPTS='--no-height'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+export FZF_CTRL_T_OPTS='--preview "head -70 {}"'
+
+export PYENV_VERSION=3.7.0
 
 zle -N _git-status
 bindkey '^ ' _git-status
@@ -27,11 +29,13 @@ bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
 
 export EDITOR="nvim"
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
 
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
-PROMPT="%{$fg[yellow]%}%m:%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
+PROMPT="%m:%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
 zstyle ':vcs_info:git:*' formats '(%b)'
 
 [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -40,6 +44,4 @@ zstyle ':vcs_info:git:*' formats '(%b)'
 
 zstyle ':completion:*' menu select
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#b3b3b3"
-
-export PATH="/Users/floriansuess/Library/Python/3.7/bin:$PATH"
 
