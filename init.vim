@@ -13,39 +13,33 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
-nnoremap <C-p> :Files<CR>
-
-nnoremap <C-f> :Rg<space>
-nnoremap <leader>f :Rg <c-r><c-w><CR>
-vnoremap <leader>f y:Rg <c-r>"<CR>
-
-let rg_options='rg --line-number --hidden --color=always --smart-case --glob="!.git/*" '
-command! -bang -nargs=* Rg call fzf#vim#grep(rg_options.shellescape(<q-args>), 0, fzf#vim#with_preview({'options': '--delimiter : --nth 3..'}), <bang>0)
-
-nnoremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
-
-let NERDTreeHijackNetrw=1
-let NERDTreeShowHidden=1
-nnoremap <leader>bo :NERDTreeFind<CR>
-
-set spelllang=en_nz
-set foldcolumn=4
-set novisualbell
 set nobackup
 set noswapfile
-set cmdheight=1
-set splitright
-set splitbelow
+set nowrap
+set spelllang=en_nz
+set foldcolumn=4
+set cursorline
 set tabstop=2
 set shiftwidth=2
 set expandtab
-set nowrap
-set cursorline
-cabbrev h vert h
-
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 
 autocmd BufWritePre * %s/\s\+$//e
+
+cabbrev h vert bo h
+
+nnoremap <C-p> :Files <CR>
+nnoremap <C-f> :Rg<SPACE>
+nnoremap <LEADER>f :Rg <C-R><C-W><CR>
+vnoremap <LEADER>f y:Rg <C-R>"<CR>
+
+let reach='rg --line-number --hidden --color=always --smart-case --glob="!.git/*" '
+command -nargs=* Rg call fzf#vim#grep(reach.shellescape(<q-args>), 0, fzf#vim#with_preview())
+
+nnoremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
+
+let NERDTreeShowHidden=1
+nnoremap <leader>bo :NERDTreeFind<CR>
 
 colorscheme monochrome
 highlight VertSplit cterm=none
