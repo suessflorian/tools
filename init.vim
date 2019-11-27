@@ -49,5 +49,6 @@ call nvim_lsp#setup("gopls", {})
 call nvim_lsp#setup("pyls", {})
 
 autocmd Filetype python,go setl omnifunc=v:lua.vim.lsp.omnifunc
-nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> ;h  <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> ;gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> ;ho  <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> ;rf <cmd>lua vim.lsp.buf.references()<CR>
