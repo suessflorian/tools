@@ -30,16 +30,18 @@ cabbrev h vert bo h
 
 nnoremap <C-p> :Files <CR>
 nnoremap <C-f> :Rg<SPACE>
+nnoremap <C-b> :Buffer <CR>
 nnoremap <LEADER>f :Rg <C-R><C-W><CR>
 vnoremap <LEADER>f y:Rg <C-R>"<CR>
 
 let reach='rg --line-number --hidden --color=always --smart-case --glob="!.git/*" '
-command -nargs=* Rg call fzf#vim#grep(reach.shellescape(<q-args>), 0, fzf#vim#with_preview())
+command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
-nnoremap <leader>gb :execute "!git blame -L " . eval(line(".")) . ",+10 %"<cr>
+nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
+" vnoremap <leader>go :<C-U> :execute "!git brws " . join(["%", line("'<")], "\\\#L") . "-" . line("'>")<cr>
 
-let NERDTreeShowHidden=1
 nnoremap <leader>bo :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
 
 colorscheme monochrome
 highlight VertSplit cterm=none

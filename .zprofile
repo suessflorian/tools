@@ -10,14 +10,15 @@ eval "$(pyenv init -)"
 function n { if [[ -n "$1" ]]; then nvim $1; else nvim .; fi }
 function _git-status { lazygit; zle reset-prompt }
 
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=30000
+export SAVEHIST=30000
 export HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 export FZF_DEFAULT_OPTS='--no-height'
-export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 export FZF_CTRL_T_OPTS='--preview "head -70 {}"'
+export FZF_CTRL_R_OPTS='--layout reverse'
 
 export PYENV_VERSION=3.7.0
 
