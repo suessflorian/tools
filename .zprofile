@@ -16,7 +16,7 @@ export HISTFILE=~/.zsh_history
 setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
-export FZF_DEFAULT_OPTS='--no-height'
+export FZF_DEFAULT_OPTS='--no-height --layout=reverse'
 export FZF_CTRL_T_OPTS='--preview "head -70 {}"'
 export FZF_CTRL_R_OPTS='--layout reverse'
 
@@ -39,10 +39,8 @@ setopt prompt_subst
 PROMPT="%B%{$fg[yellow]%}%m:%b%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
 zstyle ':vcs_info:git:*' formats '(%b)'
 
-[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 zstyle ':completion:*' menu select
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#b3b3b3"
 

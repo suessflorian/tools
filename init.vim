@@ -13,15 +13,12 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
-set nobackup
-set noswapfile
+set nobackup noswapfile
 set nowrap
 set spelllang=en_nz
 set foldcolumn=4
 set cursorline
-set tabstop=2
-set shiftwidth=2
-set expandtab
+set tabstop=2 shiftwidth=2 expandtab
 set clipboard=unnamedplus
 
 autocmd BufWritePre * %s/\s\+$//e
@@ -38,7 +35,6 @@ let reach='rg --line-number --hidden --color=always --smart-case --glob="!.git/*
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
 nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
-" vnoremap <leader>go :<C-U> :execute "!git brws " . join(["%", line("'<")], "\\\#L") . "-" . line("'>")<cr>
 
 nnoremap <leader>bo :NERDTreeFind<CR>
 let NERDTreeShowHidden=1
