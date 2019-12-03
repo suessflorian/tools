@@ -9,7 +9,9 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/scrooloose/nerdtree'
     Plug 'https://github.com/tpope/vim-surround'
     Plug 'https://github.com/fxn/vim-monochrome'
+
     Plug 'https://github.com/neovim/nvim-lsp'
+    Plug 'https://github.com/fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
 
@@ -43,10 +45,9 @@ colorscheme monochrome
 highlight VertSplit cterm=none
 highlight FoldColumn ctermbg=none
 
-call nvim_lsp#setup("gopls", {})
 call nvim_lsp#setup("pyls", {})
 
-autocmd Filetype python,go setl omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype python setl omnifunc=v:lua.vim.lsp.omnifunc
 nnoremap <silent> ;gd <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> ;ho  <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> ;rf <cmd>lua vim.lsp.buf.references()<CR>
+
+autocmd FileType go nnoremap <silent> ;gd :GoDef<CR>
