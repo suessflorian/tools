@@ -15,25 +15,24 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
+autocmd BufWritePre * %s/\s\+$//e
+
 set nobackup noswapfile
 set nowrap
-set spelllang=en_nz
 set foldcolumn=4
 set cursorline
 set tabstop=2 shiftwidth=2 expandtab
 set clipboard=unnamedplus
-
-autocmd BufWritePre * %s/\s\+$//e
+set inccommand=nosplit ignorecase
 
 cabbrev h vert bo h
 
 nnoremap <C-p> :Files <CR>
-nnoremap <C-f> :Rg<SPACE>
-nnoremap <C-b> :Buffer <CR>
-nnoremap <LEADER>f :Rg <C-R><C-W><CR>
-vnoremap <LEADER>f y:Rg <C-R>"<CR>
+nnoremap <C-f> :Rg <CR>
+nnoremap <leader>f :Rg <C-r><C-w><CR>
+vnoremap <leader>f y:Rg <C-r>"<CR>
 
-let reach='rg --line-number --hidden --color=always --smart-case --glob="!.git/*" '
+let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
 nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
