@@ -12,43 +12,38 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/morhetz/gruvbox'
 
     Plug 'https://github.com/neovim/nvim-lsp'
-    Plug 'https://github.com/fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
 
 autocmd BufWritePre * %s/\s\+$//e
 
-colorscheme gruvbox
-set background=dark
 set nobackup noswapfile
-set nowrap
 set foldcolumn=4
 set cursorline
 set tabstop=2 shiftwidth=2 expandtab
-set clipboard+=unnamedplus
 set inccommand=nosplit ignorecase
+set clipboard+=unnamedplus
 
 cabbrev h vert bo h
 
-nnoremap <C-p> :Files <CR>
-nnoremap <C-f> :Rg <CR>
-nnoremap <leader>f :Rg <C-r><C-w><CR>
-vnoremap <leader>f y:Rg <C-r>"<CR>
+nnoremap <c-p> :Files <cr>
+nnoremap <c-f> :Rg <cr>
+vnoremap <leader>f y:Rg <c-r>"<cr>
 
 let reach='rg --hidden --line-number --color always --smart-case --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
-nnoremap <leader>bo :NERDTreeFind<CR>
+nnoremap <leader>bo :NERDTreeFind<cr>
 let NERDTreeShowHidden=1
 
+call nvim_lsp#setup("pyls", {})
+call nvim_lsp#setup("gopls", {})
+
+autocmd Filetype python,go setl omnifunc=v:lua.vim.lsp.omnifunc
+nnoremap <silent> <c-[> <cmd>lua vim.lsp.buf.definition()<cr>
+
+colorscheme gruvbox
 highlight VertSplit cterm=none
 highlight FoldColumn ctermbg=none
 highlight CursorLine ctermbg=black ctermfg=none
 highlight Visual ctermbg=black ctermfg=yellow
-
-call nvim_lsp#setup("pyls", {})
-
-autocmd Filetype python setl omnifunc=v:lua.vim.lsp.omnifunc
-nnoremap <silent> ;gd <cmd>lua vim.lsp.buf.definition()<CR>
-
-autocmd FileType go nnoremap <silent> ;gd :GoDef<CR>
