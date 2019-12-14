@@ -7,7 +7,6 @@ call plug#begin('~/.config/nvim/plugged')
 
     Plug 'https://github.com/christoomey/vim-tmux-navigator'
     Plug 'https://github.com/scrooloose/nerdtree'
-    Plug 'https://github.com/tpope/vim-surround'
     Plug 'https://github.com/morhetz/gruvbox'
 
     Plug 'https://github.com/natebosch/vim-lsc'
@@ -25,8 +24,8 @@ set clipboard+=unnamedplus
 
 cabbrev h vert bo h
 
-nnoremap <c-p> :Files <cr>
-nnoremap <c-f> :Rg <cr>
+nnoremap <leader>p :Files <cr>
+nnoremap <leader>f :Rg <cr>
 vnoremap <leader>f y:Rg <c-r>"<cr>
 
 let reach='rg --hidden --line-number --color always --smart-case --glob="!.git/*" '

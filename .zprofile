@@ -8,7 +8,7 @@ eval "$(jump shell)"
 eval "$(pyenv init -)"
 
 function n { if [[ -n "$1" ]]; then nvim $1; else nvim .; fi }
-function _git-status { lazygit; zle reset-prompt }
+function _lazygit { lazygit; zle reset-prompt }
 
 export HISTSIZE=30000
 export SAVEHIST=30000
@@ -18,10 +18,8 @@ setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 export FZF_CTRL_R_OPTS='--layout reverse'
 
-export PYENV_VERSION=3.8.0
-
-zle -N _git-status
-bindkey '^ ' _git-status
+zle -N _lazygit
+bindkey '^@' _lazygit
 bindkey -e
 
 bindkey '^[[1;3D' backward-word
