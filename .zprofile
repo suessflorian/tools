@@ -16,11 +16,9 @@ export HISTFILE=~/.zsh_history
 setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
-export FZF_DEFAULT_OPTS='--no-height --layout=reverse'
-export FZF_CTRL_T_OPTS='--preview "head -70 {}"'
 export FZF_CTRL_R_OPTS='--layout reverse'
 
-export PYENV_VERSION=3.7.0
+export PYENV_VERSION=3.8.0
 
 zle -N _git-status
 bindkey '^ ' _git-status
