@@ -18,6 +18,8 @@ setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 export FZF_CTRL_R_OPTS='--layout reverse'
 
+export PYENV_VERSION="3.8.0"
+
 zle -N _lazygit
 bindkey '^@' _lazygit
 bindkey -e

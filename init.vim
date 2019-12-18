@@ -14,15 +14,12 @@ call plug#begin('~/.config/nvim/plugged')
 
 call plug#end()
 
-autocmd BufWritePre * :Neoformat
-
-set nobackup noswapfile
-set nowrap cursorline foldcolumn=4
+set nobackup noswapfile foldcolumn=4
+set termguicolors
+set nowrap cursorline
 set tabstop=2 shiftwidth=2 expandtab
 set inccommand=nosplit ignorecase
-set clipboard+=unnamedplus
-
-cabbrev h vert bo h
+set clipboard=unnamedplus
 
 nnoremap <leader>p :Files <cr>
 nnoremap <leader>f :Rg <cr>
@@ -33,13 +30,19 @@ command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#
 
 nnoremap <leader>bo :NERDTreeFind<cr>
 let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1
 
 colorscheme gruvbox
-highlight FoldColumn ctermbg=none
-highlight VertSplit cterm=none
-highlight CursorLine ctermbg=black ctermfg=none
-highlight Visual ctermbg=black ctermfg=yellow
+highlight VertSplit gui=none
+highlight FoldColumn guibg=none
+highlight CursorLine guibg=#232323 guifg=none
+highlight Visual guifg=#fabd2f guibg=#000000
 
 let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls' }
 let g:lsc_enable_autocomplete = v:false
 let g:lsc_auto_map = v:true
+
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritePre * Neoformat
+autocmd FocusGained * checktime
+
