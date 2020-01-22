@@ -10,6 +10,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/morhetz/gruvbox'
 
     Plug 'https://github.com/natebosch/vim-lsc'
+    Plug 'https://github.com/sheerun/vim-polyglot'
     Plug 'https://github.com/sbdchd/neoformat'
 
 call plug#end()
@@ -38,11 +39,10 @@ highlight FoldColumn guibg=none
 highlight CursorLine guibg=#232323 guifg=none
 highlight Visual guifg=#fabd2f guibg=#000000
 
-let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls' }
+let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'javascript': 'typescript-language-server --stdio' }
 let g:lsc_enable_autocomplete = v:false
 let g:lsc_auto_map = v:true
 
 autocmd BufWritePre * %s/\s\+$//e
-autocmd BufWritePre * Neoformat
+autocmd BufWritePre *.go,*.py,*.js,*.ts Neoformat
 autocmd FocusGained * checktime
-
