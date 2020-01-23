@@ -18,7 +18,7 @@ call plug#end()
 set nobackup noswapfile
 set nowrap
 set termguicolors
-set tabstop=2 shiftwidth=2 expandtab
+set tabstop=4 shiftwidth=4 expandtab
 set inccommand=nosplit ignorecase
 set clipboard=unnamedplus
 
