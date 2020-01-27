@@ -26,6 +26,7 @@ nnoremap <leader>p :Files <cr>
 nnoremap <leader>f :Rg <cr>
 vnoremap <leader>f y:Rg <c-r>"<cr>
 
+let $FZF_DEFAULT_OPTS="--reverse "
 let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
@@ -33,7 +34,7 @@ nnoremap <leader>bo :NERDTreeFind<cr>
 let NERDTreeShowHidden=1
 
 colorscheme gruvbox
-highlight Visual guifg=#fabd2f guibg=#000000
+highlight Visual guifg=#CC880B guibg=#000000
 
 let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'javascript': 'typescript-language-server --stdio' }
 let g:lsc_enable_autocomplete = v:false
