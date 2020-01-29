@@ -3,6 +3,7 @@ if [ "$TMUX" = "" ]; then tmux attach -t main || tmux new -s main; fi
 autoload -Uz colors && colors
 autoload -Uz vcs_info
 autoload -Uz compinit && compinit
+autoload -Uz edit-command-line
 
 eval "$(jump shell)"
 eval "$(pyenv init -)"
@@ -20,9 +21,14 @@ export FZF_CTRL_R_OPTS='--layout reverse'
 
 export PYENV_VERSION="3.8.0"
 
+bindkey -e # set emacs bindings
+
 zle -N _lazygit
 bindkey '^@' _lazygit
-bindkey -e
+
+export EDITOR=nvim
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
 bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word

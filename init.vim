@@ -26,6 +26,8 @@ nnoremap <leader>p :Files <cr>
 nnoremap <leader>f :Rg <cr>
 vnoremap <leader>f y:Rg <c-r>"<cr>
 
+nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
+
 let $FZF_DEFAULT_OPTS="--reverse "
 let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
