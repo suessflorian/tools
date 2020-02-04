@@ -5,13 +5,12 @@ call plug#begin('~/.config/nvim/plugged')
     Plug '/usr/local/opt/fzf'
     Plug 'https://github.com/junegunn/fzf.vim'
 
-    Plug 'https://github.com/christoomey/vim-tmux-navigator'
-    Plug 'https://github.com/scrooloose/nerdtree'
-    Plug 'https://github.com/morhetz/gruvbox'
-
     Plug 'https://github.com/natebosch/vim-lsc'
     Plug 'https://github.com/sheerun/vim-polyglot'
     Plug 'https://github.com/sbdchd/neoformat'
+
+    Plug 'https://github.com/scrooloose/nerdtree'
+    Plug 'https://github.com/morhetz/gruvbox'
 
 call plug#end()
 
@@ -28,7 +27,6 @@ vnoremap <leader>f y:Rg <c-r>"<cr>
 
 nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
 
-let $FZF_DEFAULT_OPTS="--reverse "
 let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
@@ -42,6 +40,5 @@ let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'javascript': 'ty
 let g:lsc_enable_autocomplete = v:false
 let g:lsc_auto_map = v:true
 
-autocmd BufWritePre * %s/\s\+$//e
-autocmd BufWritePre *.go,*.py,*.js,*.ts Neoformat
+autocmd BufWritePre *.go,*.py,*.js,*.ts,*.json Neoformat
 autocmd FocusGained * checktime
