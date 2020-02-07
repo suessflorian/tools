@@ -2,8 +2,9 @@ let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
 
-    Plug '/usr/local/opt/fzf'
     Plug 'https://github.com/junegunn/fzf.vim'
+
+    Plug 'https://github.com/rhysd/git-messenger.vim'
 
     Plug 'https://github.com/natebosch/vim-lsc'
     Plug 'https://github.com/sheerun/vim-polyglot'
@@ -21,16 +22,20 @@ set tabstop=4 shiftwidth=4 expandtab
 set inccommand=nosplit ignorecase
 set clipboard=unnamedplus
 
-nnoremap <leader>p :Files <cr>
-nnoremap <leader>f :Rg <cr>
-vnoremap <leader>f y:Rg <c-r>"<cr>
+set rtp+=/usr/local/opt/fzf
+let $FZF_DEFAULT_OPTS='--layout=reverse'
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 
-nnoremap <leader>gb :execute "!git blame -L " . line(".") . ",+10 %"<cr>
+nnoremap <leader>p :Files <cr>
+nnoremap <leader>b :Buffers <cr>
+nnoremap <leader>f :Rg
 
 let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
 
-nnoremap <leader>bo :NERDTreeFind<cr>
+nnoremap <leader>gb :GitMessenger <cr>
+
+nnoremap <leader>o :NERDTreeFind <cr>
 let NERDTreeShowHidden=1
 
 colorscheme gruvbox
