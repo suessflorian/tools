@@ -46,4 +46,5 @@ let g:lsc_enable_autocomplete = v:false
 let g:lsc_auto_map = v:true
 
 autocmd BufWritePre *.go,*.py,*.js,*.ts,*.json Neoformat
+autocmd BufWritePre * %s/\s\+$//e
 autocmd FocusGained * checktime
