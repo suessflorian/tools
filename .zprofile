@@ -40,7 +40,7 @@ export PATH=$GOPATH/bin:$PATH
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
-PROMPT="%B%{$fg[yellow]%}%m:%b%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
+PROMPT="%{$fg[white]%}[%D{%H:%M:%S}] %B%{$fg[yellow]%}%m:%b%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
 zstyle ':vcs_info:git:*' formats '(%b)'
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
