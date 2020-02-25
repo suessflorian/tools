@@ -3,3 +3,6 @@
 # Please adapt and uncomment the following lines:
 	name = Florian Suess
 	email = me@floriansuess.com
+# Enforce SSH
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
