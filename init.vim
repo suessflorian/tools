@@ -3,10 +3,10 @@ let mapleader = " "
 call plug#begin('~/.config/nvim/plugged')
 
     Plug 'https://github.com/junegunn/fzf.vim'
-
-    Plug 'https://github.com/rhysd/git-messenger.vim'
+    Plug 'https://github.com/ruanyl/vim-gh-line'
 
     Plug 'https://github.com/natebosch/vim-lsc'
+
     Plug 'https://github.com/sheerun/vim-polyglot'
     Plug 'https://github.com/sbdchd/neoformat'
 
@@ -24,7 +24,7 @@ set clipboard=unnamedplus
 
 set rtp+=/usr/local/opt/fzf
 let $FZF_DEFAULT_OPTS='--layout=reverse'
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+let g:fzf_layout = { 'window': { 'width': 0.85, 'height': 0.85 } }
 
 nnoremap <leader>p :Files <cr>
 nnoremap <leader>b :Buffers <cr>
@@ -32,8 +32,6 @@ nnoremap <leader>f :Rg
 
 let reach='rg --hidden --line-number --color always --glob="!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
-
-nnoremap <leader>gb :GitMessenger <cr>
 
 nnoremap <leader>o :NERDTreeFind <cr>
 let NERDTreeShowHidden=1
