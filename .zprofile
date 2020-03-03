@@ -40,8 +40,8 @@ export PATH=$GOPATH/bin:$PATH
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
-PROMPT="%{$fg[white]%}[%D{%H:%M:%S}] %B%{$fg[yellow]%}%m:%b%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
-zstyle ':vcs_info:git:*' formats '(%b)'
+export PS1="%F{241}[%D{%H:%M:%S}] %B%F{214}%m%F{254}%b:%(1~|%20<...<%~%<<|%~)%B"\$vcs_info_msg_0_"%F{254}%b %% "
+zstyle ':vcs_info:git:*' formats ' (%b)'
 
 case $TERM in
   xterm*)
