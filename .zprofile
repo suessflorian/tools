@@ -43,6 +43,12 @@ setopt prompt_subst
 PROMPT="%{$fg[white]%}[%D{%H:%M:%S}] %B%{$fg[yellow]%}%m:%b%{$fg[blue]%}%(1~|%30<...<%~%<<|%~)%{$reset_color%}"\$vcs_info_msg_0_" %% "
 zstyle ':vcs_info:git:*' formats '(%b)'
 
+case $TERM in
+  xterm*)
+    precmd () {print -Pn "\e]0;%(2~|%15<...<%~%<<|%~)\a"}
+    ;;
+esac
+
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
