@@ -8,6 +8,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/natebosch/vim-lsc'
 
     Plug 'https://github.com/sheerun/vim-polyglot'
+    Plug 'https://github.com/google/vim-jsonnet'
     Plug 'https://github.com/sbdchd/neoformat'
 
     Plug 'https://github.com/scrooloose/nerdtree'
