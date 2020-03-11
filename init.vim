@@ -11,9 +11,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/google/vim-jsonnet'
     Plug 'https://github.com/sbdchd/neoformat'
 
-    Plug 'https://github.com/scrooloose/nerdtree'
-    Plug 'https://github.com/morhetz/gruvbox'
-
 call plug#end()
 
 set nobackup noswapfile
@@ -28,17 +25,10 @@ let $FZF_DEFAULT_OPTS='--layout=reverse'
 let g:fzf_layout = { 'window': { 'width': 0.85, 'height': 0.85 } }
 
 nnoremap <leader>p :Files<space><cr>
-nnoremap <leader>b :Buffers<space><cr>
-nnoremap <leader>f :Rg<space>
 
-let reach='rg --hidden --line-number --color always --glob="!.git/*" '
+let reach='rg --hidden --line-number --color always --glob "!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
-
-nnoremap <leader>o :NERDTreeFind <cr>
-let NERDTreeShowHidden=1
-
-colorscheme gruvbox
-highlight Visual guifg=#CC880B guibg=#000000
+nnoremap <leader>f :Rg<space>
 
 let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'javascript': 'typescript-language-server --stdio' }
 let g:lsc_enable_autocomplete = v:false
