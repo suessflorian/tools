@@ -24,15 +24,17 @@ set rtp+=/usr/local/opt/fzf
 let $FZF_DEFAULT_OPTS='--layout=reverse'
 let g:fzf_layout = { 'window': { 'width': 0.85, 'height': 0.85 } }
 
-nnoremap <leader>p :Files<space><cr>
-
 let reach='rg --hidden --line-number --color always --glob "!.git/*" '
 command -nargs=* Rg call fzf#vim#grep(reach . shellescape(<q-args>), 0, fzf#vim#with_preview())
+
+nnoremap <leader>p :Files<space><cr>
 nnoremap <leader>f :Rg<space>
 
 let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'javascript': 'typescript-language-server --stdio' }
 let g:lsc_enable_autocomplete = v:false
 let g:lsc_auto_map = v:true
+
+let g:netrw_banner = 0
 
 autocmd BufWritePre *.go,*.py,*.js,*.ts,*.json Neoformat
 autocmd BufWritePre * %s/\s\+$//e
