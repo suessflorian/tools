@@ -25,6 +25,8 @@ bindkey "^X^E" edit-command-line
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
+export PATH=$HOME/.cargo/bin:$PATH
+
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
