@@ -1,16 +1,12 @@
 let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
-
     Plug 'https://github.com/junegunn/fzf.vim'
     Plug 'https://github.com/ruanyl/vim-gh-line'
-
     Plug 'https://github.com/natebosch/vim-lsc'
-
     Plug 'https://github.com/sheerun/vim-polyglot'
-    Plug 'https://github.com/google/vim-jsonnet'
     Plug 'https://github.com/sbdchd/neoformat'
-
+    Plug 'https://github.com/romainl/vim-cool'
 call plug#end()
 
 set nobackup noswapfile
