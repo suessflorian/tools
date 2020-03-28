@@ -1,0 +1,17 @@
+font_size               16.5
+font_family             FiraCode
+
+background_opacity      0.9
+hide_window_decorations titlebar-only
+window_padding_width    20
+
+scrollback_lines        50000
+
+enabled_layouts		    grid 
+
+tab_bar_margin_width    80
+tab_bar_edge            top
+
+map cmd+enter           new_window_with_cwd
+
+enable_audio_bell       no

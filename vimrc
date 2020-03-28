@@ -17,8 +17,7 @@ set inccommand=nosplit ignorecase
 set clipboard=unnamedplus
 
 set rtp+=/usr/local/opt/fzf
-let $FZF_DEFAULT_OPTS='--layout=reverse'
-let g:fzf_layout = { 'window': { 'width': 0.85, 'height': 0.85 } }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 
 nnoremap <leader>p :Files<space><cr>
 nnoremap <leader>f :Rg<space>
@@ -29,6 +28,4 @@ let g:lsc_auto_map = v:true
 
 let g:netrw_banner = 0
 
-autocmd BufWritePre *.go,*.py,*.js,*.ts,*.json Neoformat
-autocmd BufWritePre * %s/\s\+$//e
 autocmd FocusGained * checktime
