@@ -12,10 +12,6 @@ setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 
-function _lazygit { lazygit; zle reset-prompt }
-zle -N _lazygit
-bindkey '^X^G' _lazygit
-
 function _open { nvim . }
 zle -N _open
 bindkey '^X^O' _open

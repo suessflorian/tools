@@ -1,3 +1,2 @@
 - [kitty](https://github.com/kovidgoyal/kitty)
 - [neovim](https://github.com/neovim/neovim)
-- [lazygit](https://github.com/jesseduffield/lazygit)
