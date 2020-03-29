@@ -1,0 +1,10 @@
+env:
+    TERM: xterm-256color
+window:
+  decorations: buttonless
+  padding:
+    x: 20
+    y: 20
+background_opacity: 0.94
+font:
+  size: 16.5

@@ -3,6 +3,7 @@ autoload -Uz compinit && compinit
 eval "$(jump shell)"
 
 export EDITOR=nvim
+bindkey -e
 
 export HISTSIZE=30000
 export SAVEHIST=30000
