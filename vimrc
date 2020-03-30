@@ -10,6 +10,7 @@ call plug#begin('~/.config/nvim/plugged')
 call plug#end()
 
 set nobackup noswapfile
+set autoread
 set nowrap
 set termguicolors
 set tabstop=4 shiftwidth=4 expandtab
@@ -28,4 +29,4 @@ let g:lsc_auto_map = v:true
 
 let g:netrw_banner = 0
 
-autocmd FocusGained * checktime
+autocmd FocusGained,BufEnter * checktime
