@@ -16,6 +16,7 @@ set termguicolors
 set tabstop=4 shiftwidth=4 expandtab
 set inccommand=nosplit ignorecase
 set clipboard=unnamedplus
+set undofile undodir=~/.undodir
 
 set rtp+=/usr/local/opt/fzf
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
