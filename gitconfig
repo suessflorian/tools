@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
 	name = Florian Suess
-	email = me@floriansuess.com
+	email = floriansuess96@icloud.com
 # Enforce SSH
 [url "ssh://git@github.com/"]
     insteadOf = https://github.com/
