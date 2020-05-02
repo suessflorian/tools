@@ -23,11 +23,12 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 nnoremap <leader>p :Files<space><cr>
 nnoremap <leader>f :Rg<space>
 
-let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls', 'rust': 'rls'}
+let g:lsc_server_commands = { 'go': 'gopls', 'python': 'pyls'}
 let g:lsc_enable_autocomplete = v:false
 let g:lsc_enable_diagnostics = v:false
 let g:lsc_auto_map = v:true
 
 let g:netrw_banner = 0
+let g:netrw_liststyle = 3
 
 autocmd FocusGained,BufEnter * checktime
