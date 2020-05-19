@@ -1,6 +1,7 @@
 autoload -Uz compinit && compinit
 
 eval "$(jump shell)"
+eval "$(pyenv init -)"
 
 export EDITOR=nvim
 bindkey -e
@@ -25,7 +26,6 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
-# supporting Go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
