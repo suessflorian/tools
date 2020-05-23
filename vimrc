@@ -6,7 +6,12 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.com/natebosch/vim-lsc'
     Plug 'https://github.com/sheerun/vim-polyglot'
     Plug 'https://github.com/romainl/vim-cool'
+    Plug 'https://github.com/morhetz/gruvbox'
 call plug#end()
+
+colorscheme gruvbox
+hi Visual ctermfg=Yellow ctermbg=Black gui=none
+hi Comment cterm=italic
 
 set nobackup noswapfile
 set autoread
@@ -20,17 +25,13 @@ set rtp+=/usr/local/opt/fzf
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 
 nnoremap <leader>p :Files<space><cr>
-nnoremap <leader>f :Rg<space>
 
+let g:lsc_auto_map = v:true
 let g:lsc_server_commands = { 
             \ 'go': 'gopls', 
             \ 'python': 'pyls',
-            \ 'javascript': 'typescript-language-server --stdio',
             \ 'typescriptreact': 'typescript-language-server --stdio',
 \}
-let g:lsc_enable_autocomplete = v:false
-let g:lsc_enable_diagnostics = v:false
-let g:lsc_auto_map = v:true
 
 let g:netrw_banner = 0
 

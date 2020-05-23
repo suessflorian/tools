@@ -40,4 +40,6 @@ zstyle ':vcs_info:git:*' formats ' (%b)'
 # setting session title to current directory
 precmd () {print -Pn "\033]0;%c\007"}
 
+alias tmux="env TERM=screen-256color tmux"
+
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
