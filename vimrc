@@ -28,6 +28,7 @@ nnoremap <leader>p :Files<space><cr>
 
 let g:lsc_auto_map = v:true
 let g:lsc_enable_diagnostics = v:false
+
 let g:lsc_server_commands = { 
   \ 'go': 'gopls',
   \ 'python': 'pyls',
