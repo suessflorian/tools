@@ -1,2 +1,4 @@
-- [kitty](https://github.com/kovidgoyal/kitty)
+- [alacritty](https://github.com/alacritty/alacritty)
+- [tmux](https://github.com/tmux/tmux)
+- [zsh](https://github.com/zsh-users/zsh)
 - [neovim](https://github.com/neovim/neovim)

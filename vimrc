@@ -1,17 +1,17 @@
 let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
-    Plug 'https://github.com/junegunn/fzf.vim'
-    Plug 'https://github.com/ruanyl/vim-gh-line'
-    Plug 'https://github.com/natebosch/vim-lsc'
-    Plug 'https://github.com/sheerun/vim-polyglot'
-    Plug 'https://github.com/romainl/vim-cool'
-    Plug 'https://github.com/morhetz/gruvbox'
+  Plug 'https://github.com/jiangmiao/auto-pairs'
+  Plug 'https://github.com/tpope/vim-vinegar'
+  Plug 'https://github.com/mattn/emmet-vim'
+  Plug 'https://github.com/junegunn/fzf.vim'
+  Plug 'https://github.com/ruanyl/vim-gh-line'
+  Plug 'https://github.com/natebosch/vim-lsc'
+  Plug 'https://github.com/sheerun/vim-polyglot'
+  Plug 'https://github.com/romainl/vim-cool'
 call plug#end()
 
-colorscheme gruvbox
-hi Visual ctermfg=Yellow ctermbg=Black gui=none
-hi Comment cterm=italic
+highlight Comment cterm=italic
 
 set nobackup noswapfile
 set autoread
@@ -22,17 +22,17 @@ set clipboard=unnamedplus
 set undofile undodir=~/.undodir
 
 set rtp+=/usr/local/opt/fzf
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
 nnoremap <leader>p :Files<space><cr>
 
 let g:lsc_auto_map = v:true
+let g:lsc_enable_diagnostics = v:false
 let g:lsc_server_commands = { 
-            \ 'go': 'gopls', 
-            \ 'python': 'pyls',
-            \ 'typescriptreact': 'typescript-language-server --stdio',
+  \ 'go': 'gopls',
+  \ 'python': 'pyls',
+  \ 'typescriptreact': 'typescript-language-server --stdio',
+  \ 'css': 'css-languageserver --stdio'
 \}
-
-let g:netrw_banner = 0
 
 autocmd FocusGained,BufEnter * checktime
