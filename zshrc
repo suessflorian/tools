@@ -29,8 +29,6 @@ bindkey "^X^E" edit-command-line
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
-alias tmux="env TERM=screen-256color tmux"
-
 # .zshrc
 autoload -U promptinit; promptinit
 prompt pure
