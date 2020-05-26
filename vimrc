@@ -1,6 +1,7 @@
 let mapleader = " "
 
 call plug#begin('~/.config/nvim/plugged')
+  Plug 'https://github.com/tpope/vim-surround'
   Plug 'https://github.com/jiangmiao/auto-pairs'
   Plug 'https://github.com/tpope/vim-vinegar'
   Plug 'https://github.com/mattn/emmet-vim'
@@ -12,6 +13,7 @@ call plug#begin('~/.config/nvim/plugged')
 call plug#end()
 
 highlight Comment cterm=italic
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 set nobackup noswapfile
 set autoread
@@ -25,6 +27,7 @@ set rtp+=/usr/local/opt/fzf
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
 nnoremap <leader>p :Files<space><cr>
+nnoremap <leader>b :Buffers<space><cr>
 
 let g:lsc_auto_map = v:true
 let g:lsc_enable_diagnostics = v:false
