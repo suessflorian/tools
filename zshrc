@@ -1,7 +1,6 @@
 autoload -Uz compinit && compinit
 
 eval "$(jump shell)"
-eval "$(pyenv init -)"
 
 export EDITOR=nvim
 bindkey -e
@@ -26,11 +25,14 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
+function _lazygit { lazygit }
+zle -N _lazygit
+bindkey "^@" _lazygit
+
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
-# .zshrc
-autoload -U promptinit; promptinit
+autoload -U promptinit && promptinit
 prompt pure
 PURE_GIT_DOWN_ARROW='⇣'
 PURE_GIT_UP_ARROW='⇡'

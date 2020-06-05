@@ -12,9 +12,6 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'https://github.com/romainl/vim-cool'
 call plug#end()
 
-highlight Comment cterm=italic
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
 set nobackup noswapfile
 set autoread
 set nowrap
@@ -28,15 +25,14 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
 nnoremap <leader>p :Files<space><cr>
 nnoremap <leader>b :Buffers<space><cr>
+nnoremap <leader>f :Rg<space>
 
 let g:lsc_auto_map = v:true
 let g:lsc_enable_diagnostics = v:false
 
 let g:lsc_server_commands = { 
   \ 'go': 'gopls',
-  \ 'python': 'pyls',
   \ 'typescriptreact': 'typescript-language-server --stdio',
-  \ 'css': 'css-languageserver --stdio'
 \}
 
 autocmd FocusGained,BufEnter * checktime
