@@ -13,6 +13,7 @@ call plug#begin('~/.config/nvim/plugged')
 call plug#end()
 
 set nobackup noswapfile
+set cursorline
 set autoread
 set nowrap
 set tabstop=2 shiftwidth=2 expandtab
@@ -28,7 +29,6 @@ nnoremap <leader>b :Buffers<space><cr>
 nnoremap <leader>f :Rg<space>
 
 let g:lsc_auto_map = v:true
-let g:lsc_enable_diagnostics = v:false
 
 let g:lsc_server_commands = { 
   \ 'go': 'gopls',
