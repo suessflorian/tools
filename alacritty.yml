@@ -9,11 +9,8 @@ scrolling:
   history: 0
 font:
   normal:
-    family: Operator Mono
+    family: Fira Code
     style: Medium
-  italic:
-    family: Operator Mono
-    style: Book Italic
   size: 18
 
 # https://github.com/alacritty/alacritty/wiki/Color-schemes#ayu-mirage
@@ -46,8 +43,10 @@ colors:
     cyan: '#95E6CB'
     white: '#FFFFFF'
 
-# https://github.com/alacritty/alacritty/issues/3188
 key_bindings:
-   - { key: H,      mods: Command,            action: None             }
-   - { key: Q,      mods: Command,            action: None             }
-   - { key: W,      mods: Command,            action: None             }
+   - { key: Left,   mods: Alt,       chars: "\x1bb"   }
+   - { key: Right,  mods: Alt,       chars: "\x1bf"   }
+   # https://github.com/alacritty/alacritty/issues/3188
+   - { key: H,      mods: Command,   action: None     }
+   - { key: Q,      mods: Command,   action: None     }
+   - { key: W,      mods: Command,   action: None     }

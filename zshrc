@@ -1,14 +1,21 @@
 autoload -Uz compinit && compinit
 
-eval "$(jump shell)"
+cdpath=($HOME/Documents)
 
 export EDITOR=nvim
 bindkey -e
 
+export HISTFILE=~/.zsh_history
 export HISTSIZE=30000
 export SAVEHIST=30000
-export HISTFILE=~/.zsh_history
-setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
+
+export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *)"
+setopt INC_APPEND_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
 
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
@@ -32,11 +39,7 @@ bindkey "^@" _lazygit
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
-autoload -U promptinit && promptinit
-prompt pure
-PURE_GIT_DOWN_ARROW='⇣'
-PURE_GIT_UP_ARROW='⇡'
-PURE_GIT_STASH_SYMBOL='⎶'
-zstyle :prompt:pure:git:stash show yes
+autoload -U colors && colors
+PROMPT="%{$fg[blue]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh

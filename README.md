@@ -9,7 +9,6 @@
 Geared towards a mixture of JS/TS and Go only.
 - Brew
 - NPM hence Node
-    - pure-prompt
     - typescript
     - typescript-lagnuage-server
 - Golang

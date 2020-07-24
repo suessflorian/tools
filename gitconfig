@@ -1,4 +1,3 @@
-# This is Git's per-user configuration file.
 [user]
 	name = Florian Suess
 	email = floriansuess96@icloud.com
@@ -7,3 +6,5 @@
     insteadOf = https://github.com/
 [commit]
 verbose=true
+[alias]
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
