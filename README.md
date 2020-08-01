@@ -1,4 +1,3 @@
-## At a glance
 - [alacritty](https://github.com/alacritty/alacritty)
 - [tmux](https://github.com/tmux/tmux)
 - [zsh](https://github.com/zsh-users/zsh)
@@ -7,7 +6,7 @@
 
 ## Notes
 Geared towards a mixture of JS/TS and Go only.
-- Brew
+- Brew (install relevant packages via `brew bundle`)
 - NPM hence Node
     - typescript
     - typescript-lagnuage-server
