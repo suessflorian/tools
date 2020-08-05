@@ -2,7 +2,6 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-vinegar'
-  Plug 'mattn/emmet-vim'
   Plug 'junegunn/fzf.vim'
   Plug 'ruanyl/vim-gh-line'
   Plug 'natebosch/vim-lsc'
@@ -34,6 +33,7 @@ let g:lsc_server_commands = {
   \ 'go': 'gopls',
   \ 'typescriptreact': 'typescript-language-server --stdio',
   \ 'typescript': 'typescript-language-server --stdio',
+  \ 'javascript': 'typescript-language-server --stdio',
 \}
 
 autocmd FocusGained,BufEnter * checktime

@@ -36,7 +36,7 @@ function _lazygit { lazygit }
 zle -N _lazygit
 bindkey "^@" _lazygit
 
-export GOPATH=$HOME/go
+export GOPATH=$HOME/Documents/go
 export PATH=$GOPATH/bin:$PATH
 
 autoload -U colors && colors

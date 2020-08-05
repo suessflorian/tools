@@ -1,5 +1,4 @@
 brew 'neovim'
-brew 'git'
 brew 'lazygit'
 brew 'ripgrep'
 brew 'tmux'
