@@ -1,6 +1,6 @@
 call plug#begin('~/.config/nvim/plugged')
+  Plug 'sainnhe/sonokai'
   Plug 'tpope/vim-surround'
-  Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-vinegar'
   Plug 'junegunn/fzf.vim'
   Plug 'ruanyl/vim-gh-line'
@@ -8,6 +8,10 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'sheerun/vim-polyglot'
   Plug 'romainl/vim-cool'
 call plug#end()
+
+let g:sonokai_disable_italic_comment = 1
+let g:sonokai_transparent_background = 1
+colorscheme sonokai
 
 set nobackup noswapfile
 set cursorline
@@ -24,7 +28,7 @@ nnoremap <leader>b :Buffers<space><cr>
 nnoremap <leader>f :Rg<space>
 
 set rtp+=/usr/local/opt/fzf
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let g:fzf_layout = { 'window': { 'width': 0.95, 'height': 0.95 } }
 
 let g:lsc_auto_map = v:true
 let g:lsc_reference_highlights = v:false

@@ -40,6 +40,6 @@ export GOPATH=$HOME/Documents/go
 export PATH=$GOPATH/bin:$PATH
 
 autoload -U colors && colors
-PROMPT="%{$fg[blue]%}%1| %2~ %{$reset_color%}%# "
+PROMPT="%{$fg[red]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
