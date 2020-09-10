@@ -1,10 +1,11 @@
 [user]
-	name = Florian Suess
-	email = floriansuess96@icloud.com
-# Enforce SSH
+	name=Florian Suess
+	email=floriansuess96@icloud.com
 [url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
+  insteadOf = https://github.com/
 [commit]
-verbose=true
+  verbose=true
 [alias]
-  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  lg=log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[pull]
+  rebase=true
