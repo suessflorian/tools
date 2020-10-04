@@ -7,6 +7,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'natebosch/vim-lsc'
   Plug 'sheerun/vim-polyglot'
   Plug 'romainl/vim-cool'
+  Plug 'w0rp/ale'
 call plug#end()
 
 let g:sonokai_disable_italic_comment = 1
@@ -39,5 +40,9 @@ let g:lsc_server_commands = {
   \ 'typescript': 'typescript-language-server --stdio',
   \ 'javascript': 'typescript-language-server --stdio',
 \}
+
+let g:ale_set_signs = 0
+let g:ale_completion_enabled = 0
+let g:ale_virtualtext_cursor = 1
 
 autocmd FocusGained,BufEnter * checktime
