@@ -1,5 +1,4 @@
 call plug#begin('~/.config/nvim/plugged')
-  Plug 'sainnhe/sonokai'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-vinegar'
   Plug 'junegunn/fzf.vim'
@@ -7,16 +6,22 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'natebosch/vim-lsc'
   Plug 'sheerun/vim-polyglot'
   Plug 'romainl/vim-cool'
-  Plug 'w0rp/ale'
+  Plug 'dominikduda/vim_current_word'
+  Plug 'sainnhe/sonokai'
 call plug#end()
 
 let g:sonokai_disable_italic_comment = 1
 let g:sonokai_transparent_background = 1
 colorscheme sonokai
+highlight Search cterm=NONE ctermfg=white ctermbg=NONE
+highlight IncSearch cterm=NONE ctermfg=black ctermbg=white
+highlight SpellCap cterm=underline ctermfg=darkyellow ctermbg=NONE 
+highlight SpellBad cterm=underline ctermfg=darkred ctermbg=NONE 
 
 set nobackup noswapfile
 set cursorline
 set autoread
+set mouse=a
 set nowrap
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 set inccommand=nosplit ignorecase
@@ -40,9 +45,5 @@ let g:lsc_server_commands = {
   \ 'typescript': 'typescript-language-server --stdio',
   \ 'javascript': 'typescript-language-server --stdio',
 \}
-
-let g:ale_set_signs = 0
-let g:ale_completion_enabled = 0
-let g:ale_virtualtext_cursor = 1
 
 autocmd FocusGained,BufEnter * checktime

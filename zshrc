@@ -9,7 +9,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=30000
 export SAVEHIST=30000
 
-export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *)"
+export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *|git *)"
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS
@@ -40,6 +40,6 @@ export GOPATH=$HOME/Documents/go
 export PATH=$GOPATH/bin:$PATH
 
 autoload -U colors && colors
-PROMPT="%{$fg[red]%}%1| %2~ %{$reset_color%}%# "
+PROMPT="%{$fg[magenta]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
