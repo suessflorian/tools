@@ -43,3 +43,5 @@ autoload -U colors && colors
 PROMPT="%{$fg[magenta]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
+
+eval "$(pyenv init -)"

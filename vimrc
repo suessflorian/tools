@@ -3,7 +3,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-vinegar'
   Plug 'junegunn/fzf.vim'
   Plug 'ruanyl/vim-gh-line'
-  Plug 'natebosch/vim-lsc'
+  Plug 'natebosch/vim-lsc', { 'commit': 'c2cb9b73a593e6e3a662934d1ce0d2e992fe45e1'}
   Plug 'sheerun/vim-polyglot'
   Plug 'romainl/vim-cool'
   Plug 'dominikduda/vim_current_word'
@@ -41,9 +41,7 @@ let g:lsc_reference_highlights = v:false
 
 let g:lsc_server_commands = { 
   \ 'go': 'gopls',
-  \ 'typescriptreact': 'typescript-language-server --stdio',
-  \ 'typescript': 'typescript-language-server --stdio',
-  \ 'javascript': 'typescript-language-server --stdio',
+  \ 'python': 'pyls',
 \}
 
 autocmd FocusGained,BufEnter * checktime
