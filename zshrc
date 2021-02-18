@@ -24,7 +24,7 @@ function _open { nvim . }
 zle -N _open
 bindkey '^X^O' _open
 
-function _notes { nvim  -c "+normal ggO# $(date)" ~/.notes.md }
+function _notes { nvim  -c "+norm ggO# $(date)" -c "+norm gg2o" ~/.notes.md }
 zle -N _notes
 bindkey '^X^N' _notes
 
@@ -45,3 +45,6 @@ PROMPT="%{$fg[magenta]%}%1| %2~ %{$reset_color%}%# "
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 
 eval "$(pyenv init -)"
+
+# pip install --user
+export PATH=$HOME/.local/bin:$PATH

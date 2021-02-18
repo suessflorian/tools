@@ -1,3 +1,8 @@
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
 call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-vinegar'
@@ -15,12 +20,14 @@ let g:sonokai_transparent_background = 1
 colorscheme sonokai
 highlight Search cterm=NONE ctermfg=white ctermbg=NONE
 highlight IncSearch cterm=NONE ctermfg=black ctermbg=white
-highlight SpellCap cterm=underline ctermfg=darkyellow ctermbg=NONE 
-highlight SpellBad cterm=underline ctermfg=darkred ctermbg=NONE 
+highlight SpellCap cterm=underline ctermfg=darkyellow ctermbg=NONE
+highlight SpellBad cterm=underline ctermfg=darkred ctermbg=NONE
 
-set nobackup noswapfile
+hi ExtraWhitespace cterm=underline
+match ExtraWhitespace /\s\+\%#\@<!$/
+
+set nobackup noswapfile autoread
 set cursorline
-set autoread
 set mouse=a
 set nowrap
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
@@ -34,14 +41,10 @@ nnoremap <leader>b :Buffers<space><cr>
 nnoremap <leader>f :Rg<space>
 
 set rtp+=/usr/local/opt/fzf
-let g:fzf_layout = { 'window': { 'width': 0.95, 'height': 0.95 } }
 
 let g:lsc_auto_map = v:true
 let g:lsc_reference_highlights = v:false
 
-let g:lsc_server_commands = { 
-  \ 'go': 'gopls',
-  \ 'python': 'pyls',
-\}
+let g:lsc_server_commands = {'go': 'gopls', 'python': 'pyls'}
 
 autocmd FocusGained,BufEnter * checktime
