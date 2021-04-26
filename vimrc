@@ -13,6 +13,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'romainl/vim-cool'
   Plug 'dominikduda/vim_current_word'
   Plug 'sainnhe/sonokai'
+  Plug 'sbdchd/neoformat'
 call plug#end()
 
 let g:sonokai_disable_italic_comment = 1
@@ -31,9 +32,14 @@ set cursorline
 set mouse=a
 set nowrap
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-set inccommand=nosplit ignorecase
+set inccommand=nosplit
 set clipboard=unnamedplus
 set undofile undodir=~/.undodir
+
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END
 
 map <space> <leader>
 nnoremap <leader>p :Files<space><cr>
@@ -45,6 +51,9 @@ set rtp+=/usr/local/opt/fzf
 let g:lsc_auto_map = v:true
 let g:lsc_reference_highlights = v:false
 
-let g:lsc_server_commands = {'go': 'gopls', 'python': 'pyls'}
+let g:lsc_server_commands = {
+  \ 'go': 'gopls',
+  \ 'python': 'pyls',
+\}
 
 autocmd FocusGained,BufEnter * checktime
