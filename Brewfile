@@ -5,6 +5,7 @@ brew 'tmux'
 brew 'tree'
 brew 'fzf'
 brew 'jq'
+brew 'newsboat'
 
 cask 'alacritty'
 cask 'authy'
