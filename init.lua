@@ -48,19 +48,18 @@ ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
 ------------------------------------ LS SETUP -----------------------------------
 local nvim_lsp = require('lspconfig')    
 
--- Use an on_attach function to only map the following keys     
+-- use an on_attach function to only map the following keys     
 -- after the language server attaches to the current buffer    
 local on_attach = function(client, bufnr)    
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end    
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end    
 
-  --Enable completion triggered by <c-x><c-o>    
+  -- <c-x><c-u>    
   buf_set_option('completefunc', 'v:lua.vim.lsp.omnifunc')    
 
-  -- Mappings.    
   local opts = { noremap=true, silent=true }    
 
-  -- See `:help vim.lsp.*` for documentation on any of the below functions    
+  -- see `:help vim.lsp.*` for documentation on any of the below functions    
   buf_set_keymap('n', '<C-n>,','<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<C-p>;','<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', '<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts) 
@@ -73,7 +72,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'go',    '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
 end    
 
--- Use a loop to conveniently call 'setup' on multiple servers and    
 -- map buffer local keybindings when the language server attaches    
 local servers = { "gopls", "tsserver", "pyls", "graphql" }    
 for _, lsp in ipairs(servers) do    
