@@ -32,7 +32,8 @@ vim.opt.backup=false -- disable backup files
 vim.opt.swapfile=false -- no swap files
 vim.opt.autoread=true -- detect file changes outside of vim
 
-vim.opt.cursorline=true -- show cursor line
+vim.opt.cursorline=true
+vim.opt.clipboard="unnamedplus" -- sync clipboard and default register
 vim.opt.inccommand="nosplit" -- show effect of command incrementally
 vim.opt.mouse="a" -- let mouse do stuff
 vim.opt.wrap=false -- disable text wrapping
@@ -54,8 +55,7 @@ ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
 ------------------------------------ LS SETUP -----------------------------------
 local nvim_lsp = require('lspconfig')
 
--- use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
+-- on_attach lifecycle function maps keys to buffers as needed
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -79,7 +79,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'go',    '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
 end
 
--- map buffer local keybindings when the language server attaches
 local servers = { "gopls", "tsserver", "pyls", "graphql" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach, indent = { enable = true } }

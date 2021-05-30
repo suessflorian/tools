@@ -1,3 +1,7 @@
+" -----------------------------------------
+" file is NOT USED, refer to init.lua
+" -----------------------------------------
+
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -64,3 +68,7 @@ let g:lsc_server_commands = {
 \}
 
 autocmd FocusGained,BufEnter * checktime
+
+" -----------------------------------------
+" file is NOT USED, refer to init.lua
+" -----------------------------------------
