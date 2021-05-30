@@ -28,6 +28,7 @@ hi ExtraWhitespace cterm=underline
 match ExtraWhitespace /\s\+\%#\@<!$/
 
 set nobackup noswapfile autoread
+
 set cursorline
 set mouse=a
 set nowrap
