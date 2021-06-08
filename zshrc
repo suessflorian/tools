@@ -20,7 +20,7 @@ setopt HIST_VERIFY
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 
-function _open { nvim . }
+function _open { nvim }
 zle -N _open
 bindkey '^X^O' _open
 
@@ -32,6 +32,7 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
+alias lazygit="lazygit -ucd ~/.config/lazygit"
 function _lazygit { lazygit }
 zle -N _lazygit
 bindkey "^@" _lazygit
@@ -44,7 +45,12 @@ PROMPT="%{$fg[magenta]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.movio/movio.sh ] && source ~/.movio/movio.sh
 
-eval "$(pyenv init -)"
-
 # pip install --user
 export PATH=$HOME/.local/bin:$PATH
+
+#FIXME: so damn slow
+#export NVM_DIR="$HOME/.nvm"
+#  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+#  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm" 
+#  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+#  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"

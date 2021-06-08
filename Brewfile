@@ -5,12 +5,11 @@ brew 'tmux'
 brew 'tree'
 brew 'fzf'
 brew 'jq'
-brew 'newsboat'
 
 cask 'alacritty'
 cask 'authy'
 cask 'rectangle'
-cask 'spotify'
+cask 'chrome'
 
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
