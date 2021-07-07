@@ -2,7 +2,7 @@
 vim.cmd 'packadd paq-nvim'
 local paq = require('paq-nvim').paq
 
-paq {'savq/paq-nvim', opt=true} -- let paq manage itself
+paq {'savq/paq-nvim', opt=true}
 paq {'tpope/vim-surround'}
 paq {'nvim-treesitter/nvim-treesitter'}
 paq {'tpope/vim-vinegar'}
@@ -12,14 +12,16 @@ paq {'junegunn/fzf', run = vim.fn['fzf#install']}
 paq {'junegunn/fzf.vim'}
 paq {'ojroques/nvim-lspfuzzy'}
 paq {'romainl/vim-cool'}
-paq {'sainnhe/sonokai'}
+paq {'folke/tokyonight.nvim'}
 paq {'p00f/nvim-ts-rainbow'}
-paq {'nvim-lua/completion-nvim'}
-paq {'ray-x/lsp_signature.nvim'}
+paq {'hrsh7th/nvim-compe'}
+paq {'lewis6991/gitsigns.nvim'}
+paq {'cohama/lexima.vim'}
+paq {'nvim-lua/plenary.nvim'}
 
 ------------------------------------- THEME -------------------------------------
-vim.cmd 'colorscheme sonokai'
-vim.cmd 'let g:sonokai_transparent_background = 1'
+vim.cmd 'colorscheme tokyonight'
+vim.g.tokyonight_transparent=true
 
 ------------------------------------ OPTIONS ------------------------------------
 vim.g.mapleader=" "
@@ -57,7 +59,6 @@ ts.setup {ensure_installed = 'maintained', highlight = {enable = true}, rainbow=
 
 ------------------------------------ LS SETUP -----------------------------------
 local nvim_lsp = require('lspconfig')
-local completion = require('completion')
 
 -- on_attach lifecycle function maps keys to buffers as needed
 local on_attach = function(client, bufnr)
@@ -79,18 +80,30 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gR',    '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'gr',    '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'go',    '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-
-  completion.on_attach()
 end
 
-local servers = { 'gopls', 'tsserver', 'pyls', 'graphql' }
+local servers = { 'gopls', 'tsserver' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach, indent = { enable = true } }
 end
 
-require('lspfuzzy').setup {}  -- make the lsc use fzf instead of the quickfix list
+require('lspfuzzy').setup({})  -- make the lsc use fzf instead of the quickfix list
+
+require('compe').setup({
+  enabled = true,
+  source = {
+    path = true,
+    nvim_lsp = true,
+    nvim_lua = true,
+  },
+})
 
 -------------------------------------- MISC -------------------------------------
 vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()' -- highlight jumps
 vim.cmd 'autocmd FocusGained,BufEnter * checktime' -- force file change check
 vim.cmd 'autocmd BufNewFile,BufRead *.graphql set filetype=graphql'
+
+-------------------------------------- GIT --------------------------------------
+require('gitsigns').setup({
+  current_line_blame = true,
+})
