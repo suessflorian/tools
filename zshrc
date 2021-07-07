@@ -20,7 +20,7 @@ setopt HIST_VERIFY
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 
-function _open { nvim }
+function _open { nvim .}
 zle -N _open
 bindkey '^X^O' _open
 
@@ -54,3 +54,5 @@ export PATH=$HOME/.local/bin:$PATH
 #  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm" 
 #  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
 #  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
