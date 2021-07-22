@@ -9,7 +9,7 @@ font:
   normal:
     family: Fira Code
     style: Medium
-  size: 16
+  size: 17
 
 # https://github.com/alacritty/alacritty/wiki/Color-schemes#monokai-pro
 # Colors (Monokai Pro)

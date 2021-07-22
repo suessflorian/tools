@@ -1,6 +1,3 @@
-git clone https://github.com/savq/paq-nvim.git \
-   "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/paqs/opt/paq-nvim
-
 ln -s -f $(pwd)/gitconfig      ~/.gitconfig
 ln -s -f $(pwd)/zshrc          ~/.zshrc
 ln -s -f $(pwd)/tmux.conf      ~/.tmux.conf
