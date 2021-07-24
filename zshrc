@@ -1,6 +1,7 @@
 autoload -Uz compinit && compinit
 
 cdpath=($HOME/Documents)
+precmd () {print -Pn "\e]0;%~\a"}
 
 export EDITOR=nvim
 bindkey -e

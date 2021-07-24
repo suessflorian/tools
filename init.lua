@@ -9,26 +9,28 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require'packer'.startup(function()
-	use {'tpope/vim-surround'}
-	use {'nvim-treesitter/nvim-treesitter'}
-	use {'neovim/nvim-lspconfig'}
+  use {'tpope/vim-surround'}
+  use {'nvim-treesitter/nvim-treesitter'}
+  use {'neovim/nvim-lspconfig'}
+  use {'kabouzeid/nvim-lspinstall'}
   use {'glepnir/lspsaga.nvim'}
-	use {'tpope/vim-vinegar'}
-	use {'ruanyl/vim-gh-line'}
-	use {'romainl/vim-cool'}
-	use {'folke/tokyonight.nvim'}
-	use {'p00f/nvim-ts-rainbow'}
-	use {'hrsh7th/nvim-compe'}
-	use {'lewis6991/gitsigns.nvim'}
-	use {'cohama/lexima.vim'}
-	use {'nvim-lua/plenary.nvim'}
-	use {'nvim-lua/popup.nvim'}
-	use {'nvim-telescope/telescope.nvim'}
+  use {'tpope/vim-vinegar'}
+  use {'ruanyl/vim-gh-line'}
+  use {'romainl/vim-cool'}
+  use {'projekt0n/github-nvim-theme'}
+  use {'p00f/nvim-ts-rainbow'}
+  use {'hrsh7th/nvim-compe'}
+  use {'lewis6991/gitsigns.nvim'}
+  use {'cohama/lexima.vim'}
+  use {'nvim-lua/plenary.nvim'}
+  use {'nvim-lua/popup.nvim'}
+  use {'nvim-telescope/telescope.nvim'}
+  use {'hoob3rt/lualine.nvim'}
 end)
 
 ------------------------------------- THEME -------------------------------------
-vim.g.tokyonight_transparent=false
-vim.cmd 'colorscheme tokyonight'
+require('github-theme').setup({transparent = true})
+require('lualine').setup({options = {theme = 'github'}})
 
 ------------------------------------ OPTIONS ------------------------------------
 vim.g.mapleader=" "
@@ -93,9 +95,11 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'go',    ':Telescope lsp_document_symbols<cr>', opts)
 end
 
-local servers = { 'gopls', 'tsserver', 'pylsp' }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach, indent = { enable = true } }
+require'lspinstall'.setup() -- important
+
+local servers = require'lspinstall'.installed_servers()
+for _, server in pairs(servers) do
+  require'lspconfig'[server].setup{ on_attach = on_attach, indent = { enable = true } }
 end
 
 require('compe').setup({
