@@ -9,6 +9,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require'packer'.startup(function()
+  use {'wbthomason/packer.nvim'}
   use {'tpope/vim-surround'}
   use {'nvim-treesitter/nvim-treesitter'}
   use {'neovim/nvim-lspconfig'}
@@ -17,20 +18,25 @@ require'packer'.startup(function()
   use {'tpope/vim-vinegar'}
   use {'ruanyl/vim-gh-line'}
   use {'romainl/vim-cool'}
-  use {'projekt0n/github-nvim-theme'}
+  use {'navarasu/onedark.nvim'}
   use {'p00f/nvim-ts-rainbow'}
   use {'hrsh7th/nvim-compe'}
   use {'lewis6991/gitsigns.nvim'}
+  use {'lukas-reineke/indent-blankline.nvim'}
   use {'cohama/lexima.vim'}
-  use {'nvim-lua/plenary.nvim'}
-  use {'nvim-lua/popup.nvim'}
-  use {'nvim-telescope/telescope.nvim'}
+  use {'sbdchd/neoformat'}
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+  }
   use {'hoob3rt/lualine.nvim'}
+  use {'kyazdani42/nvim-web-devicons'}
 end)
 
 ------------------------------------- THEME -------------------------------------
-require('github-theme').setup({transparent = true})
-require('lualine').setup({options = {theme = 'github'}})
+vim.g.onedark_transparent_background = true
+require('onedark').setup()
+require('lualine').setup()
 
 ------------------------------------ OPTIONS ------------------------------------
 vim.g.mapleader=" "
@@ -63,6 +69,7 @@ vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', {noremap 
 vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope grep_string<cr>', {noremap = true, silent=true})
+vim.api.nvim_set_keymap('n', '<leader>gf', ':Neoformat <cr>', {noremap = true, silent=true})
 
 ---------------------------------- TREE SITTER ----------------------------------
 local ts = require 'nvim-treesitter.configs'
@@ -103,16 +110,15 @@ for _, server in pairs(servers) do
 end
 
 require('compe').setup({
-  enabled = true,
+  enabled = true;
   source = {
-    path = true,
-    nvim_lsp = true,
-    nvim_lua = true,
+    path = true;
+    nvim_lsp = true;
   },
 })
 
 -------------------------------------- MISC -------------------------------------
-vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()' -- highlight jumps
+vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()'
 vim.cmd 'autocmd FocusGained,BufEnter * checktime' -- force file change check
 vim.cmd 'autocmd BufNewFile,BufRead *.graphql set filetype=graphql'
 
