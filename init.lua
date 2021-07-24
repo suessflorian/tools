@@ -2,7 +2,6 @@ local execute = vim.api.nvim_command
 local fn = vim.fn
 
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-
 if fn.empty(fn.glob(install_path)) > 0 then
   fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
   execute 'packadd packer.nvim'
@@ -31,6 +30,7 @@ require'packer'.startup(function()
   }
   use {'hoob3rt/lualine.nvim'}
   use {'kyazdani42/nvim-web-devicons'}
+  use {'alvan/vim-closetag'}
 end)
 
 ------------------------------------- THEME -------------------------------------
@@ -64,7 +64,6 @@ vim.opt.foldexpr='nvim_treesitter#foldexpr()'
 vim.opt.foldlevel=99 -- open files unfolded
 
 ------------------------------------ MAPPINGS -----------------------------------
-
 vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', {noremap = true, silent=true})
@@ -78,9 +77,7 @@ ts.setup {ensure_installed = 'maintained', highlight = {enable = true}, rainbow=
 ------------------------------------ LS SETUP -----------------------------------
 local nvim_lsp = require('lspconfig')
 
--- on_attach lifecycle function maps keys to buffers as needed
 local on_attach = function(client, bufnr)
---  saga.init_lsp_saga()
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -102,8 +99,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'go',    ':Telescope lsp_document_symbols<cr>', opts)
 end
 
-require'lspinstall'.setup() -- important
-
+require'lspinstall'.setup()
 local servers = require'lspinstall'.installed_servers()
 for _, server in pairs(servers) do
   require'lspconfig'[server].setup{ on_attach = on_attach, indent = { enable = true } }
@@ -121,6 +117,7 @@ require('compe').setup({
 vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()'
 vim.cmd 'autocmd FocusGained,BufEnter * checktime' -- force file change check
 vim.cmd 'autocmd BufNewFile,BufRead *.graphql set filetype=graphql'
+vim.g.closetag_filenames = '*.html,*.js*,*.ts*'
 
 -------------------------------------- GIT --------------------------------------
 require('gitsigns').setup({
