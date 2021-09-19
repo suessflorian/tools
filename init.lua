@@ -26,7 +26,7 @@ require'packer'.startup(function()
   use {'sbdchd/neoformat'}
   use {'hoob3rt/lualine.nvim'}
   use {'alvan/vim-closetag'}
-  use { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
+  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
 end)
 
 ------------------------------------- THEME -------------------------------------
@@ -113,9 +113,10 @@ require('compe').setup({
 })
 
 -------------------------------------- MISC -------------------------------------
-vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()'
+vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()' -- highlight yank section
 vim.cmd 'autocmd FocusGained,BufEnter * checktime' -- force file change check
 vim.cmd 'autocmd BufNewFile,BufRead *.graphql set filetype=graphql'
+vim.cmd 'autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete' -- remove from buffer list when quitting window
 vim.g.closetag_filenames = '*.html,*.js*,*.ts*'
 
 -------------------------------------- GIT --------------------------------------
