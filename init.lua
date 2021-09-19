@@ -1,4 +1,4 @@
-vim.cmd 'let $GIT_EDITOR = "nvr -cc split --remote-wait +\'set bufhidden=wipe\'"'
+vim.cmd 'let $GIT_EDITOR = "nvr -cc split --remote-wait"'
 
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -11,6 +11,7 @@ require'packer'.startup(function()
   use {'iamcco/markdown-preview.nvim'}
   use {'wbthomason/packer.nvim'}
   use {'tpope/vim-surround'}
+  use {'tpope/vim-vinegar'}
   use {'nvim-treesitter/nvim-treesitter'}
   use {'neovim/nvim-lspconfig'}
   use {'kabouzeid/nvim-lspinstall'}
@@ -25,20 +26,12 @@ require'packer'.startup(function()
   use {'sbdchd/neoformat'}
   use {'hoob3rt/lualine.nvim'}
   use {'alvan/vim-closetag'}
-  use {'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons'}
-  use {'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons'}
   use { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
 end)
 
 ------------------------------------- THEME -------------------------------------
 vim.g.onedark_transparent_background = true
 require('onedark').setup()
-require("bufferline").setup({ options = { offsets = {{
-        filetype = "NvimTree",
-        text_align = "left"
-    }}
-  }
-})
 require('lualine').setup({options = {theme = "onedark"}})
 
 ------------------------------------ OPTIONS ------------------------------------
@@ -66,13 +59,11 @@ vim.opt.foldmethod='expr' -- treesitters determines folding
 vim.opt.foldexpr='nvim_treesitter#foldexpr()'
 vim.opt.foldlevel=99 -- open files unfolded
 
-vim.g.nvim_tree_quit_on_open = 1 --closes the tree when you open a file
-
 ------------------------------------ MAPPINGS -----------------------------------
 vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', {noremap = true, silent=true})
+vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope grep_string<cr>', {noremap = true, silent=true})
-vim.api.nvim_set_keymap('n', '-', ':NvimTreeFindFile<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', 'J', ':bprevious<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', 'K', ':bnext<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<c-space>', ':LazyGit<cr>', {noremap = true, silent=true})

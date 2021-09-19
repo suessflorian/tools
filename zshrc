@@ -3,14 +3,8 @@ autoload -Uz compinit && compinit
 cdpath=($HOME/Documents)
 precmd () {print -Pn "\e]0;%~\a"} # set shell process name to pwd
 
-if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-    alias nvim=nvr -cc split --remote-wait +'set bufhidden=wipe'
-    export VISUAL="nvr -cc split --remote-wait +'set bufhidden=wipe'"
-    export EDITOR="nvr -cc split --remote-wait +'set bufhidden=wipe'"
-else
-    export VISUAL="nvim"
-    export EDITOR="nvim"
-fi
+export VISUAL="nvim"
+export EDITOR="nvim"
 
 bindkey -e
 
@@ -29,7 +23,7 @@ setopt HIST_VERIFY
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 
-function _open { nvim }
+function _open { nvim . }
 zle -N _open
 bindkey '^X^O' _open
 
