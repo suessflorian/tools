@@ -1,12 +1,11 @@
-vim.cmd 'let $GIT_EDITOR = "nvr -cc split --remote-wait"'
-
+-- install packer if not present
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
   vim.api.nvim_command 'packadd packer.nvim'
 end
 
-require'packer'.startup(function()
+require('packer').startup(function()
   use {'kdheepak/lazygit.nvim'}
   use {'iamcco/markdown-preview.nvim'}
   use {'wbthomason/packer.nvim'}
@@ -21,12 +20,11 @@ require'packer'.startup(function()
   use {'navarasu/onedark.nvim'}
   use {'p00f/nvim-ts-rainbow'}
   use {'hrsh7th/nvim-compe'}
-  use {'lewis6991/gitsigns.nvim'}
   use {'cohama/lexima.vim'}
   use {'sbdchd/neoformat'}
   use {'hoob3rt/lualine.nvim'}
   use {'alvan/vim-closetag'}
-  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
+  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/plenary.nvim'}, {'kyazdani42/nvim-web-devicons'}}}
 end)
 
 ------------------------------------- THEME -------------------------------------
@@ -55,20 +53,17 @@ vim.opt.mouse='a' -- let mouse do stuff
 vim.opt.wrap=false -- disable text wrapping
 vim.opt.undofile=true -- persistant file undo's
 
-vim.opt.foldmethod='expr' -- treesitters determines folding
-vim.opt.foldexpr='nvim_treesitter#foldexpr()'
-vim.opt.foldlevel=99 -- open files unfolded
+vim.g.closetag_filenames = '*.html,*.js*,*.ts*' -- where lexima is active
+vim.g.neoformat_try_node_exe=1 -- uses project formatter dependancy if available
 
------------------------------------- MAPPINGS -----------------------------------
+------------------------------------ FINDERS ------------------------------------
 vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', {noremap = true, silent=true})
 vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope grep_string<cr>', {noremap = true, silent=true})
-vim.api.nvim_set_keymap('n', 'J', ':bprevious<cr>', {noremap = true, silent=true})
-vim.api.nvim_set_keymap('n', 'K', ':bnext<cr>', {noremap = true, silent=true})
-vim.api.nvim_set_keymap('n', '<c-space>', ':LazyGit<cr>', {noremap = true, silent=true})
+
+------------------------------------ MAPPINGS -----------------------------------
 vim.api.nvim_set_keymap('n', 'gf', ':Neoformat <cr>', {noremap = true, silent=true})
-vim.g.neoformat_try_node_exe=1 -- uses project formatter dependancy if available
 
 ---------------------------------- TREE SITTER ----------------------------------
 local ts = require('nvim-treesitter.configs')
@@ -79,10 +74,6 @@ local nvim_lsp = require('lspconfig')
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  buf_set_option('completefunc', 'v:lua.vim.lsp.omnifunc')
-
   local opts = { noremap=true, silent=true }
 
   buf_set_keymap('n', '<C-n>,',     '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', opts)
@@ -116,8 +107,8 @@ require('compe').setup({
 vim.cmd 'autocmd TextYankPost * silent! lua vim.highlight.on_yank()' -- highlight yank section
 vim.cmd 'autocmd FocusGained,BufEnter * checktime' -- force file change check
 vim.cmd 'autocmd BufNewFile,BufRead *.graphql set filetype=graphql'
-vim.cmd 'autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete' -- remove from buffer list when quitting window
-vim.g.closetag_filenames = '*.html,*.js*,*.ts*'
 
 -------------------------------------- GIT --------------------------------------
-require('gitsigns').setup({ current_line_blame = true })
+vim.api.nvim_set_keymap('n', '<c-space>', ':LazyGit<cr>', {noremap = true, silent=true})
+vim.cmd 'let $GIT_EDITOR = "nvr -cc split --remote-wait"' -- when in lazygit utulise neovim remote to re-attach to current instance
+vim.cmd 'autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete'
