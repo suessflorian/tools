@@ -12,7 +12,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=30000
 export SAVEHIST=30000
 
-export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *|git *)"
+export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *|git *|cp *|mkdir *|mv *|ls *)"
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS

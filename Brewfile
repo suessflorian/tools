@@ -1,9 +1,11 @@
 brew 'neovim'
-brew 'neovim-remote'
 brew 'lazygit'
 brew 'ripgrep'
 brew 'fzf'
 brew 'jq'
+
+brew 'go'
+brew 'golangci-lint'
 
 cask 'kitty'
 cask 'authy'
