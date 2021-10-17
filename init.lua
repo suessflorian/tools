@@ -13,7 +13,6 @@ require('packer').startup(function()
   use {'nvim-treesitter/nvim-treesitter'}
   use {'neovim/nvim-lspconfig'}
   use {'kabouzeid/nvim-lspinstall'}
-  use {'glepnir/lspsaga.nvim'}
   use {'ruanyl/vim-gh-line'}
   use {'romainl/vim-cool'}
   use {'navarasu/onedark.nvim'}
@@ -27,6 +26,8 @@ require('packer').startup(function()
   use {'hrsh7th/cmp-nvim-lsp'}
   use {'hrsh7th/nvim-cmp'}
   use {'onsails/lspkind-nvim'}
+  use {'saadparwaiz1/cmp_luasnip'}
+  use {'L3MON4D3/LuaSnip'}
 end)
 
 ------------------------------------- THEME -------------------------------------
@@ -65,7 +66,6 @@ require('telescope').setup({
     mappings = {
       i = {
         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<ESC>"] = actions.close,
       }
     }
   }
@@ -108,15 +108,26 @@ local on_attach = function(client, bufnr)
 end
 
 local cmp = require('cmp')
+local luasnip = require 'luasnip'
 cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'luasnip' },
   },
   formatting = {
     format = require('lspkind').cmp_format({with_text = true, maxwidth = 50})
   },
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
   mapping = {
-    ['<C-x><C-u>'] = cmp.mapping.complete(),
+    ['<C-x><C-u>']  = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
   }
 }
 

@@ -14,4 +14,3 @@ cask 'chrome'
 
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
-cask 'font-victor-mono'
