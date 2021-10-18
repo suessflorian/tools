@@ -12,7 +12,7 @@ require('packer').startup(function()
   use {'tpope/vim-vinegar'}
   use {'nvim-treesitter/nvim-treesitter'}
   use {'neovim/nvim-lspconfig'}
-  use {'kabouzeid/nvim-lspinstall'}
+  use {'williamboman/nvim-lsp-installer'}
   use {'ruanyl/vim-gh-line'}
   use {'romainl/vim-cool'}
   use {'navarasu/onedark.nvim'}
@@ -131,15 +131,16 @@ cmp.setup {
   }
 }
 
-require('lspinstall').setup()
-local servers = require'lspinstall'.installed_servers()
-for _, server in pairs(servers) do
-  require'lspconfig'[server].setup({
+local lsp_installer = require('nvim-lsp-installer')
+lsp_installer.on_server_ready(function(server)
+  server:setup({
     on_attach = on_attach,
     indent = { enable = true },
     capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   })
-end
+  vim.cmd [[ do User LspAttachBuffers ]]
+end)
+
 -------------------------------------- MISC -------------------------------------
 vim.cmd([[autocmd TextYankPost * silent! lua vim.highlight.on_yank()]]) -- highlight yank section
 vim.cmd([[autocmd FocusGained,BufEnter * checktime]]) -- force file change check
