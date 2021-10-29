@@ -1,6 +1,6 @@
 [user]
-	name=Florian Suess
-	email=floriansuess96@icloud.com
+  name=Florian Suess
+  email=floriansuess96@icloud.com
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
 [commit]
@@ -8,4 +8,4 @@
 [pull]
   rebase=true
 [init]
-	defaultBranch = main
+  defaultBranch = main

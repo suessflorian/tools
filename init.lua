@@ -1,4 +1,3 @@
--- install packer if not present
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
@@ -35,7 +34,7 @@ end)
 -----------------------------------BLING
 vim.g.onedark_transparent_background = true
 require('onedark').setup()
-require('lualine').setup({options = {theme = "onedark"}})
+require('lualine').setup()
 
 -----------------------------------CORE
 vim.g.mapleader=" "
@@ -64,29 +63,6 @@ vim.g.neoformat_try_node_exe=1 -- uses project formatter dependancy if available
 local silent = { noremap=true, silent=true } -- all custom mappings will be silent
 
 -----------------------------------GREPPING
-local actions = require "telescope.actions"
-function multiselect(prompt_bufnr)
-    local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-    local num_selections = table.getn(picker:get_multi_selection())
-
-    if num_selections > 1 then
-        actions.send_selected_to_qflist(prompt_bufnr)
-        actions.open_qflist()
-    else
-        actions.file_edit(prompt_bufnr)
-    end
-end
-
-require('telescope').setup({
-  defaults = {
-    mappings = {
-      i = {
-        ["<CR>"] = multiselect,
-      },
-    },
-  },
-})
-
 vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', silent)
 vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', silent)
 vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', silent)
@@ -116,6 +92,7 @@ local ls = function(client, bufnr)
   buf_set_keymap('n', 'gt',      ':lua vim.lsp.buf.type_definition()<CR>', silent)
   buf_set_keymap('n', 'gi',      ':Telescope lsp_implementations<CR>', silent)
   buf_set_keymap('n', 'ga',      ':lua vim.lsp.buf.code_action()<CR>', silent)
+  buf_set_keymap('n', 'ga',      ':Telescope lsp_code_actions<CR>', silent)
   buf_set_keymap('n', 'gR',      ':lua vim.lsp.buf.rename()<CR>', silent)
   buf_set_keymap('n', 'gd',      ':lua vim.lsp.buf.declaration()<CR>', silent)
   buf_set_keymap('n', 'gr',      ':Telescope lsp_references<CR>', silent)
