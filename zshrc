@@ -51,3 +51,5 @@ export PATH=$GOPATH/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
+
+eval "$(pyenv init --path)"

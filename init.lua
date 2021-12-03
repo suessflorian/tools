@@ -5,6 +5,7 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function()
+  use {'google/vim-jsonnet'}
   use {'wbthomason/packer.nvim'}
   use {'numToStr/Comment.nvim'}
   use {'iamcco/markdown-preview.nvim'}
@@ -22,11 +23,14 @@ require('packer').startup(function()
   use {'cohama/lexima.vim'}
   use {'alvan/vim-closetag'}
   use {'mfussenegger/nvim-lint'}
+  use {'hrsh7th/vim-vsnip'}
+  use {'hrsh7th/cmp-vsnip'}
   use {'hrsh7th/cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-path'}
+  use {'hrsh7th/cmp-cmdline'}
+  use {'hrsh7th/cmp-buffer'}
   use {'hrsh7th/nvim-cmp'}
-  use {'saadparwaiz1/cmp_luasnip'}
   use {'onsails/lspkind-nvim'}
-  use {'L3MON4D3/LuaSnip'}
   use {'kevinhwang91/nvim-bqf'}
   use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/plenary.nvim'}, {'kyazdani42/nvim-web-devicons'}}}
 end)
@@ -73,7 +77,7 @@ vim.api.nvim_set_keymap('n', 'gf', ':Neoformat <cr>', silent)
 vim.api.nvim_set_keymap('n', '<c-j>', ':cnext <cr>', silent)
 vim.api.nvim_set_keymap('n', '<c-k>', ':cprevious <cr>', silent)
 
------------------------------------IDE
+-----------------------------------SYNTAX
 local ts = require('nvim-treesitter.configs')
 ts.setup({
   ensure_installed = 'maintained',
@@ -81,6 +85,43 @@ ts.setup({
   rainbow = { enable = true },
 })
 
+-----------------------------------COMPLETION
+local cmp = require('cmp')
+cmp.setup({
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'buffer' },
+    { name = 'vsnip' },
+  },
+  formatting = {
+    format = require('lspkind').cmp_format({with_text = true, maxwidth = 50})
+  },
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-x><C-u>']  = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
+    ['<CR>'] = cmp.mapping.confirm({select = true}),
+  }
+})
+
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+-----------------------------------LSC
 local nvim_lsp = require('lspconfig')
 local ls = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -103,40 +144,15 @@ local lsp_installer = require('nvim-lsp-installer')
 lsp_installer.on_server_ready(function(server)
   server:setup({
     on_attach = ls,
-    indent = { enable = true },
     capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   })
   vim.cmd [[ do User LspAttachBuffers ]]
 end)
 
-local cmp = require('cmp')
-local luasnip = require('luasnip')
-cmp.setup {
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-  formatting = {
-    format = require('lspkind').cmp_format({with_text = true, maxwidth = 50})
-  },
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-  mapping = {
-    ['<C-x><C-u>']  = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-  }
-}
-
+-----------------------------------MISC
 require('lint').linters_by_ft = {go = {'golangcilint'}}
 vim.cmd([[autocmd BufEnter,BufWritePost *.go lua require('lint').try_lint() ]])
 
------------------------------------MISC
 require('Comment').setup()
 vim.cmd([[autocmd TextYankPost * silent! lua vim.highlight.on_yank()]]) -- highlight yank section
 vim.cmd([[autocmd FocusGained,BufEnter * checktime]]) -- force file change check
