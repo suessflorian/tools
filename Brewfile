@@ -4,6 +4,7 @@ brew 'ripgrep'
 brew 'fzf'
 brew 'jq'
 
+brew 'pyenv'
 brew 'go'
 brew 'golangci-lint'
 

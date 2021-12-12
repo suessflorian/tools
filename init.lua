@@ -15,10 +15,11 @@ require('packer').startup(function()
   use {'neovim/nvim-lspconfig'}
   use {'williamboman/nvim-lsp-installer'}
   use {'ruanyl/vim-gh-line'}
-  use {'romainl/vim-cool'}
   use {'navarasu/onedark.nvim'}
   use {'p00f/nvim-ts-rainbow'}
   use {'sbdchd/neoformat'}
+  use {'romgrk/barbar.nvim'}
+  use {'romainl/vim-cool'}
   use {'nvim-lualine/lualine.nvim'}
   use {'cohama/lexima.vim'}
   use {'alvan/vim-closetag'}
@@ -55,7 +56,6 @@ vim.opt.autoread=true -- detect file changes outside of vim
 
 vim.opt.cursorline=true
 vim.opt.clipboard='unnamedplus' -- sync clipboard and default register
-vim.opt.inccommand='nosplit' -- show effect of command incrementally
 vim.opt.completeopt='menu,menuone,noselect' -- tweaking complete menu behaviour
 vim.opt.mouse='a' -- let mouse do stuff
 vim.opt.wrap=false -- disable text wrapping
@@ -64,18 +64,22 @@ vim.opt.undofile=true -- persistant file undo's
 vim.g.closetag_filenames = '*.html,*.js*,*.ts*' -- where lexima is active
 vim.g.neoformat_try_node_exe=1 -- uses project formatter dependancy if available
 
+local map = vim.api.nvim_set_keymap
 local silent = { noremap=true, silent=true } -- all custom mappings will be silent
 
 -----------------------------------GREPPING
-vim.api.nvim_set_keymap('n', '<leader>p', ':Telescope find_files<cr>', silent)
-vim.api.nvim_set_keymap('n', '<leader>b', ':Telescope buffers<cr>', silent)
-vim.api.nvim_set_keymap('n', '<leader>F', ':Telescope live_grep<cr>', silent)
-vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope grep_string<cr>', silent)
+map('n', '<leader>p', ':Telescope find_files<cr>', silent)
+map('n', '<leader>b', ':Telescope buffers<cr>', silent)
+map('n', '<leader>F', ':Telescope live_grep<cr>', silent)
+map('n', '<leader>f', ':Telescope grep_string<cr>', silent)
 
 -----------------------------------OTHER MAPPINGS
-vim.api.nvim_set_keymap('n', 'gf', ':Neoformat <cr>', silent)
-vim.api.nvim_set_keymap('n', '<c-j>', ':cnext <cr>', silent)
-vim.api.nvim_set_keymap('n', '<c-k>', ':cprevious <cr>', silent)
+map('n', 'gf',    ':Neoformat <cr>', silent)
+map('n', '<C-h>', ':cprev<CR>', silent) -- quickfix rotation
+map('n', '<C-l>', ':cnext<CR>', silent)
+map('n', '<C-j>', ':BufferPrevious<CR>', silent) -- buffer rotation
+map('n', '<C-k>', ':BufferNext<CR>', silent)
+map('n', '<C-x>', ':BufferClose<CR>', silent) -- little controversial
 
 -----------------------------------SYNTAX
 local ts = require('nvim-treesitter.configs')
@@ -93,9 +97,6 @@ cmp.setup({
     { name = 'buffer' },
     { name = 'vsnip' },
   },
-  formatting = {
-    format = require('lspkind').cmp_format({with_text = true, maxwidth = 50})
-  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)
@@ -104,12 +105,6 @@ cmp.setup({
   mapping = {
     ['<C-x><C-u>']  = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
     ['<CR>'] = cmp.mapping.confirm({select = true}),
-  }
-})
-
-cmp.setup.cmdline('/', {
-  sources = {
-    { name = 'buffer' }
   }
 })
 
