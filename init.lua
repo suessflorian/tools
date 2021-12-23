@@ -5,45 +5,33 @@ end
 
 require('packer').startup(function()
 	use {'wbthomason/packer.nvim'}
+	use {'RRethy/vim-illuminate'}
 	use {'navarasu/onedark.nvim'}
 	use {'nvim-lualine/lualine.nvim'}
-	use {'romgrk/barbar.nvim', requires = {
-		{'kyazdani42/nvim-web-devicons'},
-	}}
-	use { 'lewis6991/gitsigns.nvim', requires = {
-		'nvim-lua/plenary.nvim' }
-	}
+	use {'romgrk/barbar.nvim', requires = {'kyazdani42/nvim-web-devicons'}}
+	use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}}
 	use {'google/vim-jsonnet'}
 	use {'tpope/vim-commentary'}
-	use {'iamcco/markdown-preview.nvim',
-		run = 'cd app && yarn install',
-	}
+	use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 	use {'tpope/vim-surround'}
 	use {'tpope/vim-vinegar'}
-	use {'williamboman/nvim-lsp-installer', requires = {
-		{'neovim/nvim-lspconfig'},
-	}}
+	use {'williamboman/nvim-lsp-installer', requires = {'neovim/nvim-lspconfig'}}
 	use {'ruanyl/vim-gh-line'}
 	use {'sbdchd/neoformat'}
 	use {'romainl/vim-cool'}
 	use {'jiangmiao/auto-pairs'}
 	use {'mfussenegger/nvim-lint'}
 	use {'kevinhwang91/nvim-bqf'}
-	use {'nvim-treesitter/nvim-treesitter', requires = {
-		{'p00f/nvim-ts-rainbow'},
-		{'windwp/nvim-ts-autotag'},
-	}}
+	use {'onsails/lspkind-nvim'}
+	use {'nvim-treesitter/nvim-treesitter', requires = {{'p00f/nvim-ts-rainbow'},{'windwp/nvim-ts-autotag'}}}
+	use {'hrsh7th/vim-vsnip'}
+	use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/plenary.nvim'},{'kyazdani42/nvim-web-devicons'}}}
 	use {'hrsh7th/nvim-cmp', requires = {
-		{'hrsh7th/vim-vsnip'},
 		{'hrsh7th/cmp-vsnip'},
 		{'hrsh7th/cmp-nvim-lsp'},
 		{'hrsh7th/cmp-path'},
 		{'hrsh7th/cmp-cmdline'},
 		{'hrsh7th/cmp-buffer'},
-	}}
-	use {'nvim-telescope/telescope.nvim', requires = {
-		{'nvim-lua/plenary.nvim'},
-		{'kyazdani42/nvim-web-devicons'},
 	}}
 
 	if packer_bootstrap then
@@ -118,6 +106,9 @@ cmp.setup({
 			vim.fn["vsnip#anonymous"](args.body)
 		end,
 	},
+	formatting = {
+		format = require('lspkind').cmp_format()
+	},
 	mapping = {
 		['<C-x><C-u>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
 		['<TAB>'] = cmp.mapping.confirm({select = true}),
@@ -151,6 +142,7 @@ local ls = function(client, bufnr)
 	buf_set_keymap('n', 'gd',      ':lua vim.lsp.buf.declaration()<CR>', silent)
 	buf_set_keymap('n', 'gr',      ':Telescope lsp_references<CR>', silent)
 	buf_set_keymap('n', 'go',      ':Telescope lsp_document_symbols<CR>', silent)
+	require('illuminate').on_attach(client)
 end
 
 local lsp_installer = require('nvim-lsp-installer')
@@ -165,11 +157,9 @@ end)
 -----------------------------------MISC
 require('gitsigns').setup({
 	current_line_blame = true,
-	current_line_blame_opts = {
-    	virt_text_pos = 'right_align',
-  	},
+	current_line_blame_formatter_opts = { relative_time = true },
 })
-require('lint').linters_by_ft = {go = {'golangcilint'}}
+require('lint').linters_by_ft = { go = {'golangcilint'} }
 vim.cmd([[autocmd BufEnter,BufWritePost *.go lua require('lint').try_lint() ]])
 vim.cmd([[autocmd FocusGained,BufEnter * checktime]]) -- force file change check
 vim.cmd([[autocmd BufWritePre * :%s/\s\+$//e]]) -- remove trailing whitespace

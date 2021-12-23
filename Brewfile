@@ -3,6 +3,8 @@ brew 'lazygit'
 brew 'ripgrep'
 brew 'fzf'
 brew 'jq'
+brew 'fd'
+brew 'n'
 
 brew 'pyenv'
 brew 'go'
