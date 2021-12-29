@@ -20,3 +20,6 @@ cask 'docker'
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
 cask 'font-hack-nerd-font'
+
+tap 'homebrew/homebrew-cask-drivers'
+cask 'logitech-options'
