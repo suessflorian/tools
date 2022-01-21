@@ -42,9 +42,10 @@ end)
 
 -----------------------------------BLING
 vim.opt.termguicolors=true
-vim.g.onedark_transparent_background=true
-require('onedark').setup()
-require('lualine').setup()
+
+require('onedark').setup({transparent = true,})
+require('lualine').setup({options = {theme = 'onedark'}})
+require('onedark').load()
 
 -----------------------------------CORE
 vim.g.mapleader=" "
