@@ -1,6 +1,7 @@
 brew 'neovim'
 brew 'lazygit'
 brew 'ripgrep'
+brew 'stylua'
 brew 'fzf'
 brew 'jq'
 brew 'fd'
