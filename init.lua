@@ -12,22 +12,18 @@ end
 
 require("packer").startup(function()
 	use({ "wbthomason/packer.nvim" })
-	use({ "RRethy/vim-illuminate" })
 	use({ "navarasu/onedark.nvim" })
-	use({ "nvim-lualine/lualine.nvim" })
-	use({ "romgrk/barbar.nvim", requires = { "kyazdani42/nvim-web-devicons" } })
+	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 	use({ "google/vim-jsonnet" })
 	use({ "tpope/vim-commentary" })
 	use({ "iamcco/markdown-preview.nvim", run = "cd app && yarn install" })
 	use({ "tpope/vim-surround" })
-	use({ "tpope/vim-vinegar" })
 	use({ "williamboman/nvim-lsp-installer", requires = { "neovim/nvim-lspconfig" } })
 	use({ "ruanyl/vim-gh-line" })
 	use({ "sbdchd/neoformat" })
 	use({ "romainl/vim-cool" })
 	use({ "jiangmiao/auto-pairs" })
-	use({ "kyazdani42/nvim-tree.lua" })
 	use({ "kevinhwang91/nvim-bqf" })
 	use({ "onsails/lspkind-nvim" })
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
@@ -46,6 +42,7 @@ require("packer").startup(function()
 			{ "hrsh7th/cmp-buffer" },
 		},
 	})
+	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
 
 	if packer_bootstrap then
 		require("packer").sync()
@@ -57,7 +54,12 @@ vim.opt.termguicolors = true
 
 require("onedark").setup({ transparent = true })
 require("onedark").load()
-require("lualine").setup({ options = { theme = "onedark" } })
+require("nvim-tree").setup({})
+require("bufferline").setup({
+	options = {
+		offsets = { { filetype = "NvimTree", text = "" } },
+	},
+})
 
 -----------------------------------CORE
 vim.g.mapleader = " "
@@ -83,7 +85,6 @@ local silent = { noremap = true, silent = true } -- all custom mappings will be 
 
 -----------------------------------GREPPING
 map("n", "<leader>p", ":Telescope find_files<cr>", silent)
-map("n", "<leader>b", ":Telescope buffers<cr>", silent)
 map("n", "<leader>F", ":Telescope live_grep<cr>", silent)
 map("n", "<leader>f", ":Telescope grep_string<cr>", silent)
 map("n", "<leader>r", ":Telescope registers<cr>", silent)
@@ -92,9 +93,10 @@ map("n", "<leader>r", ":Telescope registers<cr>", silent)
 map("n", "gf", ":Neoformat <cr>", silent)
 map("n", "<C-h>", ":cprev<cr>", silent) -- quickfix rotation
 map("n", "<C-l>", ":cnext<cr>", silent)
-map("n", "<C-j>", ":BufferPrevious<cr>", silent) -- buffer rotation
-map("n", "<C-k>", ":BufferNext<cr>", silent)
-map("n", "<C-x>", ":BufferClose<cr>", silent) -- little controversial
+map("n", "<C-j>", ":BufferLineCyclePrev<cr>", silent) -- buffer rotation
+map("n", "<C-k>", ":BufferLineCycleNext<cr>", silent)
+map("n", "<C-x>", ":bdelete<cr>", silent) -- little controversial
+map("n", "-", ":NvimTreeFindFile<cr>", silent)
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
@@ -157,7 +159,6 @@ local ls = function(client, bufnr)
 	buf_set_keymap("n", "gd", ":lua vim.lsp.buf.declaration()<cr>", silent)
 	buf_set_keymap("n", "gr", ":Telescope lsp_references<cr>", silent)
 	buf_set_keymap("n", "go", ":Telescope lsp_document_symbols<cr>", silent)
-	require("illuminate").on_attach(client)
 end
 
 local lsp_installer = require("nvim-lsp-installer")
