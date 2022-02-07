@@ -24,25 +24,27 @@ require("packer").startup(function()
 	use({ "sbdchd/neoformat" })
 	use({ "romainl/vim-cool" })
 	use({ "jiangmiao/auto-pairs" })
+	use({ "j-hui/fidget.nvim" })
 	use({ "kevinhwang91/nvim-bqf" })
 	use({ "onsails/lspkind-nvim" })
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
-	use({ "hrsh7th/vim-vsnip" })
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } },
 	})
+	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
-			{ "hrsh7th/cmp-vsnip" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-buffer" },
+			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	})
 	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
+	use({ "petertriho/nvim-scrollbar" })
 
 	if packer_bootstrap then
 		require("packer").sync()
@@ -54,17 +56,28 @@ vim.opt.termguicolors = true
 
 require("onedark").setup({ transparent = true })
 require("onedark").load()
-require("nvim-tree").setup({})
+require("nvim-tree").setup({
+	git = {
+		enable = false,
+	},
+})
 require("bufferline").setup({
 	options = {
 		offsets = { { filetype = "NvimTree", text = "" } },
 	},
 })
+vim.cmd([[highlight FidgetTitle ctermbg=None]])
+require("fidget").setup({ window = { blend = 0 } })
+require("scrollbar").setup()
 
 -----------------------------------CORE
 vim.g.mapleader = " "
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2 -- spaces per tab (when shifting), when using the >> or << commands, shift lines by 4 spaces
+vim.opt.tabstop = 2 -- spaces per tab
+vim.opt.smarttab = true -- <tab>/<BS> indent/dedent in leading whitespace
+vim.opt.autoindent = true -- maintain indent of current line
+vim.opt.expandtab = false -- don't expand tabs into spaces
 vim.opt.hidden = true -- allows buffer hiding rather than abandoning
 
 vim.opt.backup = false -- disable backup files
@@ -73,7 +86,7 @@ vim.opt.autoread = true -- detect file changes outside of vim
 
 vim.opt.cursorline = true
 vim.opt.clipboard = "unnamedplus" -- sync clipboard and default register
-vim.opt.completeopt = "menu,menuone,noselect" -- tweaking complete menu behaviour
+vim.opt.completeopt = "menuone,noinsert" -- tweaking complete menu behaviour
 vim.opt.mouse = "a" -- let mouse do stuff
 vim.opt.wrap = false -- disable text wrapping
 vim.opt.undofile = true -- persistant file undo's
@@ -110,28 +123,76 @@ ts.setup({
 
 -----------------------------------COMPLETION
 local cmp = require("cmp")
+local luasnip = require("luasnip")
+local check_back_space = function()
+	local col = vim.fn.col(".") - 1
+	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
+end
+
 cmp.setup({
+	completion = {
+		completeopt = "menu,menuone,noinsert",
+	},
 	sources = {
 		{ name = "nvim_lsp" },
+		{ name = "path" },
+		{ name = "luasnip" },
 		{ name = "buffer" },
-		{ name = "vsnip" },
 	},
 	snippet = {
 		expand = function(args)
-			vim.fn["vsnip#anonymous"](args.body)
+			require("luasnip").lsp_expand(args.body)
 		end,
 	},
 	formatting = {
 		format = require("lspkind").cmp_format(),
 	},
 	mapping = {
-		["<C-x><C-u>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		["<TAB>"] = cmp.mapping.confirm({ select = true }),
+		["<C-x><C-u>"] = cmp.mapping.complete(),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = false,
+		}),
+		["<Tab>"] = function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end,
+		["<S-Tab>"] = function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end,
 	},
 	experimental = {
 		ghost_text = true,
 	},
 })
+
+luasnip.config.set_config({
+	history = true,
+	-- Update more often, :h events for more info.
+	updateevents = "TextChanged,TextChangedI",
+})
+
+luasnip.snippets = {
+	all = {},
+	html = {},
+}
+
+-- html snippets for React
+luasnip.snippets.javascript = luasnip.snippets.html
+luasnip.snippets.javascriptreact = luasnip.snippets.html
+luasnip.snippets.typescriptreact = luasnip.snippets.html
+require("luasnip/loaders/from_vscode").load({ include = { "html" } })
 
 cmp.setup.cmdline(":", {
 	sources = cmp.config.sources({
