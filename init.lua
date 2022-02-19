@@ -91,6 +91,12 @@ vim.opt.mouse = "a" -- let mouse do stuff
 vim.opt.wrap = false -- disable text wrapping
 vim.opt.undofile = true -- persistant file undo's
 
+vim.opt.foldcolumn = "4"
+vim.opt.foldlevel = 4
+vim.opt.foldenable = false
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
 vim.g.neoformat_try_node_exe = 1 -- uses project formatter dependancy if available
 
 local map = vim.api.nvim_set_keymap
@@ -124,10 +130,6 @@ ts.setup({
 -----------------------------------COMPLETION
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-local check_back_space = function()
-	local col = vim.fn.col(".") - 1
-	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
-end
 
 cmp.setup({
 	completion = {
@@ -141,7 +143,7 @@ cmp.setup({
 	},
 	snippet = {
 		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
+			luasnip.lsp_expand(args.body)
 		end,
 	},
 	formatting = {
