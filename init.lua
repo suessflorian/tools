@@ -106,7 +106,6 @@ local silent = { noremap = true, silent = true } -- all custom mappings will be 
 map("n", "<leader>p", ":Telescope find_files<cr>", silent)
 map("n", "<leader>F", ":Telescope live_grep<cr>", silent)
 map("n", "<leader>f", ":Telescope grep_string<cr>", silent)
-map("n", "<leader>r", ":Telescope registers<cr>", silent)
 
 -----------------------------------OTHER MAPPINGS
 map("n", "gf", ":Neoformat <cr>", silent)
@@ -181,7 +180,6 @@ cmp.setup({
 
 luasnip.config.set_config({
 	history = true,
-	-- Update more often, :h events for more info.
 	updateevents = "TextChanged,TextChangedI",
 })
 
@@ -195,14 +193,6 @@ luasnip.snippets.javascript = luasnip.snippets.html
 luasnip.snippets.javascriptreact = luasnip.snippets.html
 luasnip.snippets.typescriptreact = luasnip.snippets.html
 require("luasnip/loaders/from_vscode").load({ include = { "html" } })
-
-cmp.setup.cmdline(":", {
-	sources = cmp.config.sources({
-		{ name = "path" },
-	}, {
-		{ name = "cmdline" },
-	}),
-})
 
 -----------------------------------LSC
 local nvim_lsp = require("lspconfig")
