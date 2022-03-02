@@ -21,7 +21,7 @@ require("packer").startup(function()
 	use({ "tpope/vim-surround" })
 	use({ "williamboman/nvim-lsp-installer", requires = { "neovim/nvim-lspconfig" } })
 	use({ "ruanyl/vim-gh-line" })
-	use({ "sbdchd/neoformat" })
+	use({ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" } })
 	use({ "romainl/vim-cool" })
 	use({ "jiangmiao/auto-pairs" })
 	use({ "j-hui/fidget.nvim" })
@@ -79,6 +79,7 @@ vim.opt.smarttab = true -- <tab>/<BS> indent/dedent in leading whitespace
 vim.opt.autoindent = true -- maintain indent of current line
 vim.opt.expandtab = false -- don't expand tabs into spaces
 vim.opt.hidden = true -- allows buffer hiding rather than abandoning
+vim.opt.splitright = true -- vsplits by default to the right
 
 vim.opt.backup = false -- disable backup files
 vim.opt.swapfile = false -- no swap files
@@ -87,17 +88,13 @@ vim.opt.autoread = true -- detect file changes outside of vim
 vim.opt.cursorline = true
 vim.opt.clipboard = "unnamedplus" -- sync clipboard and default register
 vim.opt.completeopt = "menuone,noinsert" -- tweaking complete menu behaviour
-vim.opt.mouse = "a" -- let mouse do stuff
 vim.opt.wrap = false -- disable text wrapping
 vim.opt.undofile = true -- persistant file undo's
 
-vim.opt.foldcolumn = "4"
-vim.opt.foldlevel = 4
+vim.opt.foldlevel = 5
 vim.opt.foldenable = false
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-
-vim.g.neoformat_try_node_exe = 1 -- uses project formatter dependancy if available
 
 local map = vim.api.nvim_set_keymap
 local silent = { noremap = true, silent = true } -- all custom mappings will be silent
@@ -108,13 +105,10 @@ map("n", "<leader>F", ":Telescope live_grep<cr>", silent)
 map("n", "<leader>f", ":Telescope grep_string<cr>", silent)
 
 -----------------------------------OTHER MAPPINGS
-map("n", "gf", ":Neoformat <cr>", silent)
-map("n", "<C-h>", ":cprev<cr>", silent) -- quickfix rotation
-map("n", "<C-l>", ":cnext<cr>", silent)
 map("n", "<C-j>", ":BufferLineCyclePrev<cr>", silent) -- buffer rotation
 map("n", "<C-k>", ":BufferLineCycleNext<cr>", silent)
 map("n", "<C-x>", ":bdelete<cr>", silent) -- little controversial
-map("n", "-", ":NvimTreeFindFile<cr>", silent)
+map("n", "-", ":NvimTreeFindFileToggle<cr>", silent)
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
@@ -156,7 +150,10 @@ cmp.setup({
 		}),
 		["<Tab>"] = function(fallback)
 			if cmp.visible() then
-				cmp.select_next_item()
+				cmp.confirm({
+					behavior = cmp.ConfirmBehavior.Replace,
+					select = false,
+				})
 			elseif luasnip.expand_or_jumpable() then
 				luasnip.expand_or_jump()
 			else
@@ -203,10 +200,10 @@ local ls = function(client, bufnr)
 	buf_set_keymap("n", "<C-n>", ":lua vim.lsp.diagnostic.goto_next({enable_popup=false})<cr>", silent)
 	buf_set_keymap("n", "<C-p>", ":lua vim.lsp.diagnostic.goto_prev({enable_popup=false})<cr>", silent)
 	buf_set_keymap("n", "<C-]>", ":Telescope lsp_definitions<cr>", silent)
-	buf_set_keymap("n", "K", ":lua vim.lsp.buf.hover()<cr>", silent)
+	buf_set_keymap("n", "K", ":Lspsaga hover_doc<cr>", silent)
 	buf_set_keymap("n", "gt", ":lua vim.lsp.buf.type_definition()<cr>", silent)
 	buf_set_keymap("n", "gi", ":Telescope lsp_implementations<cr>", silent)
-	buf_set_keymap("n", "ga", ":lua vim.lsp.buf.code_action()<cr>", silent)
+	buf_set_keymap("n", "gf", ":lua vim.lsp.buf.formatting()<cr>", silent)
 	buf_set_keymap("n", "ga", ":Telescope lsp_code_actions<cr>", silent)
 	buf_set_keymap("n", "gR", ":lua vim.lsp.buf.rename()<cr>", silent)
 	buf_set_keymap("n", "gd", ":lua vim.lsp.buf.declaration()<cr>", silent)
@@ -222,6 +219,20 @@ lsp_installer.on_server_ready(function(server)
 	})
 	vim.cmd([[ do User LspAttachBuffers ]])
 end)
+
+-----------------------------------LSC Auxiliary
+local null_ls = require("null-ls")
+null_ls.setup({
+	debug = true,
+	on_attach = ls,
+	sources = {
+		null_ls.builtins.diagnostics.eslint_d.with({ only_local = "node_modules/.bin" }),
+		null_ls.builtins.formatting.eslint_d.with({ only_local = "node_modules/.bin" }),
+		-- null_ls.builtins.formatting.prettier.with({ prefer_local = "node_modules/.bin" }),
+
+		null_ls.builtins.formatting.stylua,
+	},
+})
 
 -----------------------------------MISC
 require("gitsigns").setup({
