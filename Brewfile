@@ -6,6 +6,7 @@ brew 'fzf'
 brew 'jq'
 brew 'fd'
 brew 'n'
+brew 'less'
 
 brew 'pyenv'
 brew 'go'
