@@ -43,9 +43,8 @@ end)
 
 ---- TODO:
 -- review cmp config
--- review file exploration (<ctrl-n> go to file in tree)
--- lsc bindings relevant only to ls attached buffers
--- mappings to jump between chunks
+-- gitsigns mappings to jump between chunks
+-- review file exploration custom mappings, align with Netrw
 
 -----------------------------------CORE
 local global = vim.g
@@ -82,8 +81,11 @@ options.clipboard = "unnamedplus" -- sync clipboard and default register
 options.laststatus = 3 -- global status line
 options.hidden = true -- allows hiding dirty buffers
 
-local bind = function(mapping, action) -- bind silently
-	vim.keymap.set('n', mapping, action, { noremap = true, silent = true })
+-- silent key binding, optionally narrows binding scope to buffer.
+local bind = function(key, func, bufnr)
+	local opts = { noremap = true, silent = true }
+	opts.buffer = bufnr or nil
+	vim.keymap.set('n', key, func, opts)
 end
 -----------------------------------BLING
 
@@ -162,23 +164,31 @@ cmp.setup {
 
 -----------------------------------LSC
 local lsc = vim.lsp
-bind('<C-n>', lsc.diagnostic.goto_next)
-bind('<C-p>', lsc.diagnostic.goto_prev)
-bind('K', lsc.buf.hover)
-bind('gt', lsc.buf.type_definition)
-bind('gf', lsc.buf.formatting)
-bind('gR', lsc.buf.rename)
-bind('gd', lsc.buf.declaration)
-
-bind('<C-]>', telescope.lsp_definitions)
-bind('gi', telescope.lsp_implementations)
-bind('ga', telescope.lsp_code_actions)
-bind('gr', telescope.lsp_references)
-bind('gs', telescope.lsp_document_symbols)
-
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-	server:setup({ capabilities = require("cmp_nvim_lsp").update_capabilities(lsc.protocol.make_client_capabilities()) })
+	server:setup({
+		on_attach = function(_, bufnr)
+			local buffer_bind = function(key, func) -- closure on bufnr, narrows binding scope to buffer
+				bind(key, func, bufnr)
+			end
+			-- native LSC bindings
+			buffer_bind('<C-n>', lsc.diagnostic.goto_next)
+			buffer_bind('<C-p>', lsc.diagnostic.goto_prev)
+			buffer_bind('K', lsc.buf.hover)
+			buffer_bind('gt', lsc.buf.type_definition)
+			buffer_bind('gf', lsc.buf.formatting)
+			buffer_bind('gR', lsc.buf.rename)
+			buffer_bind('gd', lsc.buf.declaration)
+
+			-- telescope wrapped LSC bindings
+			buffer_bind('<C-]>', telescope.lsp_definitions)
+			buffer_bind('gi', telescope.lsp_implementations)
+			buffer_bind('ga', telescope.lsp_code_actions)
+			buffer_bind('gr', telescope.lsp_references)
+			buffer_bind('gs', telescope.lsp_document_symbols)
+		end,
+		capabilities = require("cmp_nvim_lsp").update_capabilities(lsc.protocol.make_client_capabilities()),
+	})
 end)
 lsc.handlers["textDocument/publishDiagnostics"] = lsc.with(lsc.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
