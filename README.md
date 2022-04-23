@@ -8,6 +8,5 @@ Notes:
 ```bash
 brew bundle
 brew info fzf # install completion
-
 npm install -g eslint_d prettier
 ```

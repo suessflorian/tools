@@ -1,4 +1,7 @@
 gui:
+  theme:
+    selectedRangeBgColor:
+      - reverse
   showRandomTip: false
   showCommandLog: false
   disableStartupPopups: true

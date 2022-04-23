@@ -42,7 +42,7 @@ zle -N _lazygit
 bindkey "^@" _lazygit # control space
 
 autoload -U colors && colors
-PROMPT="%{$fg[blue]%}%1| %2~ %{$reset_color%}%# "
+PROMPT="%{$fg[yellow]%}%1| %2~ %{$reset_color%}%# "
 
 [ -f ~/.vend/vend.sh ] && source ~/.vend/vend.sh
 [ -f ~/.vend/home/functions.sh ] && source ~/.vend/home/functions.sh
