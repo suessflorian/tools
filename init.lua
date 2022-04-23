@@ -104,8 +104,10 @@ bind("<leader>f", telescope.grep_string)
 
 -----------------------------------OTHER MAPPINGS
 local bufferline = require("bufferline")
+local tree = require('nvim-tree')
 bind("<C-j>", function() bufferline.cycle(-1) end)
 bind("<C-k>", function() bufferline.cycle(1) end)
+bind("-", function() tree.toggle(true) end)
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
