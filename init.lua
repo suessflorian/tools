@@ -29,7 +29,6 @@ require("packer").startup(function()
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-cmdline" },
-			{ "hrsh7th/cmp-buffer" },
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	})
@@ -42,9 +41,10 @@ require("packer").startup(function()
 end)
 
 ---- TODO:
--- review cmp config
 -- gitsigns mappings to jump between chunks
 -- review file exploration custom mappings, align with Netrw
+-- add better hover doc rendering
+-- funky over indentation issue
 
 -----------------------------------CORE
 local global = vim.g
@@ -72,7 +72,7 @@ options.foldexpr = "nvim_treesitter#foldexpr()" -- in particular use treesitter 
 -- APPEARANCE BEHAVIOUR
 options.termguicolors = true
 options.cursorline = true
-options.completeopt = "menuone,noinsert" -- tweaking complete menu behaviour
+options.completeopt = "menu,menuone,noselect" -- recommended by cmp
 options.splitright = true -- vsplits by default to the right
 options.wrap = false -- disable text wrapping by default
 options.linebreak = true -- if wrapping, don't break words up mid-wrap
@@ -128,41 +128,28 @@ cmp.setup {
 			luasnip.lsp_expand(args.body)
 		end,
 	},
+	window = {
+		completion = cmp.config.window.bordered(),
+		documentation = cmp.config.window.bordered(),
+	},
 	mapping = {
+		['<C-x><C-u>'] = cmp.mapping.complete(),
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
-		['<C-d>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.close(),
-		['<CR>'] = cmp.mapping.confirm {
-			behavior = cmp.ConfirmBehavior.Replace,
-			select = true,
-		},
-		['<Tab>'] = function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			else
-				fallback()
-			end
-		end,
-		['<S-Tab>'] = function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end,
+		['<CR>'] = cmp.mapping.confirm { select = true },
+		['<Tab>'] = cmp.mapping.confirm { select = true },
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
 		{ name = 'luasnip' },
+		{ name = 'path' },
 	},
 }
+
+cmp.setup.cmdline(':', {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = cmp.config.sources({ { name = 'cmdline' } })
+})
 
 -----------------------------------LSC
 local lsc = vim.lsp
@@ -193,6 +180,7 @@ lsp_installer.on_server_ready(function(server)
 	})
 end)
 lsc.handlers["textDocument/publishDiagnostics"] = lsc.with(lsc.diagnostic.on_publish_diagnostics, { virtual_text = false })
+lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "rounded" })
 
 -----------------------------------MISC
 require("gitsigns").setup({
