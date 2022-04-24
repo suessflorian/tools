@@ -41,9 +41,8 @@ require("packer").startup(function()
 end)
 
 ---- TODO:
--- gitsigns mappings to jump between chunks
 -- review file exploration custom mappings, align with Netrw
--- add better hover doc rendering
+-- add better hover doc rendering, no real support out there atm
 -- funky over indentation issue
 
 -----------------------------------CORE
@@ -80,11 +79,12 @@ options.linebreak = true -- if wrapping, don't break words up mid-wrap
 options.clipboard = "unnamedplus" -- sync clipboard and default register
 options.laststatus = 3 -- global status line
 options.hidden = true -- allows hiding dirty buffers
+options.scrolloff = 3 -- always have lines bellow cursor line
 
--- silent key binding, optionally narrows binding scope to buffer.
-local bind = function(key, func, bufnr)
-	local opts = { noremap = true, silent = true }
-	opts.buffer = bufnr or nil
+-- silent key binding, optionally pass additional options
+local bind = function(key, func, opts)
+	local opts = opts or {}
+	opts.noremap, opts.silent = true, true
 	vim.keymap.set('n', key, func, opts)
 end
 -----------------------------------BLING
@@ -157,8 +157,8 @@ local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
 	server:setup({
 		on_attach = function(_, bufnr)
-			local buffer_bind = function(key, func) -- closure on bufnr, narrows binding scope to buffer
-				bind(key, func, bufnr)
+			local buffer_bind = function(key, func) -- narrows binding scope to buffer via closure
+				bind(key, func, { buffer = bufnr })
 			end
 			-- native LSC bindings
 			buffer_bind('<C-n>', lsc.diagnostic.goto_next)
@@ -183,7 +183,15 @@ lsc.handlers["textDocument/publishDiagnostics"] = lsc.with(lsc.diagnostic.on_pub
 lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "rounded" })
 
 -----------------------------------MISC
-require("gitsigns").setup({
+local gitsigns = require("gitsigns")
+gitsigns.setup({
 	current_line_blame = true,
 	current_line_blame_formatter_opts = { relative_time = true },
+	on_attach = function(bufnr)
+		local buffer_bind = function(key, func) -- narrows binding scope to buffer via closure
+			bind(key, func, { buffer = bufnr })
+		end
+		buffer_bind(']c', gitsigns.next_hunk)
+		buffer_bind('[c', gitsigns.prev_hunk)
+	end
 })
