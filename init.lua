@@ -168,11 +168,11 @@ lsp_installer.on_server_ready(function(server)
 			buffer_bind('gf', lsc.buf.formatting)
 			buffer_bind('gR', lsc.buf.rename)
 			buffer_bind('gd', lsc.buf.declaration)
+			buffer_bind('ga', vim.lsp.buf.code_action)
 
 			-- telescope wrapped LSC bindings
 			buffer_bind('<C-]>', telescope.lsp_definitions)
 			buffer_bind('gi', telescope.lsp_implementations)
-			buffer_bind('ga', telescope.lsp_code_actions)
 			buffer_bind('gr', telescope.lsp_references)
 			buffer_bind('gs', telescope.lsp_document_symbols)
 		end,
