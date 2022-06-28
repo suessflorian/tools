@@ -5,6 +5,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require("packer").startup(function(use)
+	use({ 'glepnir/dashboard-nvim' })
 	use({ "wbthomason/packer.nvim" })
 	use({ "RRethy/vim-illuminate" })
 	use({ "navarasu/onedark.nvim" })
@@ -93,7 +94,36 @@ require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
 require("fidget").setup({ window = { blend = 0 } })
 
------------------------------------GREPPING
+local dash = require("dashboard")
+dash.custom_header = {
+	[[                                                        ]],
+	[[                                                        ]],
+	[[                    .   .xXXXX+.   .                    ]],
+	[[               .   ..   xXXXX+.-   ..   .               ]],
+	[[         .   ..  ... ..xXXXX+. --.. ...  ..   .         ]],
+	[[     .   ..  ... .....xXXXX+.  -.-..... ...  ..   .     ]],
+	[[   .   ..  ... ......xXXXX+.  . .--...... ...  ..   .   ]],
+	[[  .   ..  ... ......xXXXX+.    -.- -...... ...  ..   .  ]],
+	[[ .   ..  ... ......xXXXX+.   .-+-.-.-...... ...  ..   . ]],
+	[[ .   ..  ... .....xXXXX+. . --xx+.-.--..... ...  ..   . ]],
+	[[.   ..  ... .....xXXXX+. - .-xxxx+- .-- .... ...  ..   .]],
+	[[ .   ..  ... ...xXXXX+.  -.-xxxxxx+ .---... ...  ..   . ]],
+	[[ .   ..  ... ..xXXXX+. .---..xxxxxx+-..--.. ...  ..   . ]],
+	[[  .   ..  ... xXXXX+. . --....xxxxxx+  -.- ...  ..   .  ]],
+	[[   .   ..  ..xXXXX+. . .-......xxxxxx+-. --..  ..   .   ]],
+	[[     .   .. xXXXXXXXXXXXXXXXXXXXxxxxxx+. .-- ..   .     ]],
+	[[         . xXXXXXXXXXXXXXXXXXXXXXxxxxxx+.  -- .         ]],
+	[[           xxxxxxxxxxxxxxxxxxxxxxxxxxxxx+.--            ]],
+	[[            xxxxxxxxxxxxxxxxxxxxxxxxxxxxx+-             ]],
+	[[                                                        ]],
+	[[                                                        ]],
+}
+dash.custom_footer = {}
+dash.custom_center = {
+	{ desc = 'Files', action = 'Telescope find_files' },
+	{ desc = 'Find', action = 'Telescope live_grep' }
+}
+-------------------------------------GREPPING
 local telescope = require('telescope.builtin')
 pcall(telescope.load_extension, 'fzf') -- enables fzf native
 bind("<leader>p", telescope.find_files)
