@@ -6,6 +6,7 @@ end
 
 require("packer").startup(function(use)
 	use({ "wbthomason/packer.nvim" })
+	use({ "RRethy/vim-illuminate" })
 	use({ "navarasu/onedark.nvim" })
 	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
@@ -44,7 +45,6 @@ end)
 -- review file exploration custom mappings, align with Netrw
 -- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
--- tree navigation
 
 -----------------------------------CORE
 local global = vim.g
@@ -152,6 +152,7 @@ cmp.setup.cmdline(':', {
 
 -----------------------------------LSC
 local lsc = vim.lsp
+local illuminate = require("illuminate")
 local lsp_installer = require("nvim-lsp-installer")
 local capabilities = require("cmp_nvim_lsp").update_capabilities(lsc.protocol.make_client_capabilities())
 capabilities.textDocument.foldingRange = {
@@ -161,13 +162,14 @@ capabilities.textDocument.foldingRange = {
 
 lsp_installer.on_server_ready(function(server)
 	server:setup({
-		on_attach = function(_, bufnr)
+		on_attach = function(client, bufnr)
+			illuminate.on_attach(client)
 			local buffer_bind = function(key, func) -- narrows binding scope to buffer via closure
 				bind(key, func, { buffer = bufnr })
 			end
 			-- native LSC bindings
-			buffer_bind('<C-n>', lsc.diagnostic.goto_next)
-			buffer_bind('<C-p>', lsc.diagnostic.goto_prev)
+			buffer_bind('<C-n>', vim.diagnostic.goto_next)
+			buffer_bind('<C-p>', vim.diagnostic.goto_prev)
 			buffer_bind('K', lsc.buf.hover)
 			buffer_bind('gt', lsc.buf.type_definition)
 			buffer_bind('gf', lsc.buf.formatting)
@@ -187,6 +189,9 @@ end)
 lsc.handlers["textDocument/publishDiagnostics"] = lsc.with(lsc.diagnostic.on_publish_diagnostics,
 	{ virtual_text = false })
 lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "rounded" })
+
+bind("]n", function() illuminate.next_reference({ wrap = true }) end)
+bind("[n", function() illuminate.next_reference({ reverse = true, wrap = true }) end)
 
 -----------------------------------MISC
 local gitsigns = require("gitsigns")
