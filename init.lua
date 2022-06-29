@@ -4,8 +4,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
 end
 
+require('impatient') -- https://github.com/lewis6991/impatient.nvim#optimisations
 require("packer").startup(function(use)
-	use({ "dstein64/vim-startuptime" })
+	use({ 'lewis6991/impatient.nvim' })
 	use({ "glepnir/dashboard-nvim" })
 	use({ "wbthomason/packer.nvim" })
 	use({ "RRethy/vim-illuminate" })
