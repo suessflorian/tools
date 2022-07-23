@@ -4,9 +4,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
 end
 
-require('impatient') -- https://github.com/lewis6991/impatient.nvim#optimisations
 require("packer").startup(function(use)
-	use({ 'lewis6991/impatient.nvim' })
+	use({ "lervag/vimtex" })
+	use({ "lewis6991/impatient.nvim" })
 	use({ "glepnir/dashboard-nvim" })
 	use({ "wbthomason/packer.nvim" })
 	use({ "RRethy/vim-illuminate" })
@@ -43,16 +43,17 @@ require("packer").startup(function(use)
 		require("packer").sync()
 	end
 end)
+require("impatient") -- https://github.com/lewis6991/impatient.nvim#optimisations
 
 ---- TODO:
--- review file exploration custom mappings, align with Netrw
+-- telescope: search through dotfiles
 -- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
 
 -----------------------------------CORE
 local global = vim.g
-global.mapleader = " "
--- global.do_filetype_lua = 1 -- use filetype.lua to detect filetype
+global.mapleader = " " -- space
+global.do_filetype_lua = 1 -- use filetype.lua to detect filetype
 
 local options = vim.opt
 -- TABBING
@@ -144,6 +145,7 @@ bind("-", function() tree.toggle(true) end)
 local ts = require("nvim-treesitter.configs")
 ts.setup({
 	ensure_installed = "all",
+	ignore_install = { "phpdoc", "latex" },
 	highlight = { enable = true },
 	rainbow = { enable = true },
 	autotag = { enable = true },
