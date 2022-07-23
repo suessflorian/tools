@@ -1,8 +1,21 @@
 gui:
-  theme:
-    selectedRangeBgColor:
-      - reverse
-  showRandomTip: false
+  showRandomTip: true
   showCommandLog: false
   disableStartupPopups: true
-notARepository: 'skip'
+  notARepository: 'skip'
+  theme:
+    activeBorderColor:
+      - yellow
+      - bold
+    optionsTextColor:
+      - default
+    selectedLineBgColor:
+      - default
+    selectedRangeBgColor:
+      - magenta
+    cherryPickedCommitBgColor:
+      - red
+    cherryPickedCommitFgColor:
+      - black
+    unstagedChangesColor:
+      - red
