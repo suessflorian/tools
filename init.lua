@@ -26,7 +26,6 @@ require("packer").startup(function(use)
 	use({ "onsails/lspkind-nvim" })
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } } })
-	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make", cond = fn.executable "make" == 1 })
 	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
 	use({
 		"hrsh7th/nvim-cmp",
@@ -127,9 +126,9 @@ dash.custom_center = {
 	{ desc = "Files", action = "Telescope find_files" },
 	{ desc = "Find", action = "Telescope live_grep" }
 }
+
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
-pcall(telescope.load_extension, "fzf") -- enables fzf native
 bind("<leader>p", telescope.find_files)
 bind("<leader>b", telescope.buffers)
 bind("<leader>F", telescope.live_grep)
