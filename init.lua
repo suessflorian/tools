@@ -194,6 +194,7 @@ lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "ro
 
 bind("]n", function() illuminate.next_reference({ wrap = true }) end)
 bind("[n", function() illuminate.next_reference({ reverse = true, wrap = true }) end)
+require("ufo").setup() -- language server based code folding
 
 -----------------------------------MISC
 local gitsigns = require("gitsigns")
@@ -208,4 +209,3 @@ gitsigns.setup({
 		buffer_bind("[c", gitsigns.prev_hunk)
 	end
 })
-require("ufo").setup() -- code folding
