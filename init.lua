@@ -82,6 +82,7 @@ options.hidden = true -- allows hiding dirty buffers
 options.scrolloff = 3 -- always have lines bellow cursor line
 options.ignorecase = true -- case insensitive searching UNLESS /C or capital in search
 options.smartcase = true
+options.jumpoptions = "stack"
 
 -- silent key binding, optionally pass additional options
 local bind = function(key, func, opts)
