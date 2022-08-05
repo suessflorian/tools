@@ -97,7 +97,6 @@ require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
 require("fidget").setup({ window = { blend = 0 } })
 
-
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
 bind("<leader>p", telescope.find_files)
@@ -169,21 +168,19 @@ lsp_installer.on_server_ready(function(server)
 	server:setup({
 		on_attach = function(client, bufnr)
 			illuminate.on_attach(client)
-			local buffer_bind = function(key, func) -- narrows binding scope to buffer via closure
+			local buffer_bind = function(key, func)
 				bind(key, func, { buffer = bufnr })
 			end
-			-- native LSC bindings
 			buffer_bind("<C-n>", vim.diagnostic.goto_next)
 			buffer_bind("<C-p>", vim.diagnostic.goto_prev)
 			buffer_bind("K", lsc.buf.hover)
-			buffer_bind("gt", lsc.buf.type_definition)
 			buffer_bind("gf", lsc.buf.formatting)
 			buffer_bind("gR", lsc.buf.rename)
 			buffer_bind("gd", lsc.buf.declaration)
 			buffer_bind("ga", lsc.buf.code_action)
 
-			-- telescope wrapped LSC bindings
 			buffer_bind("<C-]>", telescope.lsp_definitions)
+			buffer_bind("gt", telescope.lsp_type_definitions)
 			buffer_bind("gi", telescope.lsp_implementations)
 			buffer_bind("gr", telescope.lsp_references)
 			buffer_bind("gs", telescope.lsp_document_symbols)
@@ -204,7 +201,7 @@ gitsigns.setup({
 	current_line_blame = true,
 	current_line_blame_formatter_opts = { relative_time = true },
 	on_attach = function(bufnr)
-		local buffer_bind = function(key, func) -- narrows binding scope to buffer via closure
+		local buffer_bind = function(key, func)
 			bind(key, func, { buffer = bufnr })
 		end
 		buffer_bind("]c", gitsigns.next_hunk)
