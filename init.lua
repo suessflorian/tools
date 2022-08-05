@@ -51,7 +51,6 @@ require("impatient") -- https://github.com/lewis6991/impatient.nvim#optimisation
 -----------------------------------CORE
 local global = vim.g
 global.mapleader = " " -- space
-global.do_filetype_lua = 1 -- use filetype.lua to detect filetype
 
 local options = vim.opt
 -- TABBING
@@ -59,7 +58,6 @@ options.tabstop = 2 -- spaces per tab
 -- BACKUP
 options.backup = false -- disable backup files
 options.swapfile = false -- no swap files
-options.autoread = true -- detect file changes outside of vim
 options.undofile = true -- persistant file undo"s
 -- FOLDING
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
@@ -67,7 +65,6 @@ options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/n
 options.foldlevel = 99 -- feel free to decrease the value
 options.foldenable = true
 -- APPEARANCE BEHAVIOUR
-options.termguicolors = true
 options.cursorline = true
 options.completeopt = "menu,menuone,noselect" -- recommended by cmp
 options.splitright = true -- vsplits by default to the right
@@ -76,7 +73,6 @@ options.linebreak = true -- if wrapping, don"t break words up mid-wrap
 -- MISC
 options.clipboard = "unnamedplus" -- sync clipboard and default register
 options.laststatus = 3 -- global status line
-options.hidden = true -- allows hiding dirty buffers
 options.scrolloff = 3 -- always have lines bellow cursor line
 options.ignorecase = true -- case insensitive searching UNLESS /C or capital in search
 options.smartcase = true
