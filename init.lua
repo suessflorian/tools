@@ -15,17 +15,16 @@ require("packer").startup(function(use)
 	use({ "tpope/vim-commentary" })
 	use({ "tpope/vim-surround" })
 	use({ "tpope/vim-sleuth" })
-	use({ "williamboman/nvim-lsp-installer", requires = { "neovim/nvim-lspconfig" } })
 	use({ "ruanyl/vim-gh-line" })
 	use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
 	use({ "kevinhwang91/nvim-bqf" })
 	use({ "romainl/vim-cool" })
 	use({ "jiangmiao/auto-pairs" })
-	use({ "j-hui/fidget.nvim" })
 	use({ "onsails/lspkind-nvim" })
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } } })
 	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
+	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
@@ -35,18 +34,27 @@ require("packer").startup(function(use)
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	})
-	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
-
+	use({
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		"neovim/nvim-lspconfig",
+	})
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
 end)
 require("impatient") -- https://github.com/lewis6991/impatient.nvim#optimisations
 
+-----------------------------------DEPENDANCY-MANAGEMENT
+require("mason").setup()
+
 ---- TODO:
 -- telescope: search through dotfiles
 -- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
+-- move to nvim surround ? over tpope
+-- indent blanklines? context? kitty `modify_font`
+-- hydra?
 
 -----------------------------------CORE
 local global = vim.g
@@ -77,7 +85,7 @@ options.scrolloff = 3 -- always have lines bellow cursor line
 options.ignorecase = true -- case insensitive searching UNLESS /C or capital in search
 options.smartcase = true
 options.jumpoptions = "stack"
-options.mouse="a"
+options.mouse = "a"
 
 -- silent key binding, optionally pass additional options
 local bind = function(key, func, opts)
@@ -86,12 +94,10 @@ local bind = function(key, func, opts)
 	vim.keymap.set("n", key, func, opts)
 end
 -----------------------------------BLING
-
 require("onedark").setup({ transparent = true })
 require("onedark").load()
 require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
-require("fidget").setup({ window = { blend = 0 } })
 
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
@@ -119,8 +125,8 @@ ts.setup({
 })
 
 -----------------------------------COMPLETION
-local luasnip = require "luasnip"
-local cmp = require "cmp"
+local luasnip = require("luasnip")
+local cmp = require("cmp")
 cmp.setup {
 	snippet = {
 		expand = function(args)
@@ -151,41 +157,39 @@ cmp.setup.cmdline(":", {
 })
 
 -----------------------------------LSC
+require("mason-lspconfig").setup()
 local lsc = vim.lsp
 local illuminate = require("illuminate")
-local lsp_installer = require("nvim-lsp-installer")
 local capabilities = require("cmp_nvim_lsp").update_capabilities(lsc.protocol.make_client_capabilities())
-capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true
-}
 
-lsp_installer.on_server_ready(function(server)
-	server:setup({
-		on_attach = function(client, bufnr)
-			illuminate.on_attach(client)
-			local buffer_bind = function(key, func)
-				bind(key, func, { buffer = bufnr })
-			end
-			buffer_bind("<C-n>", vim.diagnostic.goto_next)
-			buffer_bind("<C-p>", vim.diagnostic.goto_prev)
-			buffer_bind("K", lsc.buf.hover)
-			buffer_bind("gf", lsc.buf.formatting)
-			buffer_bind("gR", lsc.buf.rename)
-			buffer_bind("gd", lsc.buf.declaration)
-			buffer_bind("ga", lsc.buf.code_action)
+require("mason-lspconfig").setup_handlers({
+	function(server_name)
+		require("lspconfig")[server_name].setup({
+			on_attach = function(client, bufnr)
+				illuminate.on_attach(client)
+				local buffer_bind = function(key, func)
+					bind(key, func, { buffer = bufnr })
+				end
+				buffer_bind("<C-n>", vim.diagnostic.goto_next)
+				buffer_bind("<C-p>", vim.diagnostic.goto_prev)
+				buffer_bind("K", lsc.buf.hover)
+				buffer_bind("gf", function() lsc.buf.format { async = true } end)
+				buffer_bind("gR", lsc.buf.rename)
+				buffer_bind("gd", lsc.buf.declaration)
+				buffer_bind("ga", lsc.buf.code_action)
 
-			buffer_bind("<C-]>", telescope.lsp_definitions)
-			buffer_bind("gt", telescope.lsp_type_definitions)
-			buffer_bind("gi", telescope.lsp_implementations)
-			buffer_bind("gr", telescope.lsp_references)
-			buffer_bind("gs", telescope.lsp_document_symbols)
-		end,
-		capabilities = capabilities,
-	})
-end)
-lsc.handlers["textDocument/publishDiagnostics"] = lsc.with(lsc.diagnostic.on_publish_diagnostics,
-	{ virtual_text = false })
+				buffer_bind("<C-]>", telescope.lsp_definitions)
+				buffer_bind("gt", telescope.lsp_type_definitions)
+				buffer_bind("gi", telescope.lsp_implementations)
+				buffer_bind("gr", telescope.lsp_references)
+				buffer_bind("gs", telescope.lsp_document_symbols)
+			end,
+			capabilities = capabilities,
+			flags = { debounce_text_changes = 150 }
+		})
+	end,
+})
+
 lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "rounded" })
 
 bind("]n", function() illuminate.next_reference({ wrap = true }) end)
