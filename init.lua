@@ -4,6 +4,12 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
 end
 
+local global = vim.g
+-- NOTE: as per nvim-tree/nvim-tree advice, we can disable netrw as it is just a plugin
+-- at the end of the day too...
+global.loaded = 1
+global.loaded_netrwPlugin = 1
+
 require("packer").startup(function(use)
 	use({ "lervag/vimtex" })
 	use({ "lewis6991/impatient.nvim" })
@@ -24,7 +30,7 @@ require("packer").startup(function(use)
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } } })
 	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
-	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
+	use({ "nvim-tree/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
@@ -49,7 +55,7 @@ require("impatient") -- https://github.com/lewis6991/impatient.nvim#optimisation
 require("mason").setup()
 
 ---- TODO:
--- telescope: search through dotfiles
+-- telescope: search through dotfiles, although while respecting .gitignore and ignoring .git/*
 -- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
 -- move to nvim surround ? over tpope
@@ -57,7 +63,6 @@ require("mason").setup()
 -- hydra?
 
 -----------------------------------CORE
-local global = vim.g
 global.mapleader = " " -- space
 
 local options = vim.opt
@@ -70,7 +75,7 @@ options.undofile = true -- persistant file undo"s
 -- FOLDING
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/neovim/pull/17446
-options.foldlevel = 99 -- feel free to decrease the value
+options.foldlevel = 99
 options.foldenable = true
 -- APPEARANCE BEHAVIOUR
 options.cursorline = true
@@ -108,15 +113,17 @@ bind("<leader>f", telescope.grep_string)
 
 -----------------------------------OTHER MAPPINGS
 local bufferline = require("bufferline")
-local tree = require("nvim-tree")
 bind("<C-j>", function() bufferline.cycle(-1) end)
 bind("<C-k>", function() bufferline.cycle(1) end)
+
+local tree = require("nvim-tree")
 bind("-", function() tree.toggle(true) end)
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
 ts.setup({
 	ensure_installed = "all",
+	-- NOTE: phpdoc is just unstable, latex syntax is overbearingly managed by vimtex
 	ignore_install = { "phpdoc", "latex" },
 	highlight = { enable = true },
 	rainbow = { enable = true },
@@ -150,6 +157,7 @@ cmp.setup {
 		{ name = "path" },
 	},
 }
+
 
 cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
@@ -185,16 +193,20 @@ require("mason-lspconfig").setup_handlers({
 				buffer_bind("gs", telescope.lsp_document_symbols)
 			end,
 			capabilities = capabilities,
-			flags = { debounce_text_changes = 150 }
 		})
 	end,
 })
 
-lsc.handlers["textDocument/hover"] = lsc.with(lsc.handlers.hover, { border = "rounded" })
-
 bind("]n", function() illuminate.next_reference({ wrap = true }) end)
 bind("[n", function() illuminate.next_reference({ reverse = true, wrap = true }) end)
-require("ufo").setup() -- language server based code folding
+
+-- NOTE: trialling out treesitter AST for code folding support
+-- see documentation to revert back to LS based code folidng.
+require('ufo').setup({
+	provider_selector = function(_, _, _)
+		return { 'treesitter', 'indent' }
+	end
+})
 
 -----------------------------------MISC
 local gitsigns = require("gitsigns")
