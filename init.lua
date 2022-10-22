@@ -169,7 +169,7 @@ cmp.setup.cmdline(":", {
 require("mason-lspconfig").setup()
 local lsc = vim.lsp
 local illuminate = require("illuminate")
-local capabilities = require("cmp_nvim_lsp").update_capabilities(lsc.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 require("mason-lspconfig").setup_handlers({
 	function(server_name)
