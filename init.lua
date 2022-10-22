@@ -11,6 +11,7 @@ global.loaded = 1
 global.loaded_netrwPlugin = 1
 
 require("packer").startup(function(use)
+	use({ "Groctel/pddl.vim" })
 	use({ "lervag/vimtex" })
 	use({ "lewis6991/impatient.nvim" })
 	use({ "wbthomason/packer.nvim" })
