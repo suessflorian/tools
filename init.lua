@@ -16,7 +16,7 @@ require("packer").startup(function(use)
 	use({ "lewis6991/impatient.nvim" })
 	use({ "wbthomason/packer.nvim" })
 	use({ "RRethy/vim-illuminate" })
-	use({ "navarasu/onedark.nvim" })
+	use({ "folke/tokyonight.nvim" })
 	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 	use({ "tpope/vim-commentary" })
@@ -100,8 +100,8 @@ local bind = function(key, func, opts)
 	vim.keymap.set("n", key, func, opts)
 end
 -----------------------------------BLING
-require("onedark").setup({ transparent = true })
-require("onedark").load()
+require("tokyonight").setup({ transparent = true })
+vim.cmd[[colorscheme tokyonight-storm]]
 require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
 
