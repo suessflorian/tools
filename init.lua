@@ -5,13 +5,12 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 local global = vim.g
--- NOTE: as per nvim-tree/nvim-tree advice, we can disable netrw as it is just a plugin
--- at the end of the day too...
+-- NOTE: as per nvim-tree/nvim-tree advice, we can disable netrw in the following way
 global.loaded = 1
 global.loaded_netrwPlugin = 1
 
 require("packer").startup(function(use)
-	use({ "Groctel/pddl.vim" })
+	use({ "lukas-reineke/indent-blankline.nvim" })
 	use({ "lervag/vimtex" })
 	use({ "lewis6991/impatient.nvim" })
 	use({ "wbthomason/packer.nvim" })
@@ -50,18 +49,17 @@ require("packer").startup(function(use)
 		require("packer").sync()
 	end
 end)
-require("impatient") -- https://github.com/lewis6991/impatient.nvim#optimisations
+
+require("impatient")
 
 -----------------------------------DEPENDANCY-MANAGEMENT
 require("mason").setup()
 
 ---- TODO:
--- telescope: search through dotfiles, although while respecting .gitignore and ignoring .git/*
+-- telescope buffer management
 -- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
 -- move to nvim surround ? over tpope
--- indent blanklines? context? kitty `modify_font`
--- hydra?
 
 -----------------------------------CORE
 global.mapleader = " " -- space
@@ -72,7 +70,7 @@ options.tabstop = 2 -- spaces per tab
 -- BACKUP
 options.backup = false -- disable backup files
 options.swapfile = false -- no swap files
-options.undofile = true -- persistant file undo"s
+options.undofile = true -- persistent file undo"s
 -- FOLDING
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/neovim/pull/17446
@@ -92,6 +90,7 @@ options.ignorecase = true -- case insensitive searching UNLESS /C or capital in 
 options.smartcase = true
 options.jumpoptions = "stack"
 options.mouse = "a"
+options.nu = true
 
 -- silent key binding, optionally pass additional options
 local bind = function(key, func, opts)
@@ -101,13 +100,16 @@ local bind = function(key, func, opts)
 end
 -----------------------------------BLING
 require("tokyonight").setup({ transparent = true })
-vim.cmd[[colorscheme tokyonight-storm]]
+vim.cmd [[colorscheme tokyonight-storm]]
 require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
+require("indent_blankline").setup {
+	show_current_context = true
+}
 
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
-bind("<leader>p", telescope.find_files)
+bind("<leader>p", telescope.git_files)
 bind("<leader>b", telescope.buffers)
 bind("<leader>F", telescope.live_grep)
 bind("<leader>f", telescope.grep_string)
@@ -123,8 +125,6 @@ bind("-", function() tree.toggle(true) end)
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
 ts.setup({
-	ensure_installed = "all",
-	-- NOTE: phpdoc is just unstable, latex syntax is overbearingly managed by vimtex
 	ignore_install = { "phpdoc", "latex" },
 	highlight = { enable = true },
 	rainbow = { enable = true },
@@ -159,12 +159,10 @@ cmp.setup {
 	},
 }
 
-
 cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({ { name = "cmdline" } })
 })
-
 -----------------------------------LSC
 require("mason-lspconfig").setup()
 local lsc = vim.lsp
@@ -201,8 +199,6 @@ require("mason-lspconfig").setup_handlers({
 bind("]n", function() illuminate.next_reference({ wrap = true }) end)
 bind("[n", function() illuminate.next_reference({ reverse = true, wrap = true }) end)
 
--- NOTE: trialling out treesitter AST for code folding support
--- see documentation to revert back to LS based code folidng.
 require('ufo').setup({
 	provider_selector = function(_, _, _)
 		return { 'treesitter', 'indent' }
