@@ -109,7 +109,8 @@ require("indent_blankline").setup {
 
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
-bind("<leader>p", telescope.git_files)
+bind("<leader>p", telescope.find_files)
+bind("<leader>P", telescope.git_files)
 bind("<leader>b", telescope.buffers)
 bind("<leader>F", telescope.live_grep)
 bind("<leader>f", telescope.grep_string)
