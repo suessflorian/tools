@@ -120,8 +120,7 @@ local bufferline = require("bufferline")
 bind("<C-j>", function() bufferline.cycle(-1) end)
 bind("<C-k>", function() bufferline.cycle(1) end)
 
-local tree = require("nvim-tree")
-bind("-", function() tree.toggle(true) end)
+bind("-", require("nvim-tree.api").tree.toggle)
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
