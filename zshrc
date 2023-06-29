@@ -54,4 +54,5 @@ export PATH=$GOPATH/bin:$PATH
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 
 alias ls='ls -GFahl'
-eval "$(pyenv init --path)"
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
