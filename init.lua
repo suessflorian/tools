@@ -1,7 +1,8 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim",
+		install_path })
 end
 
 local global = vim.g
@@ -10,6 +11,7 @@ global.loaded = 1
 global.loaded_netrwPlugin = 1
 
 require("packer").startup(function(use)
+	use({ 'norcalli/nvim-colorizer.lua' })
 	use({ "lukas-reineke/indent-blankline.nvim" })
 	use({ "lervag/vimtex" })
 	use({ "lewis6991/impatient.nvim" })
@@ -28,7 +30,10 @@ require("packer").startup(function(use)
 	use({ "jiangmiao/auto-pairs" })
 	use({ "onsails/lspkind-nvim" })
 	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
-	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } } })
+	use({
+		"nvim-telescope/telescope.nvim",
+		requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } }
+	})
 	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
 	use({ "nvim-tree/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({
@@ -66,11 +71,11 @@ global.mapleader = " " -- space
 
 local options = vim.opt
 -- TABBING
-options.tabstop = 2 -- spaces per tab
+options.tabstop = 2      -- spaces per tab
 -- BACKUP
-options.backup = false -- disable backup files
+options.backup = false   -- disable backup files
 options.swapfile = false -- no swap files
-options.undofile = true -- persistent file undo"s
+options.undofile = true  -- persistent file undo"s
 -- FOLDING
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/neovim/pull/17446
@@ -79,18 +84,19 @@ options.foldenable = true
 -- APPEARANCE BEHAVIOUR
 options.cursorline = true
 options.completeopt = "menu,menuone,noselect" -- recommended by cmp
-options.splitright = true -- vsplits by default to the right
-options.wrap = false -- disable text wrapping by default
-options.linebreak = true -- if wrapping, don"t break words up mid-wrap
+options.splitright = true                     -- vsplits by default to the right
+options.wrap = false                          -- disable text wrapping by default
+options.linebreak = true                      -- if wrapping, don"t break words up mid-wrap
 -- MISC
-options.clipboard = "unnamedplus" -- sync clipboard and default register
-options.laststatus = 3 -- global status line
-options.scrolloff = 3 -- always have lines bellow cursor line
-options.ignorecase = true -- case insensitive searching UNLESS /C or capital in search
+options.clipboard = "unnamedplus"             -- sync clipboard and default register
+options.laststatus = 3                        -- global status line
+options.scrolloff = 3                         -- always have lines bellow cursor line
+options.ignorecase = true                     -- case insensitive searching UNLESS /C or capital in search
 options.smartcase = true
 options.jumpoptions = "stack"
 options.mouse = "a"
 options.nu = true
+options.termguicolors = true
 
 -- silent key binding, optionally pass additional options
 local bind = function(key, func, opts)
@@ -100,6 +106,7 @@ local bind = function(key, func, opts)
 end
 -----------------------------------BLING
 require("tokyonight").setup({ transparent = true })
+require("colorizer").setup()
 vim.cmd [[colorscheme tokyonight-storm]]
 require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
@@ -120,7 +127,10 @@ local bufferline = require("bufferline")
 bind("<C-j>", function() bufferline.cycle(-1) end)
 bind("<C-k>", function() bufferline.cycle(1) end)
 
-bind("-", require("nvim-tree.api").tree.toggle)
+local api = require("nvim-tree.api")
+bind("-", function() api.tree.toggle({ find_file = true }) end)
+
+vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
@@ -168,6 +178,8 @@ require("mason-lspconfig").setup()
 local lsc = vim.lsp
 local illuminate = require("illuminate")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single", max_width = 80 })
 
 require("mason-lspconfig").setup_handlers({
 	function(server_name)
