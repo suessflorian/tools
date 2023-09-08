@@ -1,59 +1,67 @@
-local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim",
-		install_path })
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
+vim.opt.rtp:prepend(lazypath)
+
 
 local global = vim.g
+global.mapleader = " " -- space
+
 -- NOTE: as per nvim-tree/nvim-tree advice, we can disable netrw in the following way
 global.loaded = 1
 global.loaded_netrwPlugin = 1
 
-require("packer").startup(function(use)
-	use({ 'norcalli/nvim-colorizer.lua' })
-	use({ "lukas-reineke/indent-blankline.nvim" })
-	use({ "lervag/vimtex" })
-	use({ "lewis6991/impatient.nvim" })
-	use({ "wbthomason/packer.nvim" })
-	use({ "RRethy/vim-illuminate" })
-	use({ "folke/tokyonight.nvim" })
-	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
-	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
-	use({ "tpope/vim-commentary" })
-	use({ "tpope/vim-surround" })
-	use({ "tpope/vim-sleuth" })
-	use({ "ruanyl/vim-gh-line" })
-	use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
-	use({ "kevinhwang91/nvim-bqf" })
-	use({ "romainl/vim-cool" })
-	use({ "jiangmiao/auto-pairs" })
-	use({ "onsails/lspkind-nvim" })
-	use({ "nvim-treesitter/nvim-treesitter", requires = { { "p00f/nvim-ts-rainbow" }, { "windwp/nvim-ts-autotag" } } })
-	use({
+require("lazy").setup({
+	"norcalli/nvim-colorizer.lua",
+	"lukas-reineke/indent-blankline.nvim",
+	"lervag/vimtex",
+	"lewis6991/impatient.nvim",
+	"RRethy/vim-illuminate",
+	"folke/tokyonight.nvim",
+	"tpope/vim-commentary",
+	"tpope/vim-surround",
+	"tpope/vim-sleuth",
+	"ruanyl/vim-gh-line",
+	"kevinhwang91/nvim-bqf",
+	"romainl/vim-cool",
+	"jiangmiao/auto-pairs",
+	"onsails/lspkind-nvim",
+	{ "kevinhwang91/nvim-ufo",   dependencies = "kevinhwang91/promise-async" },
+	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
+	{ "lewis6991/gitsigns.nvim", dependencies = "nvim-lua/plenary.nvim" },
+	{ "L3MON4D3/LuaSnip",        dependencies = "rafamadriz/friendly-snippets" },
+	{ "nvim-tree/nvim-tree.lua", dependencies = "kyazdani42/nvim-web-devicons" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		dependencies = { "p00f/nvim-ts-rainbow", "windwp/nvim-ts-autotag" },
+		build = ":TSUpdate"
+	},
+	{
 		"nvim-telescope/telescope.nvim",
-		requires = { { "nvim-lua/plenary.nvim" }, { "kyazdani42/nvim-web-devicons" } }
-	})
-	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
-	use({ "nvim-tree/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
-	use({
+		dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" } }
+	},
+	{
 		"hrsh7th/nvim-cmp",
-		requires = {
-			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-path" },
-			{ "hrsh7th/cmp-cmdline" },
-			{ "saadparwaiz1/cmp_luasnip" },
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			"saadparwaiz1/cmp_luasnip",
 		},
-	})
-	use({
+	},
+	{
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-	})
-	if PACKER_BOOTSTRAP then
-		require("packer").sync()
-	end
-end)
+	},
+	{ "stefanlogue/hydrate.nvim", opts = { persist_timer = true } },
+})
 
 require("impatient")
 
@@ -67,8 +75,6 @@ require("mason").setup()
 -- move to nvim surround ? over tpope
 
 -----------------------------------CORE
-global.mapleader = " " -- space
-
 local options = vim.opt
 -- TABBING
 options.tabstop = 2      -- spaces per tab
@@ -104,6 +110,11 @@ local bind = function(key, func, opts)
 	opts.noremap, opts.silent = true, true
 	vim.keymap.set("n", key, func, opts)
 end
+
+-- remap for dealing with word wrap
+bind('k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+bind('j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
 -----------------------------------BLING
 require("tokyonight").setup({ transparent = true })
 require("colorizer").setup()
@@ -115,6 +126,7 @@ require("indent_blankline").setup {
 }
 
 -------------------------------------GREPPING
+require('telescope').load_extension('fzf')
 local telescope = require("telescope.builtin")
 bind("<leader>p", telescope.find_files)
 bind("<leader>P", telescope.git_files)
@@ -135,11 +147,19 @@ vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 -----------------------------------SYNTAX
 local ts = require("nvim-treesitter.configs")
 ts.setup({
-	ignore_install = { "phpdoc", "latex" },
+	auto_install = true,
+	ignore_install = { "latex" },
 	highlight = { enable = true },
 	rainbow = { enable = true },
 	autotag = { enable = true },
 	indent = { enable = true },
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = '<c-space>',
+			node_incremental = '<c-space>',
+		},
+	},
 })
 
 -----------------------------------COMPLETION
