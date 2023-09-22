@@ -49,6 +49,7 @@ PROMPT="%{$fg[blue]%}%1| %2~ %{$reset_color%}%# "
 
 export GOPATH=$HOME/Documents/go
 export PATH=$GOPATH/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
