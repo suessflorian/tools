@@ -250,3 +250,79 @@ gitsigns.setup({
 		buffer_bind("[c", gitsigns.prev_hunk)
 	end
 })
+
+-- we'll etch this into another plugin
+-- what we're doing is managing the buffer list
+-- by performing a prune
+-- basically we unlist/unload buffers if they haven't been
+-- touched. This allows rapid cycling through buffers
+-- via goto def for example, without polluting the buffer list
+-- we only persist buffers that are touched.
+local id = vim.api.nvim_create_augroup("startup", {
+	clear = false
+})
+
+local persistbuffer = function(bufnr)
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+	vim.fn.setbufvar(bufnr, 'bufpersist', 1)
+end
+
+vim.api.nvim_create_autocmd({ "bufread" }, {
+	group = id,
+	pattern = { "*" },
+	callback = function()
+		vim.api.nvim_create_autocmd({ "InsertEnter", "BufModifiedSet" }, {
+			buffer = 0,
+			once = true,
+			callback = function()
+				persistbuffer()
+			end
+		})
+	end
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+	pattern = { "*" },
+	callback = function()
+		-- ignore any buffer changes if we enter a special buffer
+		local curbufnr = vim.api.nvim_get_current_buf()
+		local curbuftype = vim.api.nvim_buf_get_option(curbufnr, "buftype")
+		if curbuftype ~= "" then
+			return
+		end
+
+
+		-- full buffer list
+		local buflist = vim.api.nvim_list_bufs()
+
+		-- to be filtered to non-special buffers
+		local loadedNormBufList = {}
+		for _, bufnr in ipairs(buflist) do
+			if vim.api.nvim_buf_is_loaded(bufnr) then
+				if vim.api.nvim_buf_get_option(bufnr, "buftype") ~= "" then
+					table.insert(loadedNormBufList, bufnr)
+				end
+			end
+		end
+
+		-- vim.api.nvim_out_write("loadedBufList length: " .. #loadedNormBufList .. "\n")
+
+
+		-- TODO: load loadedNormBufList properly in order to loop through that table only
+		for _, bufnr in ipairs(buflist) do
+			-- we mark bufnr's in view
+			local isBufferViewed = false
+			for _, win_id in ipairs(vim.api.nvim_list_wins()) do
+				if vim.api.nvim_win_get_buf(win_id) == bufnr then
+					isBufferViewed = true
+					break
+				end
+			end
+
+			-- and remove all buffers, not persisted, in view or unlisted
+			if not isBufferViewed and vim.bo[bufnr].buflisted and (vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1) then
+				vim.cmd('bd ' .. tostring(bufnr))
+			end
+		end
+	end
+})
