@@ -1,3 +1,5 @@
+local vim = vim
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -18,7 +20,6 @@ global.loaded_netrwPlugin = 1
 
 require("lazy").setup({
 	"norcalli/nvim-colorizer.lua",
-	"lukas-reineke/indent-blankline.nvim",
 	"lervag/vimtex",
 	"lewis6991/impatient.nvim",
 	"RRethy/vim-illuminate",
@@ -29,12 +30,10 @@ require("lazy").setup({
 	"ruanyl/vim-gh-line",
 	"kevinhwang91/nvim-bqf",
 	"romainl/vim-cool",
-	"jiangmiao/auto-pairs",
 	"onsails/lspkind-nvim",
 	{ "kevinhwang91/nvim-ufo",   dependencies = "kevinhwang91/promise-async" },
 	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
 	{ "lewis6991/gitsigns.nvim", dependencies = "nvim-lua/plenary.nvim" },
-	{ "L3MON4D3/LuaSnip",        dependencies = "rafamadriz/friendly-snippets" },
 	{ "nvim-tree/nvim-tree.lua", dependencies = "kyazdani42/nvim-web-devicons" },
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -49,10 +48,11 @@ require("lazy").setup({
 	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-cmdline",
-			"saadparwaiz1/cmp_luasnip",
+			'L3MON4D3/LuaSnip',
+			'saadparwaiz1/cmp_luasnip',
+			'hrsh7th/cmp-nvim-lsp',
+			'hrsh7th/cmp-cmdline',
+			'rafamadriz/friendly-snippets',
 		},
 	},
 	{
@@ -60,7 +60,11 @@ require("lazy").setup({
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
 	},
-	{ "stefanlogue/hydrate.nvim", opts = { persist_timer = true } },
+	{
+		'windwp/nvim-autopairs', event = "InsertEnter", opts = {} -- this is equalent to setup({}) function
+	},
+	{ "stefanlogue/hydrate.nvim",            opts = { persist_timer = true } },
+	{ "lukas-reineke/indent-blankline.nvim", main = "ibl",                   opts = {} },
 })
 
 require("impatient")
@@ -121,9 +125,7 @@ require("colorizer").setup()
 vim.cmd [[colorscheme tokyonight-storm]]
 require("nvim-tree").setup({ git = { enable = false } })
 require("bufferline").setup()
-require("indent_blankline").setup {
-	show_current_context = true
-}
+require("ibl").setup()
 
 -------------------------------------GREPPING
 require('telescope').load_extension('fzf')
@@ -145,47 +147,68 @@ bind("-", function() api.tree.toggle({ find_file = true }) end)
 vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 
 -----------------------------------SYNTAX
-local ts = require("nvim-treesitter.configs")
-ts.setup({
-	auto_install = true,
-	ignore_install = { "latex" },
-	highlight = { enable = true },
-	rainbow = { enable = true },
-	autotag = { enable = true },
-	indent = { enable = true },
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = '<c-space>',
-			node_incremental = '<c-space>',
+vim.defer_fn(function()
+	require("nvim-treesitter.configs").setup({
+		ensure_installed = { 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'comment' },
+		auto_install = true,
+		ignore_install = { "latex" },
+		highlight = { enable = true },
+		rainbow = { enable = true },
+		autotag = { enable = true },
+		indent = { enable = true },
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				init_selection = '<c-space>',
+				node_incremental = '<c-space>',
+			},
 		},
-	},
-})
+	})
+end, 0)
 
 -----------------------------------COMPLETION
-local luasnip = require("luasnip")
-local cmp = require("cmp")
+local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+require('luasnip.loaders.from_vscode').lazy_load()
+luasnip.config.setup {}
+
 cmp.setup {
 	snippet = {
 		expand = function(args)
 			luasnip.lsp_expand(args.body)
 		end,
 	},
-	window = {
-		completion = cmp.config.window.bordered(),
-		documentation = cmp.config.window.bordered(),
-	},
-	mapping = {
-		["<C-x><C-u>"] = cmp.mapping.complete(),
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<CR>"] = cmp.mapping.confirm { select = true },
-		["<Tab>"] = cmp.mapping.confirm { select = true },
+	mapping = cmp.mapping.preset.insert {
+		['<C-p>'] = cmp.mapping.select_prev_item(),
+		['<C-n>'] = cmp.mapping.select_next_item(),
+		['<C-x><C-u>'] = cmp.mapping.complete {},
+		['<CR>'] = cmp.mapping.confirm {
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		},
+		['<Tab>'] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_locally_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end, { 'i', 's' }),
+		['<S-Tab>'] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.locally_jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { 'i', 's' }),
 	},
 	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		{ name = "path" },
+		{ name = 'nvim_lsp' },
+		{ name = 'luasnip' },
+		{ name = 'path' },
 	},
 }
 
@@ -193,10 +216,10 @@ cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({ { name = "cmdline" } })
 })
+
 -----------------------------------LSC
 require("mason-lspconfig").setup()
 local lsc = vim.lsp
-local illuminate = require("illuminate")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single", max_width = 80 })
@@ -204,8 +227,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { 
 require("mason-lspconfig").setup_handlers({
 	function(server_name)
 		require("lspconfig")[server_name].setup({
-			on_attach = function(client, bufnr)
-				illuminate.on_attach(client)
+			on_attach = function(_, bufnr)
 				local buffer_bind = function(key, func)
 					bind(key, func, { buffer = bufnr })
 				end
@@ -228,8 +250,8 @@ require("mason-lspconfig").setup_handlers({
 	end,
 })
 
-bind("]n", function() illuminate.next_reference({ wrap = true }) end)
-bind("[n", function() illuminate.next_reference({ reverse = true, wrap = true }) end)
+bind("]n", function() require('illuminate').goto_next_reference(true) end)
+bind("[n", function() require('illuminate').goto_prev_reference(true) end)
 
 require('ufo').setup({
 	provider_selector = function(_, _, _)
