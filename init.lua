@@ -10,7 +10,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
 local global = vim.g
 global.mapleader = " " -- space
 
@@ -52,8 +51,25 @@ require("lazy").setup({
 			'saadparwaiz1/cmp_luasnip',
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-cmdline',
+			'zbirenbaum/copilot-cmp',
 			'rafamadriz/friendly-snippets',
 		},
+	},
+	{
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end
+	},
+	{
+		"zbirenbaum/copilot.lua",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
+		end
 	},
 	{
 		"williamboman/mason.nvim",
@@ -149,9 +165,9 @@ vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 -----------------------------------SYNTAX
 vim.defer_fn(function()
 	require("nvim-treesitter.configs").setup({
-		ensure_installed = { 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'comment' },
-		auto_install = true,
-		ignore_install = { "latex" },
+		ensure_installed = { 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash',
+			'comment' },
+		ignore_install = { 'latex' },
 		highlight = { enable = true },
 		rainbow = { enable = true },
 		autotag = { enable = true },
@@ -172,7 +188,16 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
+require('copilot').setup()
+
 cmp.setup {
+	formatting = {
+		format = require('lspkind').cmp_format({
+			mode = 'symbol',    -- show only symbol annotations
+			maxwidth = 50,      -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+			ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+		})
+	},
 	snippet = {
 		expand = function(args)
 			luasnip.lsp_expand(args.body)
@@ -209,6 +234,7 @@ cmp.setup {
 		{ name = 'nvim_lsp' },
 		{ name = 'luasnip' },
 		{ name = 'path' },
+		{ name = 'copilot' },
 	},
 }
 
@@ -280,16 +306,9 @@ gitsigns.setup({
 -- touched. This allows rapid cycling through buffers
 -- via goto def for example, without polluting the buffer list
 -- we only persist buffers that are touched.
-local id = vim.api.nvim_create_augroup("startup", {
-	clear = false
-})
+local id = vim.api.nvim_create_augroup("startup", { clear = false })
 
-local persistbuffer = function(bufnr)
-	bufnr = bufnr or vim.api.nvim_get_current_buf()
-	vim.fn.setbufvar(bufnr, 'bufpersist', 1)
-end
-
-vim.api.nvim_create_autocmd({ "bufread" }, {
+vim.api.nvim_create_autocmd({ "BufRead" }, {
 	group = id,
 	pattern = { "*" },
 	callback = function()
@@ -297,54 +316,45 @@ vim.api.nvim_create_autocmd({ "bufread" }, {
 			buffer = 0,
 			once = true,
 			callback = function()
-				persistbuffer()
+				vim.fn.setbufvar(vim.api.nvim_get_current_buf(), 'bufpersist', 1)
 			end
 		})
 	end
 })
 
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
+	group = id,
 	pattern = { "*" },
 	callback = function()
-		-- ignore any buffer changes if we enter a special buffer
 		local curbufnr = vim.api.nvim_get_current_buf()
-		local curbuftype = vim.api.nvim_buf_get_option(curbufnr, "buftype")
-		if curbuftype ~= "" then
+		if vim.api.nvim_buf_get_option(curbufnr, "buftype") ~= "" then
 			return
 		end
 
-
-		-- full buffer list
-		local buflist = vim.api.nvim_list_bufs()
-
-		-- to be filtered to non-special buffers
-		local loadedNormBufList = {}
-		for _, bufnr in ipairs(buflist) do
-			if vim.api.nvim_buf_is_loaded(bufnr) then
-				if vim.api.nvim_buf_get_option(bufnr, "buftype") ~= "" then
-					table.insert(loadedNormBufList, bufnr)
-				end
-			end
-		end
-
-		-- vim.api.nvim_out_write("loadedBufList length: " .. #loadedNormBufList .. "\n")
-
-
-		-- TODO: load loadedNormBufList properly in order to loop through that table only
-		for _, bufnr in ipairs(buflist) do
-			-- we mark bufnr's in view
-			local isBufferViewed = false
+		local is_buffer_in_view = function(bufnr)
 			for _, win_id in ipairs(vim.api.nvim_list_wins()) do
 				if vim.api.nvim_win_get_buf(win_id) == bufnr then
-					isBufferViewed = true
-					break
+					return true
 				end
 			end
+			return false
+		end
 
-			-- and remove all buffers, not persisted, in view or unlisted
-			if not isBufferViewed and vim.bo[bufnr].buflisted and (vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1) then
+		-- deciding which buffers to prune
+		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+			if not vim.api.nvim_buf_get_option(bufnr, 'buflisted') or is_buffer_in_view(bufnr) then
+				goto continue
+			end
+
+			if vim.api.nvim_buf_get_option(bufnr, 'modified') then
+				vim.fn.setbufvar(bufnr, 'bufpersist', 1)
+				goto continue
+			end
+
+			if vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1 then
 				vim.cmd('bd ' .. tostring(bufnr))
 			end
+			::continue::
 		end
 	end
 })
