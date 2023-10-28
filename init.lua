@@ -47,12 +47,12 @@ require("lazy").setup({
 	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
-			'L3MON4D3/LuaSnip',
-			'saadparwaiz1/cmp_luasnip',
-			'hrsh7th/cmp-nvim-lsp',
-			'hrsh7th/cmp-cmdline',
-			'zbirenbaum/copilot-cmp',
-			'rafamadriz/friendly-snippets',
+			"L3MON4D3/LuaSnip",
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-cmdline",
+			"zbirenbaum/copilot-cmp",
+			"rafamadriz/friendly-snippets",
 		},
 	},
 	{
@@ -77,7 +77,7 @@ require("lazy").setup({
 		"neovim/nvim-lspconfig",
 	},
 	{
-		'windwp/nvim-autopairs', event = "InsertEnter", opts = {} -- this is equalent to setup({}) function
+		"windwp/nvim-autopairs", event = "InsertEnter", opts = {} -- this is equalent to setup({}) function
 	},
 	{ "stefanlogue/hydrate.nvim",            opts = { persist_timer = true } },
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl",                   opts = {} },
@@ -132,8 +132,8 @@ local bind = function(key, func, opts)
 end
 
 -- remap for dealing with word wrap
-bind('k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-bind('j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+bind("k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+bind("j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -----------------------------------BLING
 require("tokyonight").setup({ transparent = true })
@@ -144,7 +144,7 @@ require("bufferline").setup()
 require("ibl").setup()
 
 -------------------------------------GREPPING
-require('telescope').load_extension('fzf')
+require("telescope").load_extension("fzf")
 local telescope = require("telescope.builtin")
 bind("<leader>p", telescope.find_files)
 bind("<leader>P", telescope.git_files)
@@ -165,9 +165,9 @@ vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 -----------------------------------SYNTAX
 vim.defer_fn(function()
 	require("nvim-treesitter.configs").setup({
-		ensure_installed = { 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash',
-			'comment' },
-		ignore_install = { 'latex' },
+		ensure_installed = { "go", "lua", "python", "tsx", "javascript", "typescript", "vimdoc", "vim", "bash",
+			"comment" },
+		ignore_install = { "latex" },
 		highlight = { enable = true },
 		rainbow = { enable = true },
 		autotag = { enable = true },
@@ -175,27 +175,27 @@ vim.defer_fn(function()
 		incremental_selection = {
 			enable = true,
 			keymaps = {
-				init_selection = '<c-space>',
-				node_incremental = '<c-space>',
+				init_selection = "<c-space>",
+				node_incremental = "<c-space>",
 			},
 		},
 	})
 end, 0)
 
 -----------------------------------COMPLETION
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-require('luasnip.loaders.from_vscode').lazy_load()
+local cmp = require "cmp"
+local luasnip = require "luasnip"
+require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup {}
 
-require('copilot').setup()
+require("copilot").setup()
 
 cmp.setup {
 	formatting = {
-		format = require('lspkind').cmp_format({
-			mode = 'symbol',    -- show only symbol annotations
+		format = require("lspkind").cmp_format({
+			mode = "symbol",    -- show only symbol annotations
 			maxwidth = 50,      -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-			ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+			ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 		})
 	},
 	snippet = {
@@ -204,14 +204,14 @@ cmp.setup {
 		end,
 	},
 	mapping = cmp.mapping.preset.insert {
-		['<C-p>'] = cmp.mapping.select_prev_item(),
-		['<C-n>'] = cmp.mapping.select_next_item(),
-		['<C-x><C-u>'] = cmp.mapping.complete {},
-		['<CR>'] = cmp.mapping.confirm {
+		["<C-p>"] = cmp.mapping.select_prev_item(),
+		["<C-n>"] = cmp.mapping.select_next_item(),
+		["<C-x><C-u>"] = cmp.mapping.complete {},
+		["<CR>"] = cmp.mapping.confirm {
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
 		},
-		['<Tab>'] = cmp.mapping(function(fallback)
+		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif luasnip.expand_or_locally_jumpable() then
@@ -219,8 +219,8 @@ cmp.setup {
 			else
 				fallback()
 			end
-		end, { 'i', 's' }),
-		['<S-Tab>'] = cmp.mapping(function(fallback)
+		end, { "i", "s" }),
+		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
 			elseif luasnip.locally_jumpable(-1) then
@@ -228,13 +228,13 @@ cmp.setup {
 			else
 				fallback()
 			end
-		end, { 'i', 's' }),
+		end, { "i", "s" }),
 	},
 	sources = {
-		{ name = 'nvim_lsp' },
-		{ name = 'luasnip' },
-		{ name = 'path' },
-		{ name = 'copilot' },
+		{ name = "nvim_lsp" },
+		{ name = "luasnip" },
+		{ name = "path" },
+		{ name = "copilot" },
 	},
 }
 
@@ -276,12 +276,12 @@ require("mason-lspconfig").setup_handlers({
 	end,
 })
 
-bind("]n", function() require('illuminate').goto_next_reference(true) end)
-bind("[n", function() require('illuminate').goto_prev_reference(true) end)
+bind("]n", function() require("illuminate").goto_next_reference(true) end)
+bind("[n", function() require("illuminate").goto_prev_reference(true) end)
 
-require('ufo').setup({
+require("ufo").setup({
 	provider_selector = function(_, _, _)
-		return { 'treesitter', 'indent' }
+		return { "treesitter", "indent" }
 	end
 })
 
@@ -299,10 +299,10 @@ gitsigns.setup({
 	end
 })
 
--- we'll etch this into another plugin
--- what we're doing is managing the buffer list
+-- we"ll etch this into another plugin
+-- what we"re doing is managing the buffer list
 -- by performing a prune
--- basically we unlist/unload buffers if they haven't been
+-- basically we unlist/unload buffers if they haven"t been
 -- touched. This allows rapid cycling through buffers
 -- via goto def for example, without polluting the buffer list
 -- we only persist buffers that are touched.
@@ -316,7 +316,7 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 			buffer = 0,
 			once = true,
 			callback = function()
-				vim.fn.setbufvar(vim.api.nvim_get_current_buf(), 'bufpersist', 1)
+				vim.fn.setbufvar(vim.api.nvim_get_current_buf(), "bufpersist", 1)
 			end
 		})
 	end
@@ -342,17 +342,17 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 		-- deciding which buffers to prune
 		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-			if not vim.api.nvim_buf_get_option(bufnr, 'buflisted') or is_buffer_in_view(bufnr) then
+			if not vim.api.nvim_buf_get_option(bufnr, "buflisted") or is_buffer_in_view(bufnr) then
 				goto continue
 			end
 
-			if vim.api.nvim_buf_get_option(bufnr, 'modified') then
-				vim.fn.setbufvar(bufnr, 'bufpersist', 1)
+			if vim.api.nvim_buf_get_option(bufnr, "modified") then
+				vim.fn.setbufvar(bufnr, "bufpersist", 1)
 				goto continue
 			end
 
-			if vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1 then
-				vim.cmd('bd ' .. tostring(bufnr))
+			if vim.fn.getbufvar(bufnr, "bufpersist") ~= 1 then
+				vim.cmd("bd " .. tostring(bufnr))
 			end
 			::continue::
 		end
