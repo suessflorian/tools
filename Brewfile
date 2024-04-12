@@ -1,5 +1,6 @@
 # editing
 brew 'neovim'
+cask 'code'
 brew 'lazygit'
 brew 'ripgrep'
 brew 'fzf'
@@ -21,10 +22,11 @@ cask 'authy'
 cask 'rectangle'
 cask 'messenger'
 cask 'docker'
-# cask 'mactex'
 
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
 cask 'font-hack-nerd-font'
 
 cask 'logitech-options'
+cask 'obsidian'
+cask 'mactex'

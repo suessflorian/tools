@@ -16,7 +16,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=30000
 export SAVEHIST=30000
 
-export HISTORY_IGNORE="(ls|pwd|cd *|exit|rm *|git *|cp *|mkdir *|mv *|ls *|nvim *)"
+export HISTORY_IGNORE="(open|ls|pwd|cd *|exit|rm *|git *|cp *|mkdir *|mv *|ls *|nvim *)"
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS
@@ -57,3 +57,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 alias ls='ls -GFahl'
 source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

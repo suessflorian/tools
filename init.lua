@@ -90,7 +90,6 @@ require("mason").setup()
 
 ---- TODO:
 -- telescope buffer management
--- add better hover doc rendering, no real support out there atm
 -- new window behaviour in Kitty weird
 -- move to nvim surround ? over tpope
 
@@ -276,8 +275,8 @@ require("mason-lspconfig").setup_handlers({
 	end,
 })
 
-bind("]n", function() require("illuminate").goto_next_reference(true) end)
-bind("[n", function() require("illuminate").goto_prev_reference(true) end)
+bind("]]", function() require("illuminate").goto_next_reference(true) end)
+bind("[[", function() require("illuminate").goto_prev_reference(true) end)
 
 require("ufo").setup({
 	provider_selector = function(_, _, _)
