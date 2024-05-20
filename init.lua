@@ -298,6 +298,11 @@ gitsigns.setup({
 	end
 })
 
+vim.api.nvim_create_augroup("RemoveTrailingWhitespace", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = "RemoveTrailingWhitespace", pattern = "*", command = [[%s/\s\+$//e]],
+})
+
 -- we"ll etch this into another plugin
 -- what we"re doing is managing the buffer list
 -- by performing a prune
