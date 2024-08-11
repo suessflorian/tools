@@ -10,6 +10,7 @@ brew 'fd'
 # languages
 brew 'n'
 brew 'pyenv'
+brew 'pipx'
 brew 'go'
 brew 'golangci-lint'
 brew 'stylua'
