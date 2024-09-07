@@ -113,6 +113,7 @@ bind("<leader>P", telescope.git_files)
 bind("<leader>b", telescope.buffers)
 bind("<leader>F", telescope.live_grep)
 bind("<leader>f", telescope.grep_string)
+vim.keymap.set("c", "<C-R>", telescope.command_history)
 
 -----------------------------------OTHER MAPPINGS
 local api = require("nvim-tree.api")
