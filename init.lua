@@ -18,16 +18,16 @@ global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
 
 require("lazy").setup({
-  "RRethy/vim-illuminate",
-  "tpope/vim-surround",
-  "ruanyl/vim-gh-line",
-  "onsails/lspkind-nvim",
-  "HiPhish/rainbow-delimiters.nvim",
-  "windwp/nvim-ts-autotag",
-  { "kevinhwang91/nvim-ufo",         dependencies = { "kevinhwang91/promise-async" } },
-  { "lewis6991/gitsigns.nvim",       dependencies = { "nvim-lua/plenary.nvim" } },
-  { "nvim-tree/nvim-tree.lua",       dependencies = { "kyazdani42/nvim-web-devicons" } },
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" }, },
+  { "RRethy/vim-illuminate" },
+  { "tpope/vim-surround" },
+  { "ruanyl/vim-gh-line" },
+  { "onsails/lspkind-nvim" },
+  { "HiPhish/rainbow-delimiters.nvim" },
+  { "windwp/nvim-ts-autotag" },
+  { "kevinhwang91/nvim-ufo",          dependencies = { "kevinhwang91/promise-async" } },
+  { "lewis6991/gitsigns.nvim",        dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-tree/nvim-tree.lua",        dependencies = { "kyazdani42/nvim-web-devicons" } },
+  { "nvim-telescope/telescope.nvim",  dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" }, },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -38,7 +38,8 @@ require("lazy").setup({
       "hrsh7th/cmp-path",
     },
   },
-  { "nvim-treesitter/nvim-treesitter",     build = ":TSUpdate" },
+  { "nvim-treesitter/nvim-treesitter",        build = ":TSUpdate" },
+  { "nvim-treesitter/nvim-treesitter-context" },
   {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
