@@ -1,44 +1,33 @@
 local vim = vim
+vim.loader.enable()
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
     lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
 
 local global = vim.g
-global.mapleader = " " -- space
+global.mapleader = " "
 
--- NOTE: as per nvim-tree/nvim-tree advice, we can disable netrw in the following way
-global.loaded = 1
+-- NOTE: prevent netrw from loading.
+global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
 
 require("lazy").setup({
-  "lervag/vimtex",
-  "lewis6991/impatient.nvim",
   "RRethy/vim-illuminate",
-  "folke/tokyonight.nvim",
-  "tpope/vim-commentary",
   "tpope/vim-surround",
   "ruanyl/vim-gh-line",
-  "romainl/vim-cool",
   "onsails/lspkind-nvim",
   "HiPhish/rainbow-delimiters.nvim",
   "windwp/nvim-ts-autotag",
-  { "kevinhwang91/nvim-ufo",           dependencies = "kevinhwang91/promise-async" },
-  { "akinsho/bufferline.nvim",         dependencies = "kyazdani42/nvim-web-devicons" },
-  { "lewis6991/gitsigns.nvim",         dependencies = "nvim-lua/plenary.nvim" },
-  { "nvim-tree/nvim-tree.lua",         dependencies = "kyazdani42/nvim-web-devicons" },
-  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons",
-      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } }
-  },
+  { "kevinhwang91/nvim-ufo",         dependencies = { "kevinhwang91/promise-async" } },
+  { "lewis6991/gitsigns.nvim",       dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-tree/nvim-tree.lua",       dependencies = { "kyazdani42/nvim-web-devicons" } },
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" }, },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -46,19 +35,18 @@ require("lazy").setup({
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-cmdline",
-      "rafamadriz/friendly-snippets",
+      "hrsh7th/cmp-path",
     },
   },
+  { "nvim-treesitter/nvim-treesitter",     build = ":TSUpdate" },
   {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
   },
-  { "windwp/nvim-autopairs",               event = "InsertEnter", opts = {} }, -- this is equalent to setup({}) function },
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl",          opts = {} },
+  { "windwp/nvim-autopairs",               event = "InsertEnter", opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", },
 })
-
-require("impatient")
 
 -----------------------------------DEPENDANCY-MANAGEMENT
 require("mason").setup()
@@ -80,6 +68,7 @@ options.undofile = true  -- persistent file undo"s
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/neovim/pull/17446
 options.foldlevel = 99
+options.foldlevelstart = 99
 options.foldenable = true
 -- APPEARANCE BEHAVIOUR
 options.cursorline = true
@@ -95,8 +84,8 @@ options.ignorecase = true                     -- case insensitive searching UNLE
 options.smartcase = true
 options.jumpoptions = "stack"
 options.mouse = "a"
-options.nu = true
-options.termguicolors = true
+options.number = true
+options.conceallevel = 2
 -- INDENT
 vim.opt.tabstop = 2      -- number of spaces that a <Tab> in the file counts for
 vim.opt.shiftwidth = 2   -- number of spaces to use for each step of (auto)indent
@@ -114,14 +103,9 @@ bind("k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 bind("j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -----------------------------------BLING
-require("tokyonight").setup({ transparent = true })
-vim.cmd [[colorscheme tokyonight-storm]]
 require("nvim-tree").setup({ git = { enable = false } })
-require("bufferline").setup()
-require("ibl").setup()
 
 -------------------------------------GREPPING
-require("telescope").load_extension("fzf")
 local telescope = require("telescope.builtin")
 bind("<leader>p", telescope.find_files)
 bind("<leader>P", telescope.git_files)
@@ -130,10 +114,6 @@ bind("<leader>F", telescope.live_grep)
 bind("<leader>f", telescope.grep_string)
 
 -----------------------------------OTHER MAPPINGS
-local bufferline = require("bufferline")
-bind("<C-j>", function() bufferline.cycle(-1) end)
-bind("<C-k>", function() bufferline.cycle(1) end)
-
 local api = require("nvim-tree.api")
 bind("-", function() api.tree.toggle({ find_file = true }) end)
 
@@ -141,7 +121,6 @@ vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 
 -----------------------------------SYNTAX
 require("nvim-treesitter.configs").setup({
-  ignore_install = { "latex" },
   auto_install = true,
   highlight = { enable = true },
   incremental_selection = {
@@ -158,16 +137,11 @@ require('nvim-ts-autotag').setup()
 -----------------------------------COMPLETION
 local cmp = require "cmp"
 local luasnip = require "luasnip"
-require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
   formatting = {
-    format = require("lspkind").cmp_format({
-      mode = "symbol",       -- show only symbol annotations
-      maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-      ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-    })
+    format = require("lspkind").cmp_format({})
   },
   snippet = {
     expand = function(args)
@@ -178,28 +152,7 @@ cmp.setup {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<C-x><C-u>"] = cmp.mapping.complete {},
-    ["<CR>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+    ["<CR>"] = cmp.mapping.confirm { select = true },
   },
   sources = {
     { name = "nvim_lsp" },
@@ -227,9 +180,6 @@ require("mason-lspconfig").setup_handlers({
         local buffer_bind = function(key, func)
           bind(key, func, { buffer = bufnr })
         end
-        buffer_bind("<C-n>", vim.diagnostic.goto_next)
-        buffer_bind("<C-p>", vim.diagnostic.goto_prev)
-        buffer_bind("K", lsc.buf.hover)
         buffer_bind("gf", function() lsc.buf.format { async = true } end)
         buffer_bind("gR", lsc.buf.rename)
         buffer_bind("gd", lsc.buf.declaration)
@@ -258,8 +208,6 @@ require("ufo").setup({
 -----------------------------------MISC
 local gitsigns = require("gitsigns")
 gitsigns.setup({
-  current_line_blame = true,
-  current_line_blame_formatter_opts = { relative_time = true },
   on_attach = function(bufnr)
     local buffer_bind = function(key, func)
       bind(key, func, { buffer = bufnr })
@@ -268,3 +216,5 @@ gitsigns.setup({
     buffer_bind("[c", gitsigns.prev_hunk)
   end
 })
+
+require("ibl").setup({ scope = { highlight = "Search" } })
