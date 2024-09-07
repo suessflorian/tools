@@ -28,7 +28,7 @@ function _open { nvim }
 zle -N _open
 bindkey '^X^O' _open
 
-function _notes { nvim -c "+norm ggO# $(date)" -c "+norm gg2o" ~/.notes.md }
+function _notes { nvim ~/.notes.md }
 zle -N _notes
 bindkey '^X^N' _notes
 
