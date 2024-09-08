@@ -18,6 +18,7 @@ brew 'stylua'
 # services
 cask 'google-cloud-sdk'
 
+cask 'stats'
 cask 'kitty'
 cask 'authy'
 cask 'rectangle'
@@ -29,5 +30,3 @@ cask 'font-fira-code'
 cask 'font-hack-nerd-font'
 
 cask 'logitech-options'
-cask 'obsidian'
-cask 'mactex'
