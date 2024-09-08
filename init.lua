@@ -113,13 +113,12 @@ bind("<leader>P", telescope.git_files)
 bind("<leader>b", telescope.buffers)
 bind("<leader>F", telescope.live_grep)
 bind("<leader>f", telescope.grep_string)
-vim.keymap.set("c", "<C-R>", telescope.command_history)
+bind("<leader>/", telescope.current_buffer_fuzzy_find)
+vim.keymap.set("c", "<leader>r", telescope.command_history)
 
 -----------------------------------OTHER MAPPINGS
 local api = require("nvim-tree.api")
 bind("-", function() api.tree.toggle({ find_file = true }) end)
-
-vim.cmd [[tnoremap <silent> <Esc> <C-\><C-n>]]
 
 -----------------------------------SYNTAX
 require("nvim-treesitter.configs").setup({
@@ -182,16 +181,17 @@ require("mason-lspconfig").setup_handlers({
         local buffer_bind = function(key, func)
           bind(key, func, { buffer = bufnr })
         end
+        --:h lsp-defaults re; <C-]>, gq, K
         buffer_bind("gf", function() lsc.buf.format { async = true } end)
         buffer_bind("gR", lsc.buf.rename)
         buffer_bind("gd", lsc.buf.declaration)
         buffer_bind("ga", lsc.buf.code_action)
 
-        buffer_bind("<C-]>", telescope.lsp_definitions)
         buffer_bind("gt", telescope.lsp_type_definitions)
         buffer_bind("gi", telescope.lsp_implementations)
         buffer_bind("gr", telescope.lsp_references)
         buffer_bind("gs", telescope.lsp_document_symbols)
+        buffer_bind("gS", telescope.lsp_dynamic_workspace_symbols)
       end,
       capabilities = capabilities,
     })
@@ -207,7 +207,8 @@ require("ufo").setup({
   end
 })
 
------------------------------------MISC
+-----------------------------------GIT
+-- :h vim-gh-line re; go, gh, gb
 local gitsigns = require("gitsigns")
 gitsigns.setup({
   on_attach = function(bufnr)
@@ -219,4 +220,5 @@ gitsigns.setup({
   end
 })
 
+-----------------------------------MISC
 require("ibl").setup({ scope = { highlight = "Search" } })
