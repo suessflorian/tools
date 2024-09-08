@@ -13,7 +13,7 @@ vim.opt.rtp:prepend(lazypath)
 local global = vim.g
 global.mapleader = " "
 
--- NOTE: prevent netrw from loading.
+-- prevent netrw from loading.
 global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
 
@@ -49,39 +49,34 @@ require("lazy").setup({
   { "lukas-reineke/indent-blankline.nvim", main = "ibl", },
 })
 
------------------------------------DEPENDANCY-MANAGEMENT
+-----------------------------------DEPENDENCY-MANAGEMENT
 require("mason").setup()
-
----- TODO:
--- telescope buffer management
--- new window behaviour in Kitty weird
--- move to nvim surround ? over tpope
 
 -----------------------------------CORE
 local options = vim.opt
 -- TABBING
-options.tabstop = 2      -- spaces per tab
+options.tabstop = 2
 -- BACKUP
-options.backup = false   -- disable backup files
-options.swapfile = false -- no swap files
-options.undofile = true  -- persistent file undo"s
+options.backup = false
+options.swapfile = false
+options.undofile = true
 -- FOLDING
 options.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-options.foldcolumn = "0" -- hide for now, waiting on https://github.com/neovim/neovim/pull/17446
+options.foldcolumn = "0"
 options.foldlevel = 99
 options.foldlevelstart = 99
 options.foldenable = true
 -- APPEARANCE BEHAVIOUR
 options.cursorline = true
 options.completeopt = "menu,menuone,noselect" -- recommended by cmp
-options.splitright = true                     -- vsplits by default to the right
-options.wrap = false                          -- disable text wrapping by default
-options.linebreak = true                      -- if wrapping, don"t break words up mid-wrap
+options.splitright = true
+options.wrap = false
+options.linebreak = true
 -- MISC
-options.clipboard = "unnamedplus"             -- sync clipboard and default register
-options.laststatus = 3                        -- global status line
-options.scrolloff = 3                         -- always have lines bellow cursor line
-options.ignorecase = true                     -- case insensitive searching UNLESS /C or capital in search
+options.clipboard = "unnamedplus"
+options.laststatus = 3
+options.scrolloff = 3
+options.ignorecase = true
 options.smartcase = true
 options.jumpoptions = "stack"
 options.mouse = "a"
@@ -92,19 +87,11 @@ vim.opt.tabstop = 2      -- number of spaces that a <Tab> in the file counts for
 vim.opt.shiftwidth = 2   -- number of spaces to use for each step of (auto)indent
 vim.opt.expandtab = true -- use spaces instead of tabs
 
--- silent key binding, optionally pass additional options
 local bind = function(key, func, opts)
   opts = opts or {}
   opts.noremap, opts.silent = true, true
   vim.keymap.set("n", key, func, opts)
 end
-
--- remap for dealing with word wrap
-bind("k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-bind("j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
------------------------------------BLING
-require("nvim-tree").setup({ git = { enable = false } })
 
 -------------------------------------GREPPING
 local telescope = require("telescope.builtin")
@@ -222,3 +209,4 @@ gitsigns.setup({
 
 -----------------------------------MISC
 require("ibl").setup({ scope = { highlight = "Search" } })
+require("nvim-tree").setup({ git = { enable = false } })
