@@ -18,6 +18,7 @@ global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
 
 require("lazy").setup({
+  { "Mofiqul/vscode.nvim" },
   { "RRethy/vim-illuminate" },
   { "tpope/vim-surround" },
   { "ruanyl/vim-gh-line" },
@@ -53,6 +54,8 @@ require("lazy").setup({
 require("mason").setup()
 
 -----------------------------------CORE
+require('vscode').load()
+
 local options = vim.opt
 -- TABBING
 options.tabstop = 2
@@ -109,7 +112,6 @@ bind("-", function() api.tree.toggle({ find_file = true }) end)
 
 -----------------------------------SYNTAX
 require("nvim-treesitter.configs").setup({
-  auto_install = true,
   highlight = { enable = true },
   incremental_selection = {
     enable = true,
