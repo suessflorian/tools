@@ -18,17 +18,24 @@ global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
 
 require("lazy").setup({
-  { "Mofiqul/vscode.nvim" },
+  { "nvim-treesitter/nvim-treesitter",        build = ":TSUpdate" },
+  { "nvim-treesitter/nvim-treesitter-context" },
+  { "projekt0n/github-nvim-theme" },
   { "RRethy/vim-illuminate" },
   { "tpope/vim-surround" },
   { "ruanyl/vim-gh-line" },
   { "onsails/lspkind-nvim" },
   { "HiPhish/rainbow-delimiters.nvim" },
   { "windwp/nvim-ts-autotag" },
-  { "kevinhwang91/nvim-ufo",          dependencies = { "kevinhwang91/promise-async" } },
-  { "lewis6991/gitsigns.nvim",        dependencies = { "nvim-lua/plenary.nvim" } },
-  { "nvim-tree/nvim-tree.lua",        dependencies = { "kyazdani42/nvim-web-devicons" } },
-  { "nvim-telescope/telescope.nvim",  dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" }, },
+  { "kevinhwang91/nvim-ufo",                  dependencies = { "kevinhwang91/promise-async" } },
+  { "lewis6991/gitsigns.nvim",                dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-tree/nvim-tree.lua",                dependencies = { "kyazdani42/nvim-web-devicons" } },
+  { "nvim-telescope/telescope.nvim",          dependencies = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" }, },
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+  { "neovim/nvim-lspconfig" },
+  { "windwp/nvim-autopairs" },
+  { "lukas-reineke/indent-blankline.nvim" },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -39,22 +46,15 @@ require("lazy").setup({
       "hrsh7th/cmp-path",
     },
   },
-  { "nvim-treesitter/nvim-treesitter",        build = ":TSUpdate" },
-  { "nvim-treesitter/nvim-treesitter-context" },
-  {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
-  },
-  { "windwp/nvim-autopairs",               event = "InsertEnter", opts = {} },
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", },
 })
 
 -----------------------------------DEPENDENCY-MANAGEMENT
 require("mason").setup()
 
 -----------------------------------CORE
-require('vscode').load()
+require("github-theme").setup({ options = { transparent = true, }, })
+require("github-theme").load()
+require("nvim-autopairs").setup()
 
 local options = vim.opt
 -- TABBING
@@ -122,7 +122,7 @@ require("nvim-treesitter.configs").setup({
   },
 })
 
-require('nvim-ts-autotag').setup()
+require("nvim-ts-autotag").setup()
 
 -----------------------------------COMPLETION
 local cmp = require "cmp"
@@ -210,5 +210,5 @@ gitsigns.setup({
 })
 
 -----------------------------------MISC
-require("ibl").setup({ scope = { highlight = "Search" } })
+require("ibl").setup()
 require("nvim-tree").setup({ git = { enable = false } })

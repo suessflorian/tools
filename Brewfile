@@ -1,32 +1,37 @@
 # editing
+cask 'kitty'
 brew 'neovim'
-cask 'code'
+cask 'visual-studio-code'
 brew 'lazygit'
 brew 'ripgrep'
 brew 'fzf'
 brew 'jq'
 brew 'fd'
 
-# languages
-brew 'n'
+# language ecosystems
 brew 'pyenv'
-brew 'pipx'
+brew 'node'
 brew 'go'
 brew 'golangci-lint'
 brew 'stylua'
 
 # services
 cask 'google-cloud-sdk'
+cask 'docker'
+cask 'chatgpt'
 
+# utilities
 cask 'stats'
-cask 'kitty'
 cask 'authy'
 cask 'rectangle'
 cask 'messenger'
-cask 'docker'
+brew 'graphviz'
 
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
 cask 'font-hack-nerd-font'
 
 cask 'logitech-options'
+
+brew 'pgcli'
+brew 'duckdb'
