@@ -4,7 +4,6 @@ fi
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 autoload -Uz compinit && compinit
 
-cdpath=($HOME/Documents)
 precmd () {print -Pn "\e]0;%~\a"} # set shell process name to pwd
 
 export VISUAL="nvim"
@@ -16,7 +15,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=30000
 export SAVEHIST=30000
 
-export HISTORY_IGNORE="(open|ls|pwd|cd *|exit|rm *|git *|cp *|mkdir *|mv *|ls *|nvim *)"
+export HISTORY_IGNORE="(open|ls|pwd|cd *|z *|exit|rm *|git *|cp *|mkdir *|mv *|ls *|nvim *)"
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS
@@ -50,8 +49,10 @@ export GOPATH=$HOME/Documents/go
 export PATH=$GOPATH/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
+
+source /opt/homebrew/etc/profile.d/z.sh
 
 alias ls='ls -GFahl'
 source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"

@@ -7,6 +7,8 @@ brew 'ripgrep'
 brew 'fzf'
 brew 'jq'
 brew 'fd'
+brew 'gnupg'
+brew 'z'
 
 # language ecosystems
 brew 'pyenv'
