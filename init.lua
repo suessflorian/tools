@@ -197,9 +197,9 @@ require("mason-lspconfig").setup_handlers({
 bind("]]", function() require("illuminate").goto_next_reference(true) end)
 bind("[[", function() require("illuminate").goto_prev_reference(true) end)
 
-require("ufo").setup({
-  provider_selector = function(_, _, _)
-    return { "treesitter", "indent" }
+require('ufo').setup({
+  provider_selector = function(bufnr, filetype, buftype)
+    return { 'treesitter', 'indent' }
   end
 })
 
