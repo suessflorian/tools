@@ -55,8 +55,6 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*" '
 source /opt/homebrew/etc/profile.d/z.sh
 
 alias ls='ls -GFahl'
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
